@@ -7,6 +7,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(ramsey
     ./RamseyMain.cpp
+    ./Color.cpp
 )
 
 add_executable(playground
@@ -14,7 +15,7 @@ add_executable(playground
 )
 
 foreach(target ramsey playground)
-    target_include_directories(${target} PRIVATE graph_module)
+    target_include_directories(${target} PRIVATE graph_module .)
     target_compile_options(${target} PRIVATE
         $<$<CXX_COMPILER_ID:MSVC>:/W4>
         $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra>
