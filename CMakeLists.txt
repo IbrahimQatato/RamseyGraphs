@@ -8,6 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_executable(ramsey
     ./RamseyMain.cpp
     ./Color.cpp
+    ./ExhaustiveSearch.cpp
 )
 
 add_executable(playground

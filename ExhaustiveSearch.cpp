@@ -1,7 +1,13 @@
 #include "ExhaustiveSearch.h"
 #include "RamseyChecker.h"
+#include "Utils.h"
+#include <algorithm>
+#include <cstddef>
 #include <fstream>
 #include <iostream>
+#include <iterator>
+#include <ostream>
+#include <vector>
 
 ExhaustiveSearch::ExhaustiveSearch(size_t s, size_t t)
     : s_(s), t_(t), current_n_(std::max(s, t)), current_coloring_(0), done_(false), result_(0) {}
@@ -64,17 +70,17 @@ void ExhaustiveSearch::run(bool verbose) {
 
     while (current_coloring_ < total_colorings) {
       auto graph = build_colored_kn(current_n_, current_coloring_);
-      bool satisfies =  checkRamseyProperty(graph, s_, t_);
+      bool satisfies = checkRamseyProperty(graph, s_, t_);
       if (!satisfies) {
         counterexamples_[current_n_].push_back(current_coloring_);
         all_satisfy = false;
       }
 
       if (verbose) {
-        std::cout << "Coloring #" << current_coloring_
-                  << (satisfies ? "  [satisfies]" : "  [counterexample]") << "\n";
+        std::cout << "Coloring #" << current_coloring_ << (satisfies ? "  [satisfies]" : "  [counterexample]")
+                  << "\n";
         graph.print();
-        std::cout<< "Press Enter to continue ... ";
+        std::cout << "Press Enter to continue ... ";
         std::cin.ignore();
       }
       ++current_coloring_;
@@ -93,4 +99,42 @@ void ExhaustiveSearch::run(bool verbose) {
   }
 }
 
+void ExhaustiveSearch::save(const std::string& filename) const {
+  std::ofstream file(filename);
+  if (!file.is_open()) {
+    throw FileException(UNABLE_TO_OPEN_OUTPUT_FILE, filename);
+  }
+  file << s_ << " " << t_ << std::endl;
+  file << current_n_ << " " << current_coloring_ << " " << done_ << " " << result_ << std::endl;
+  for (const auto& [n, indices] : counterexamples_) {
+    file << n << " " << indices.size();
+    for (uint64_t idx : indices)
+      file << " " << idx;
+    file << std::endl;
+  }
+}
 
+ExhaustiveSearch ExhaustiveSearch::load(const std::string& filename) {
+  std::ifstream file(filename);
+  if (!file.is_open())
+    throw FileException(UNABLE_TO_OPEN_INPUT_FILE, filename);
+
+  size_t s, t;
+  file >> s >> t;
+
+  ExhaustiveSearch search(s, t);
+  file >> search.current_n_ >> search.current_coloring_ >> search.done_ >> search.result_;
+
+  size_t n, count;
+  while (file >> n >> count) {
+    std::vector<uint64_t> indices;
+    for (size_t i = 0; i < count; ++i) {
+      uint64_t idx;
+      file >> idx;
+      indices.push_back(idx);
+    }
+    search.counterexamples_[n] = std::move(indices);
+  }
+
+  return search;
+}
