@@ -20,7 +20,8 @@ public:
   const std::vector<uint64_t>& counterexamples(size_t n) const;
 
   bool isDone() const;
-  size_t result() const; 
+  size_t result() const;
+  void printSummary(std::ostream& out = std::cout) const; 
 
   void save(const std::string& filename) const;
   static ExhaustiveSearch load(const std::string& filename);

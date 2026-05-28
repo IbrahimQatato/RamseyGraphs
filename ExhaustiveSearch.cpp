@@ -46,6 +46,16 @@ UndirectedGraph<Identifier, Color> ExhaustiveSearch::getColoring(size_t n, uint6
 bool ExhaustiveSearch::isDone() const { return done_; }
 size_t ExhaustiveSearch::result() const { return result_; }
 
+void ExhaustiveSearch::printSummary(std::ostream& out) const {
+  out << "\nLoaded R(" << s_ << "," << t_ << ") search\n";
+  for (const auto& [n, indices] : counterexamples_)
+    out << "  K_" << n << ": " << indices.size() << " counterexamples\n";
+  if (isDone())
+    out << "  Result: R(" << s_ << "," << t_ << ") = " << result_ << "\n";
+  else
+    out << "  In progress: K_" << current_n_ << " (coloring " << current_coloring_ << ")\n";
+}
+
 const std::vector<uint64_t>& ExhaustiveSearch::counterexamples(size_t n) const {
   static const std::vector<uint64_t> empty;
   auto it = counterexamples_.find(n);
@@ -53,6 +63,10 @@ const std::vector<uint64_t>& ExhaustiveSearch::counterexamples(size_t n) const {
 }
 
 void ExhaustiveSearch::run(bool verbose) {
+  if (done_) {
+    std::cout << "Already complete: R(" << s_ << "," << t_ << ") = " << result_ << "\n";
+    return;
+  }
   while (!done_) {
     size_t no_of_edges = total_edges(current_n_);
 
@@ -108,8 +122,8 @@ void ExhaustiveSearch::save(const std::string& filename) const {
   file << current_n_ << " " << current_coloring_ << " " << done_ << " " << result_ << std::endl;
   for (const auto& [n, indices] : counterexamples_) {
     file << n << " " << indices.size();
-    for (uint64_t idx : indices)
-      file << " " << idx;
+    for (uint64_t index : indices)
+      file << " " << index;
     file << std::endl;
   }
 }
@@ -129,9 +143,9 @@ ExhaustiveSearch ExhaustiveSearch::load(const std::string& filename) {
   while (file >> n >> count) {
     std::vector<uint64_t> indices;
     for (size_t i = 0; i < count; ++i) {
-      uint64_t idx;
-      file >> idx;
-      indices.push_back(idx);
+      uint64_t index;
+      file >> index;
+      indices.push_back(index);
     }
     search.counterexamples_[n] = std::move(indices);
   }
