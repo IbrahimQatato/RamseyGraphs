@@ -1,0 +1,496 @@
+\doxysection{Array.\+h}
+\hypertarget{Array_8h_source}{}\label{Array_8h_source}\index{graph\_module/Array.h@{graph\_module/Array.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ ARRAY\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ ARRAY\_H}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <cstddef>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <cstdlib>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <initializer\_list>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <iterator>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <ostream>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{namespace\ }lib\ \{}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{size\_t}\ DEFAULT\_BLOCK\_SIZE\ =\ 10;}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00016\ \textcolor{keyword}{concept\ }\mbox{\hyperlink{conceptlib_1_1ArrayElement}{ArrayElement}}\ =}
+\DoxyCodeLine{00017\ \ \ \ \ (std::copy\_constructible<T>\ ||\ std::move\_constructible<T>\ ||}
+\DoxyCodeLine{00018\ \ \ \ \ \ std::default\_initializable<T>)\ \&\&}
+\DoxyCodeLine{00019\ \ \ \ \ std::destructible<T>;}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{template}\ <ArrayElement\ T>\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classlib_1_1Array}{Array}};}
+\DoxyCodeLine{00022\ \textcolor{keyword}{template}\ <ArrayElement\ T>}
+\DoxyCodeLine{00023\ std::ostream\ \&operator<<(std::ostream\ \&,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classlib_1_1Array}{Array<T>}}\ \&);}
+\DoxyCodeLine{00024\ \textcolor{keyword}{template}\ <ArrayElement\ T>\ \textcolor{keywordtype}{void}\ swap(\mbox{\hyperlink{classlib_1_1Array}{Array<T>}}\ \&,\ \mbox{\hyperlink{classlib_1_1Array}{Array<T>}}\ \&)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{template}\ <ArrayElement\ T>\ \textcolor{keyword}{class\ }Array\ \{}
+\DoxyCodeLine{00027\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00028\ \ \ \textcolor{keyword}{using\ }value\_type\ =\ T;}
+\DoxyCodeLine{00029\ \ \ \textcolor{keyword}{using\ }size\_type\ =\ std::size\_t;}
+\DoxyCodeLine{00030\ \ \ \textcolor{keyword}{using\ }difference\_type\ =\ std::ptrdiff\_t;}
+\DoxyCodeLine{00031\ \ \ \textcolor{keyword}{using\ }reference\ =\ T\ \&;}
+\DoxyCodeLine{00032\ \ \ \textcolor{keyword}{using\ }const\_reference\ =\ \textcolor{keyword}{const}\ T\ \&;}
+\DoxyCodeLine{00033\ \ \ \textcolor{keyword}{using\ }pointer\ =\ T\ *;}
+\DoxyCodeLine{00034\ \ \ \textcolor{keyword}{using\ }const\_pointer\ =\ \textcolor{keyword}{const}\ T\ *;}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00037\ \ \ std::vector<pointer>\ data\_;}
+\DoxyCodeLine{00038\ \ \ size\_type\ block\_size\_;}
+\DoxyCodeLine{00039\ \ \ size\_type\ current\_size\_;}
+\DoxyCodeLine{00040\ \ \ size\_type\ current\_capacity\_;}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ pointer\ get\_slot(size\_type\ index)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00045\ \ \ Array(size\_type\ block\_size\ =\ DEFAULT\_BLOCK\_SIZE);}
+\DoxyCodeLine{00046\ \ \ Array(size\_type\ count,\ const\_reference\ item);}
+\DoxyCodeLine{00047\ \ \ Array(std::initializer\_list<T>\ items);}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \textcolor{keyword}{template}\ <std::input\_iterator\ InputIterator>}
+\DoxyCodeLine{00050\ \ \ Array(InputIterator\ first,\ InputIterator\ last);}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ Array(\textcolor{keyword}{const}\ Array\ \&other);}
+\DoxyCodeLine{00053\ \ \ Array(Array\ \&\&other)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00054\ \ \ Array\ \&operator=(\textcolor{keyword}{const}\ Array\ \&other);}
+\DoxyCodeLine{00055\ \ \ Array\ \&operator=(Array\ \&\&other)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00056\ \ \ \string~Array()\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \textcolor{keywordtype}{void}\ add\_block();}
+\DoxyCodeLine{00059\ \ \ \textcolor{keywordtype}{void}\ remove\_block();}
+\DoxyCodeLine{00060\ \ \ \textcolor{comment}{//\ I\ wasn't\ sure\ if\ the\ aliases\ are\ only\ for\ the\ user\ or\ for\ us\ too}}
+\DoxyCodeLine{00061\ \ \ \textcolor{comment}{//\ so\ I\ tried\ using\ them\ in\ some\ of\ the\ declarations}}
+\DoxyCodeLine{00062\ \ \ size\_type\ size()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00063\ \ \ size\_type\ capacity()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00064\ \ \ \textcolor{keywordtype}{bool}\ empty()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \textcolor{keywordtype}{void}\ print(std::ostream\ \&stream\ =\ std::cout)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Source>}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{requires}\ std::constructible\_from<T,\ Source\ \&\&>}
+\DoxyCodeLine{00070\ \ \ \textcolor{keywordtype}{void}\ push\_back(Source\ \&\&item);}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{requires}\ std::constructible\_from<T,\ Args\ \&\&...>}
+\DoxyCodeLine{00074\ \ \ T\ \&emplace\_back(Args\ \&\&...args);}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \textcolor{keywordtype}{void}\ pop\_back();}
+\DoxyCodeLine{00077\ \ \ \textcolor{keywordtype}{void}\ clear()\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ reference\ at(size\_type\ index);}
+\DoxyCodeLine{00080\ \ \ const\_reference\ at(size\_type\ index)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00081\ \ \ reference\ operator[](size\_type\ index);}
+\DoxyCodeLine{00082\ \ \ const\_reference\ operator[](size\_type\ index)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \textcolor{keyword}{friend}\ std::ostream\ \&operator<<\ <T>(std::ostream\ \&stream,}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ Array<T>\ \&array);}
+\DoxyCodeLine{00086\ \ \ \textcolor{keyword}{friend}\ \textcolor{keywordtype}{void}\ swap<T>(Array<T>\ \&a,\ Array<T>\ \&b)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \textcolor{keyword}{template}\ <\textcolor{keywordtype}{bool}\ Constant>\ \textcolor{keyword}{class\ }iterator\_base\ \{}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }Array<T>;}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keyword}{using\ }array\_pointer\ =}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ std::conditional\_t<Constant,\ const\ Array<T>\ *,\ Array<T>\ *>;}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ array\_pointer\ parent\_;}
+\DoxyCodeLine{00095\ \ \ \ \ size\_type\ index\_;}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keyword}{using\ }iterator\_category\ =\ std::random\_access\_iterator\_tag;}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keyword}{using\ }value\_type\ =\ std::conditional\_t<Constant,\ const\ T,\ T>;}
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keyword}{using\ }difference\_type\ =\ std::ptrdiff\_t;}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keyword}{using\ }pointer\ =\ std::conditional\_t<Constant,\ const\ T\ *,\ T\ *>;}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keyword}{using\ }reference\ =\ std::conditional\_t<Constant,\ const\ T\ \&,\ T\ \&>;}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ iterator\_base()\ :\ parent\_(\textcolor{keyword}{nullptr}),\ index\_(0)\ \{\}}
+\DoxyCodeLine{00105\ \ \ \ \ iterator\_base(array\_pointer\ parent,\ size\_type\ index)}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ :\ parent\_(parent),\ index\_(index)\ \{\}}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keyword}{operator}\ iterator\_base<true>()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ iterator\_base<true>(parent\_,\ index\_);}
+\DoxyCodeLine{00110\ \ \ \ \ \}}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ iterator\_base\ \&other)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ parent\_\ ==\ other.parent\_\ \&\&\ index\_\ ==\ other.index\_;}
+\DoxyCodeLine{00114\ \ \ \ \ \}}
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator!=(\textcolor{keyword}{const}\ iterator\_base\ \&other)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ !(*\textcolor{keyword}{this}\ ==\ other);}
+\DoxyCodeLine{00117\ \ \ \ \ \}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ iterator\_base\ \&operator++()\ \{}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ ++index\_;}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00122\ \ \ \ \ \}}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ iterator\_base\ operator++(\textcolor{keywordtype}{int})\ \{}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ iterator\_base\ tmp\ =\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ ++index\_;}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ tmp;}
+\DoxyCodeLine{00128\ \ \ \ \ \}}
+\DoxyCodeLine{00129\ \ \ \ \ iterator\_base\ \&operator-\/-\/()\ \{}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ -\/-\/index\_;}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00132\ \ \ \ \ \}}
+\DoxyCodeLine{00133\ \ \ \ \ iterator\_base\ operator-\/-\/(\textcolor{keywordtype}{int})\ \{}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ iterator\_base\ tmp\ =\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ -\/-\/index\_;}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ tmp;}
+\DoxyCodeLine{00137\ \ \ \ \ \}}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \ \ reference\ operator*()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ (*parent\_)[index\_];\ \}}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ pointer\ operator-\/>()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \&((*parent\_)[index\_]);\ \}}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \ \ \ \ iterator\_base\ operator+(difference\_type\ n)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ iterator\_base(parent\_,\ index\_\ +\ n);}
+\DoxyCodeLine{00145\ \ \ \ \ \}}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \ \ \ \ iterator\_base\ operator-\/(difference\_type\ n)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ iterator\_base(parent\_,\ index\_\ -\/\ n);}
+\DoxyCodeLine{00149\ \ \ \ \ \}}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \ \ \ \ difference\_type\ operator-\/(\textcolor{keyword}{const}\ iterator\_base\ \&other)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}difference\_type\textcolor{keyword}{>}(index\_)\ -\/}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}difference\_type\textcolor{keyword}{>}(other.index\_);}
+\DoxyCodeLine{00154\ \ \ \ \ \}}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \ \ \ \ iterator\_base\ \&operator+=(difference\_type\ n)\ \{}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ index\_\ +=\ n;}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00159\ \ \ \ \ \}}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \ \ \ \ iterator\_base\ \&operator-\/=(difference\_type\ n)\ \{}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ index\_\ -\/=\ n;}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00164\ \ \ \ \ \}}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \ \ \ \ reference\ operator[](difference\_type\ n)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ *(*\textcolor{keyword}{this}\ +\ n);\ \}}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator<(\textcolor{keyword}{const}\ iterator\_base\ \&other)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ index\_\ <\ other.index\_;}
+\DoxyCodeLine{00170\ \ \ \ \ \}}
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator<=(\textcolor{keyword}{const}\ iterator\_base\ \&other)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ index\_\ <=\ other.index\_;}
+\DoxyCodeLine{00173\ \ \ \ \ \}}
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator>(\textcolor{keyword}{const}\ iterator\_base\ \&other)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ index\_\ >\ other.index\_;}
+\DoxyCodeLine{00176\ \ \ \ \ \}}
+\DoxyCodeLine{00177\ \ \ \ \ \textcolor{keywordtype}{bool}\ operator>=(\textcolor{keyword}{const}\ iterator\_base\ \&other)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ index\_\ >=\ other.index\_;}
+\DoxyCodeLine{00179\ \ \ \ \ \}}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{keyword}{friend}\ iterator\_base\ operator+(difference\_type\ n,\ \textcolor{keyword}{const}\ iterator\_base\ \&it)\ \{}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ it\ +\ n;}
+\DoxyCodeLine{00183\ \ \ \ \ \}}
+\DoxyCodeLine{00184\ \ \ \};}
+\DoxyCodeLine{00185\ \ \ \textcolor{keyword}{using\ }iterator\ =\ \mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator\_base<false>}};}
+\DoxyCodeLine{00186\ \ \ \textcolor{keyword}{using\ }const\_iterator\ =\ \mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator\_base<true>}};}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ \ \ \textcolor{keyword}{inline}\ iterator\ begin()\ \{\ \textcolor{keywordflow}{return}\ iterator(\textcolor{keyword}{this},\ 0);\ \}}
+\DoxyCodeLine{00189\ \ \ \textcolor{keyword}{inline}\ iterator\ end()\ \{\ \textcolor{keywordflow}{return}\ iterator(\textcolor{keyword}{this},\ current\_size\_);\ \}}
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \ \ \textcolor{keyword}{inline}\ const\_iterator\ begin()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ const\_iterator(\textcolor{keyword}{this},\ 0);\ \}}
+\DoxyCodeLine{00192\ \ \ \textcolor{keyword}{inline}\ const\_iterator\ end()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00193\ \ \ \ \ \textcolor{keywordflow}{return}\ const\_iterator(\textcolor{keyword}{this},\ current\_size\_);}
+\DoxyCodeLine{00194\ \ \ \}}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \ \ \textcolor{keyword}{inline}\ const\_iterator\ cbegin()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ const\_iterator(\textcolor{keyword}{this},\ 0);\ \}}
+\DoxyCodeLine{00197\ \ \ \textcolor{keyword}{inline}\ const\_iterator\ cend()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00198\ \ \ \ \ \textcolor{keywordflow}{return}\ const\_iterator(\textcolor{keyword}{this},\ current\_size\_);}
+\DoxyCodeLine{00199\ \ \ \}}
+\DoxyCodeLine{00200\ \ \ \textcolor{keywordtype}{void}\ resize(\textcolor{keywordtype}{size\_t}\ size);}
+\DoxyCodeLine{00201\ \ \ iterator\ erase(const\_iterator\ first,\ const\_iterator\ last);}
+\DoxyCodeLine{00202\ \};}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \textcolor{keyword}{template}\ <ArrayElement\ T>\ \textcolor{keywordtype}{void}\ Array<T>::resize(\textcolor{keywordtype}{size\_t}\ size)\ \{}
+\DoxyCodeLine{00205\ \ \ \textcolor{keyword}{static\_assert}(}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ std::default\_initializable<T>,}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}resize()\ requires\ T\ to\ be\ default\ initializable\ to\ fill\ new\ slots"{}});}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \ \ \textcolor{keywordflow}{if}\ (size\ <\ current\_size\_)\ \{}
+\DoxyCodeLine{00210\ \ \ \ \ \textcolor{keywordflow}{while}\ (current\_size\_\ >\ size)\ \{}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ pop\_back();}
+\DoxyCodeLine{00212\ \ \ \ \ \}}
+\DoxyCodeLine{00213\ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (size\ >\ current\_size\_)\ \{}
+\DoxyCodeLine{00214\ \ \ \ \ size\_type\ original\_size\ =\ current\_size\_;}
+\DoxyCodeLine{00215\ \ \ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (current\_size\_\ <\ size)\ \{}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ emplace\_back();}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00219\ \ \ \ \ \}\ \textcolor{keywordflow}{catch}\ (...)\ \{}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (current\_size\_\ >\ original\_size)\ \{}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ pop\_back();}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \textcolor{keywordflow}{throw};}
+\DoxyCodeLine{00224\ \ \ \ \ \}}
+\DoxyCodeLine{00225\ \ \ \}}
+\DoxyCodeLine{00226\ \}}
+\DoxyCodeLine{00227\ }
+\DoxyCodeLine{00228\ \textcolor{keyword}{template}\ <ArrayElement\ T>}
+\DoxyCodeLine{00229\ \textcolor{keyword}{typename}\ Array<T>::iterator\ Array<T>::erase(const\_iterator\ first,}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ const\_iterator\ last)\ \{}
+\DoxyCodeLine{00231\ \ \ \textcolor{keyword}{static\_assert}(std::assignable\_from<T\ \&,\ T\ \&\&>,\ \textcolor{stringliteral}{"{}T\ must\ be\ move-\/assignable"{}});}
+\DoxyCodeLine{00232\ \ \ \textcolor{keyword}{static\_assert}(}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \textcolor{keyword}{requires}(T\ \&t,\ T\ \&\&s)\ \{}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \{\ t\ =\ std::move(s)\ \}\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \},\ \textcolor{stringliteral}{"{}T\ move\ assignment\ must\ be\ noexcept\ for\ exception-\/safe\ erase"{}});}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ \ \ difference\_type\ num\_to\_erase\ =\ last\ -\/\ first;}
+\DoxyCodeLine{00238\ \ \ \textcolor{keywordflow}{if}\ (num\_to\_erase\ <=\ 0)\ \{}
+\DoxyCodeLine{00239\ \ \ \ \ \textcolor{keywordflow}{return}\ begin()\ +\ (first\ -\/\ cbegin());}
+\DoxyCodeLine{00240\ \ \ \}}
+\DoxyCodeLine{00241\ \ \ size\_type\ start\_index\ =\ first.index\_;}
+\DoxyCodeLine{00242\ \ \ size\_type\ end\_index\ =\ last.index\_;}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ \ \ \textcolor{keywordflow}{for}\ (size\_type\ i\ =\ end\_index;\ i\ <\ current\_size\_;\ ++i)\ \{}
+\DoxyCodeLine{00245\ \ \ \ \ (*this)[i\ -\/\ num\_to\_erase]\ =\ std::move((*\textcolor{keyword}{this})[i]);}
+\DoxyCodeLine{00246\ \ \ \}}
+\DoxyCodeLine{00247\ \ \ \textcolor{keywordflow}{for}\ (difference\_type\ i\ =\ 0;\ i\ <\ num\_to\_erase;\ ++i)\ \{}
+\DoxyCodeLine{00248\ \ \ \ \ pop\_back();}
+\DoxyCodeLine{00249\ \ \ \}}
+\DoxyCodeLine{00250\ \ \ \textcolor{keywordflow}{return}\ begin()\ +\ start\_index;}
+\DoxyCodeLine{00251\ \}}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ \textcolor{keyword}{template}\ <ArrayElement\ T>\ T\ *Array<T>::get\_slot(size\_type\ index)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00254\ \ \ \textcolor{keywordflow}{return}\ \&(data\_[index\ /\ block\_size\_][index\ \%\ block\_size\_]);}
+\DoxyCodeLine{00255\ \}}
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ \textcolor{keyword}{template}\ <ArrayElement\ T>}
+\DoxyCodeLine{00258\ Array<T>::Array(size\_type\ block\_size)}
+\DoxyCodeLine{00259\ \ \ \ \ :\ block\_size\_(block\_size),\ current\_size\_(0),\ current\_capacity\_(0)\ \{\}}
+\DoxyCodeLine{00260\ \textcolor{keyword}{template}\ <ArrayElement\ T>\ Array<T>::\string~Array()\ noexcept\ \{\ clear();\ \}}
+\DoxyCodeLine{00261\ \textcolor{keyword}{template}\ <ArrayElement\ T>\ \textcolor{keywordtype}{void}\ Array<T>::add\_block()\ \{}
+\DoxyCodeLine{00262\ \ \ pointer\ new\_block\ =}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \textcolor{keyword}{static\_cast<}pointer\textcolor{keyword}{>}(::operator\ \textcolor{keyword}{new}(block\_size\_\ *\ \textcolor{keyword}{sizeof}(T)));}
+\DoxyCodeLine{00264\ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00265\ \ \ \ \ data\_.push\_back(new\_block);}
+\DoxyCodeLine{00266\ \ \ \}\ \textcolor{keywordflow}{catch}\ (\textcolor{keyword}{const}\ std::bad\_alloc\ \&e)\ \{}
+\DoxyCodeLine{00267\ \ \ \ \ ::operator\ \textcolor{keyword}{delete}(new\_block);}
+\DoxyCodeLine{00268\ \ \ \ \ \textcolor{keywordflow}{throw};}
+\DoxyCodeLine{00269\ \ \ \}}
+\DoxyCodeLine{00270\ \ \ current\_capacity\_\ +=\ block\_size\_;}
+\DoxyCodeLine{00271\ \}}
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00273\ \textcolor{keyword}{template}\ <ArrayElement\ T>\ \textcolor{keywordtype}{void}\ Array<T>::remove\_block()\ \{}
+\DoxyCodeLine{00274\ \ \ ::operator\ \textcolor{keyword}{delete}(data\_.back());\ \textcolor{comment}{//\ Free\ the\ memory\ of\ the\ last\ block}}
+\DoxyCodeLine{00275\ \ \ data\_.pop\_back();\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Remove\ the\ block\ from\ the\ vector}}
+\DoxyCodeLine{00276\ \ \ current\_capacity\_\ -\/=\ block\_size\_;}
+\DoxyCodeLine{00277\ \}}
+\DoxyCodeLine{00278\ }
+\DoxyCodeLine{00279\ \textcolor{keyword}{template}\ <ArrayElement\ T>}
+\DoxyCodeLine{00280\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Source>}
+\DoxyCodeLine{00281\ \ \ \textcolor{keyword}{requires}\ std::constructible\_from<T,\ Source\ \&\&>}
+\DoxyCodeLine{00282\ \textcolor{keywordtype}{void}\ Array<T>::push\_back(Source\ \&\&item)\ \{}
+\DoxyCodeLine{00283\ \ \ emplace\_back(std::forward<Source>(item));}
+\DoxyCodeLine{00284\ \}}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \textcolor{keyword}{template}\ <ArrayElement\ T>}
+\DoxyCodeLine{00287\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}...\ Args>}
+\DoxyCodeLine{00288\ \ \ \textcolor{keyword}{requires}\ std::constructible\_from<T,\ Args\ \&\&...>}
+\DoxyCodeLine{00289\ T\ \&Array<T>::emplace\_back(Args\ \&\&...args)\ \{}
+\DoxyCodeLine{00290\ \ \ \textcolor{keywordtype}{bool}\ added\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00291\ \ \ \textcolor{keywordflow}{if}\ (current\_size\_\ ==\ current\_capacity\_)\ \{}
+\DoxyCodeLine{00292\ \ \ \ \ add\_block();}
+\DoxyCodeLine{00293\ \ \ \ \ added\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00294\ \ \ \}}
+\DoxyCodeLine{00295\ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00296\ \ \ \ \ T\ *target\ =\ get\_slot(current\_size\_);}
+\DoxyCodeLine{00297\ \ \ \ \ \textcolor{keyword}{new}\ (target)\ T(std::forward<Args>(args)...);}
+\DoxyCodeLine{00298\ \ \ \ \ ++current\_size\_;}
+\DoxyCodeLine{00299\ \ \ \ \ \textcolor{keywordflow}{return}\ *target;}
+\DoxyCodeLine{00300\ \ \ \}\ \textcolor{keywordflow}{catch}\ (...)\ \{}
+\DoxyCodeLine{00301\ \ \ \ \ \textcolor{keywordflow}{if}\ (added)}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ remove\_block();}
+\DoxyCodeLine{00303\ \ \ \ \ \textcolor{keywordflow}{throw};}
+\DoxyCodeLine{00304\ \ \ \}}
+\DoxyCodeLine{00305\ \}}
+\DoxyCodeLine{00306\ }
+\DoxyCodeLine{00307\ \textcolor{keyword}{template}\ <ArrayElement\ T>\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{size\_t}\ Array<T>::size()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00308\ \ \ \textcolor{keywordflow}{return}\ current\_size\_;}
+\DoxyCodeLine{00309\ \}}
+\DoxyCodeLine{00310\ }
+\DoxyCodeLine{00311\ \textcolor{keyword}{template}\ <ArrayElement\ T>\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{size\_t}\ Array<T>::capacity()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00312\ \ \ \textcolor{keywordflow}{return}\ current\_capacity\_;}
+\DoxyCodeLine{00313\ \}}
+\DoxyCodeLine{00314\ }
+\DoxyCodeLine{00315\ \textcolor{keyword}{template}\ <ArrayElement\ T>\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ Array<T>::empty()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00316\ \ \ \textcolor{keywordflow}{return}\ current\_size\_\ ==\ 0;}
+\DoxyCodeLine{00317\ \}}
+\DoxyCodeLine{00318\ }
+\DoxyCodeLine{00319\ \textcolor{keyword}{template}\ <ArrayElement\ T>\ \textcolor{keywordtype}{void}\ Array<T>::print(std::ostream\ \&stream)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00320\ \ \ stream\ <<\ \textcolor{stringliteral}{"{}["{}};}
+\DoxyCodeLine{00321\ \ \ \textcolor{keywordflow}{for}\ (size\_type\ i\ =\ 0;\ i\ <\ current\_size\_;\ ++i)\ \{}
+\DoxyCodeLine{00322\ \ \ \ \ \textcolor{keywordflow}{if}\ (i\ >\ 0)\ \{}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ stream\ <<\ \textcolor{stringliteral}{"{},\ "{}};}
+\DoxyCodeLine{00324\ \ \ \ \ \}}
+\DoxyCodeLine{00325\ \ \ \ \ stream\ <<\ *get\_slot(i);}
+\DoxyCodeLine{00326\ \ \ \}}
+\DoxyCodeLine{00327\ \ \ stream\ <<\ \textcolor{stringliteral}{"{}]"{}};}
+\DoxyCodeLine{00328\ \}}
+\DoxyCodeLine{00329\ }
+\DoxyCodeLine{00330\ \textcolor{keyword}{template}\ <ArrayElement\ T>}
+\DoxyCodeLine{00331\ std::ostream\ \&operator<<(std::ostream\ \&stream,\ \textcolor{keyword}{const}\ Array<T>\ \&array)\ \{}
+\DoxyCodeLine{00332\ \ \ array.print(stream);}
+\DoxyCodeLine{00333\ \ \ \textcolor{keywordflow}{return}\ stream;}
+\DoxyCodeLine{00334\ \}}
+\DoxyCodeLine{00335\ }
+\DoxyCodeLine{00336\ \textcolor{keyword}{template}\ <ArrayElement\ T>\ \textcolor{keywordtype}{void}\ Array<T>::pop\_back()\ \{}
+\DoxyCodeLine{00337\ \textcolor{preprocessor}{\#ifdef\ ARRAY\_DEBUG\_MODE}}
+\DoxyCodeLine{00338\ \ \ \textcolor{keywordflow}{if}\ (empty())\ \{}
+\DoxyCodeLine{00339\ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}Empty\ array"{}});}
+\DoxyCodeLine{00340\ \ \ \}}
+\DoxyCodeLine{00341\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00342\ \ \ pointer\ target\ =\ get\_slot(current\_size\_\ -\/\ 1);}
+\DoxyCodeLine{00343\ \ \ target-\/>\string~T();}
+\DoxyCodeLine{00344\ }
+\DoxyCodeLine{00345\ \ \ -\/-\/current\_size\_;}
+\DoxyCodeLine{00346\ }
+\DoxyCodeLine{00347\ \ \ \textcolor{keywordflow}{if}\ (current\_size\_\ \%\ block\_size\_\ ==\ 0)\ \{}
+\DoxyCodeLine{00348\ \ \ \ \ remove\_block();}
+\DoxyCodeLine{00349\ \ \ \}}
+\DoxyCodeLine{00350\ \}}
+\DoxyCodeLine{00351\ }
+\DoxyCodeLine{00352\ \textcolor{keyword}{template}\ <ArrayElement\ T>\ \textcolor{keywordtype}{void}\ Array<T>::clear()\ noexcept\ \{}
+\DoxyCodeLine{00353\ \ \ \textcolor{keywordflow}{for}\ (size\_type\ i\ =\ current\_size\_;\ i\ >\ 0;\ -\/-\/i)\ \{}
+\DoxyCodeLine{00354\ \ \ \ \ pop\_back();}
+\DoxyCodeLine{00355\ \ \ \}}
+\DoxyCodeLine{00356\ \}}
+\DoxyCodeLine{00357\ }
+\DoxyCodeLine{00358\ \textcolor{keyword}{template}\ <ArrayElement\ T>}
+\DoxyCodeLine{00359\ Array<T>::Array(size\_type\ count,\ const\_reference\ item)}
+\DoxyCodeLine{00360\ \ \ \ \ :\ block\_size\_(DEFAULT\_BLOCK\_SIZE),\ current\_size\_(0),\ current\_capacity\_(0)\ \{}
+\DoxyCodeLine{00361\ \ \ \textcolor{keyword}{static\_assert}(std::copy\_constructible<T>,}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Repeating\ constructor\ requires\ T\ to\ be\ copy\ constructible"{}});}
+\DoxyCodeLine{00363\ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00364\ \ \ \ \ \textcolor{keywordflow}{for}\ (size\_type\ i\ =\ 0;\ i\ <\ count;\ ++i)\ \{}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ push\_back(item);}
+\DoxyCodeLine{00366\ \ \ \ \ \}}
+\DoxyCodeLine{00367\ \ \ \}\ \textcolor{keywordflow}{catch}\ (...)\ \{}
+\DoxyCodeLine{00368\ \ \ \ \ clear();}
+\DoxyCodeLine{00369\ \ \ \ \ \textcolor{keywordflow}{throw};}
+\DoxyCodeLine{00370\ \ \ \}}
+\DoxyCodeLine{00371\ \}}
+\DoxyCodeLine{00372\ }
+\DoxyCodeLine{00373\ \textcolor{keyword}{template}\ <ArrayElement\ T>}
+\DoxyCodeLine{00374\ Array<T>::Array(std::initializer\_list<T>\ items)}
+\DoxyCodeLine{00375\ \ \ \ \ :\ block\_size\_(DEFAULT\_BLOCK\_SIZE),\ current\_size\_(0),\ current\_capacity\_(0)\ \{}
+\DoxyCodeLine{00376\ \ \ \textcolor{keyword}{static\_assert}(}
+\DoxyCodeLine{00377\ \ \ \ \ \ \ std::copy\_constructible<T>,}
+\DoxyCodeLine{00378\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Initializer\ list\ constructor\ requires\ T\ to\ be\ copy\ constructible"{}});}
+\DoxyCodeLine{00379\ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00380\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ \&item\ :\ items)\ \{}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ push\_back(item);}
+\DoxyCodeLine{00382\ \ \ \ \ \}}
+\DoxyCodeLine{00383\ \ \ \}\ \textcolor{keywordflow}{catch}\ (...)\ \{}
+\DoxyCodeLine{00384\ \ \ \ \ clear();}
+\DoxyCodeLine{00385\ \ \ \ \ \textcolor{keywordflow}{throw};}
+\DoxyCodeLine{00386\ \ \ \}}
+\DoxyCodeLine{00387\ \}}
+\DoxyCodeLine{00388\ }
+\DoxyCodeLine{00389\ \textcolor{keyword}{template}\ <ArrayElement\ T>}
+\DoxyCodeLine{00390\ \textcolor{keyword}{template}\ <std::input\_iterator\ InputIterator>}
+\DoxyCodeLine{00391\ Array<T>::Array(InputIterator\ first,\ InputIterator\ last)}
+\DoxyCodeLine{00392\ \ \ \ \ :\ block\_size\_(DEFAULT\_BLOCK\_SIZE),\ current\_size\_(0),\ current\_capacity\_(0)\ \{}
+\DoxyCodeLine{00393\ \ \ \textcolor{keyword}{using\ }IterRef\ =\ \textcolor{keyword}{typename}\ std::iterator\_traits<InputIterator>::reference;}
+\DoxyCodeLine{00394\ \ \ \textcolor{keyword}{static\_assert}(std::constructible\_from<T,\ IterRef>,}
+\DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}T\ must\ be\ constructible\ from\ the\ iterator's\ reference\ type"{}});}
+\DoxyCodeLine{00396\ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00397\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ it\ =\ first;\ it\ !=\ last;\ ++it)\ \{}
+\DoxyCodeLine{00398\ \ \ \ \ \ \ push\_back(*it);}
+\DoxyCodeLine{00399\ \ \ \ \ \}}
+\DoxyCodeLine{00400\ \ \ \}\ \textcolor{keywordflow}{catch}\ (...)\ \{}
+\DoxyCodeLine{00401\ \ \ \ \ clear();}
+\DoxyCodeLine{00402\ \ \ \ \ \textcolor{keywordflow}{throw};}
+\DoxyCodeLine{00403\ \ \ \}}
+\DoxyCodeLine{00404\ \}}
+\DoxyCodeLine{00405\ }
+\DoxyCodeLine{00406\ \textcolor{keyword}{template}\ <ArrayElement\ T>\ T\ \&Array<T>::at(size\_type\ index)\ \{}
+\DoxyCodeLine{00407\ \ \ \textcolor{keywordflow}{if}\ (index\ >=\ current\_size\_)\ \{}
+\DoxyCodeLine{00408\ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(\textcolor{stringliteral}{"{}Invalid\ index"{}});}
+\DoxyCodeLine{00409\ \ \ \}}
+\DoxyCodeLine{00410\ \ \ \textcolor{keywordflow}{return}\ data\_[index\ /\ block\_size\_][index\ \%\ block\_size\_];}
+\DoxyCodeLine{00411\ \}}
+\DoxyCodeLine{00412\ }
+\DoxyCodeLine{00413\ \textcolor{keyword}{template}\ <ArrayElement\ T>\ \textcolor{keyword}{const}\ T\ \&Array<T>::at(size\_type\ index)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00414\ \ \ \textcolor{keywordflow}{if}\ (index\ >=\ current\_size\_)\ \{}
+\DoxyCodeLine{00415\ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(\textcolor{stringliteral}{"{}Invalid\ index"{}});}
+\DoxyCodeLine{00416\ \ \ \}}
+\DoxyCodeLine{00417\ \ \ \textcolor{keywordflow}{return}\ data\_[index\ /\ block\_size\_][index\ \%\ block\_size\_];}
+\DoxyCodeLine{00418\ \}}
+\DoxyCodeLine{00419\ }
+\DoxyCodeLine{00420\ \textcolor{keyword}{template}\ <ArrayElement\ T>\ T\ \&Array<T>::operator[](size\_type\ index)\ \{}
+\DoxyCodeLine{00421\ \textcolor{preprocessor}{\#ifdef\ ARRAY\_DEBUG\_MODE}}
+\DoxyCodeLine{00422\ \ \ \textcolor{keywordflow}{if}\ (index\ >=\ current\_size\_)\ \{}
+\DoxyCodeLine{00423\ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(\textcolor{stringliteral}{"{}Invalid\ index"{}});}
+\DoxyCodeLine{00424\ \ \ \}}
+\DoxyCodeLine{00425\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00426\ \ \ \textcolor{keywordflow}{return}\ data\_[index\ /\ block\_size\_][index\ \%\ block\_size\_];}
+\DoxyCodeLine{00427\ \}}
+\DoxyCodeLine{00428\ }
+\DoxyCodeLine{00429\ \textcolor{keyword}{template}\ <ArrayElement\ T>\ \textcolor{keyword}{const}\ T\ \&Array<T>::operator[](size\_type\ index)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00430\ \textcolor{preprocessor}{\#ifdef\ ARRAY\_DEBUG\_MODE}}
+\DoxyCodeLine{00431\ \ \ \textcolor{keywordflow}{if}\ (index\ >=\ current\_size\_)\ \{}
+\DoxyCodeLine{00432\ \ \ \ \ \textcolor{keywordflow}{throw}\ std::out\_of\_range(\textcolor{stringliteral}{"{}Invalid\ index"{}});}
+\DoxyCodeLine{00433\ \ \ \}}
+\DoxyCodeLine{00434\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00435\ \ \ \textcolor{keywordflow}{return}\ data\_[index\ /\ block\_size\_][index\ \%\ block\_size\_];}
+\DoxyCodeLine{00436\ \}}
+\DoxyCodeLine{00437\ }
+\DoxyCodeLine{00438\ \textcolor{keyword}{template}\ <ArrayElement\ T>\ \textcolor{keywordtype}{void}\ swap(Array<T>\ \&a,\ Array<T>\ \&b)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00439\ \ \ \textcolor{keyword}{using\ }std::swap;}
+\DoxyCodeLine{00440\ \ \ swap(a.data\_,\ b.data\_);}
+\DoxyCodeLine{00441\ \ \ swap(a.block\_size\_,\ b.block\_size\_);}
+\DoxyCodeLine{00442\ \ \ swap(a.current\_size\_,\ b.current\_size\_);}
+\DoxyCodeLine{00443\ \ \ swap(a.current\_capacity\_,\ b.current\_capacity\_);}
+\DoxyCodeLine{00444\ \}}
+\DoxyCodeLine{00445\ }
+\DoxyCodeLine{00446\ \textcolor{keyword}{template}\ <ArrayElement\ T>}
+\DoxyCodeLine{00447\ Array<T>::Array(\textcolor{keyword}{const}\ Array\ \&other)}
+\DoxyCodeLine{00448\ \ \ \ \ :\ block\_size\_(other.block\_size\_),\ current\_size\_(0),\ current\_capacity\_(0)\ \{}
+\DoxyCodeLine{00449\ \ \ \textcolor{keyword}{static\_assert}(}
+\DoxyCodeLine{00450\ \ \ \ \ \ \ std::copy\_constructible<T>,}
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Array::Array(const\ Array\&)\ requires\ T\ to\ be\ copy\ constructible"{}});}
+\DoxyCodeLine{00452\ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00453\ \ \ \ \ \textcolor{keywordflow}{for}\ (size\_type\ i\ =\ 0;\ i\ <\ other.current\_size\_;\ ++i)\ \{}
+\DoxyCodeLine{00454\ \ \ \ \ \ \ push\_back(other.at(i));}
+\DoxyCodeLine{00455\ \ \ \ \ \}}
+\DoxyCodeLine{00456\ \ \ \}\ \textcolor{keywordflow}{catch}\ (...)\ \{}
+\DoxyCodeLine{00457\ \ \ \ \ clear();}
+\DoxyCodeLine{00458\ \ \ \ \ \textcolor{keywordflow}{throw};}
+\DoxyCodeLine{00459\ \ \ \}}
+\DoxyCodeLine{00460\ \}}
+\DoxyCodeLine{00461\ }
+\DoxyCodeLine{00462\ \textcolor{keyword}{template}\ <ArrayElement\ T>}
+\DoxyCodeLine{00463\ Array<T>::Array(Array\ \&\&other)\ noexcept}
+\DoxyCodeLine{00464\ \ \ \ \ :\ block\_size\_(other.block\_size\_),\ current\_size\_(0),\ current\_capacity\_(0)\ \{}
+\DoxyCodeLine{00465\ \ \ swap(*\textcolor{keyword}{this},\ other);}
+\DoxyCodeLine{00466\ \}}
+\DoxyCodeLine{00467\ }
+\DoxyCodeLine{00468\ \textcolor{keyword}{template}\ <ArrayElement\ T>\ Array<T>\ \&Array<T>::operator=(\textcolor{keyword}{const}\ Array\ \&other)\ \{}
+\DoxyCodeLine{00469\ \ \ \textcolor{keyword}{static\_assert}(std::copy\_constructible<T>,}
+\DoxyCodeLine{00470\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}Array::operator=\ requires\ T\ to\ be\ copy\ constructible"{}});}
+\DoxyCodeLine{00471\ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{this}\ !=\ \&other)\ \{}
+\DoxyCodeLine{00472\ \ \ \ \ Array\ temp(other);}
+\DoxyCodeLine{00473\ \ \ \ \ swap(*\textcolor{keyword}{this},\ temp);}
+\DoxyCodeLine{00474\ \ \ \}}
+\DoxyCodeLine{00475\ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00476\ \}}
+\DoxyCodeLine{00477\ }
+\DoxyCodeLine{00478\ \textcolor{keyword}{template}\ <ArrayElement\ T>}
+\DoxyCodeLine{00479\ Array<T>\ \&Array<T>::operator=(Array\ \&\&other)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00480\ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{this}\ !=\ \&other)\ \{}
+\DoxyCodeLine{00481\ \ \ \ \ clear();}
+\DoxyCodeLine{00482\ \ \ \ \ block\_size\_\ =\ other.block\_size\_;}
+\DoxyCodeLine{00483\ \ \ \ \ swap(*\textcolor{keyword}{this},\ other);}
+\DoxyCodeLine{00484\ \ \ \}}
+\DoxyCodeLine{00485\ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00486\ \}}
+\DoxyCodeLine{00487\ }
+\DoxyCodeLine{00488\ \}\ \textcolor{comment}{//\ namespace\ lib}}
+\DoxyCodeLine{00489\ }
+\DoxyCodeLine{00490\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ ARRAY\_H}}
+
+\end{DoxyCode}

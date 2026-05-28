@@ -1,0 +1,637 @@
+\doxysection{Graph.\+h}
+\hypertarget{Graph_8h_source}{}\label{Graph_8h_source}\index{graph\_module/Graph.h@{graph\_module/Graph.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ GRAPH\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ GRAPH\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}Array.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}Utils.h"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <concepts>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <cstddef>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <cstdint>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <new>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <optional>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <sstream>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <string\_view>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <type\_traits>}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00018\ \textcolor{keyword}{concept\ }\mbox{\hyperlink{conceptGraphData}{GraphData}}\ =\ !std::is\_pointer\_v<T>\ \&\&\ std::copyable<T>\ \&\&\ std::movable<T>\ \&\&}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::is\_nothrow\_move\_constructible\_v<T>\ \&\&\ std::is\_nothrow\_move\_assignable\_v<T>\ \&\&}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::default\_initializable<T>\ \&\&\ \textcolor{keyword}{requires}(std::ostream\&\ os,\ std::istream\&\ is,\ T\ data)\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ os\ <<\ data\ \}\ -\/>\ std::same\_as<std::ostream\&>;}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ is\ >>\ data\ \}\ -\/>\ std::same\_as<std::istream\&>;}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>\ \textcolor{keyword}{class\ }Graph\ \{}
+\DoxyCodeLine{00026\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00027\ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classGraph_1_1Nodes}{Nodes}};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classGraph_1_1Edges}{Edges}};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \textcolor{keyword}{virtual}\ \string~Graph()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00032\ \ \ Graph(\textcolor{keyword}{const}\ Graph\&\ other);}
+\DoxyCodeLine{00033\ \ \ Graph(Graph\&\&\ other)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classGraph_1_1Nodes}{Nodes}}\&\ nodes()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00036\ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classGraph_1_1Edges}{Edges}}\&\ edges()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00037\ \ \ \mbox{\hyperlink{classGraph_1_1Nodes}{Nodes}}\&\ nodes();}
+\DoxyCodeLine{00038\ \ \ \mbox{\hyperlink{classGraph_1_1Edges}{Edges}}\&\ edges();}
+\DoxyCodeLine{00039\ \ \ \textcolor{keywordtype}{void}\ print(std::ostream\&\ stream\ =\ std::cout)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00040\ \ \ \textcolor{keywordtype}{void}\ print(\textcolor{keyword}{const}\ std::string\&\ filename)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00041\ \ \ \ \ std::ofstream\ file(filename);}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordflow}{if}\ (!file.is\_open())}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{classFileException}{FileException}}(UNABLE\_TO\_OPEN\_OUTPUT\_FILE,\ filename);}
+\DoxyCodeLine{00044\ \ \ \ \ print(file);}
+\DoxyCodeLine{00045\ \ \ \}}
+\DoxyCodeLine{00046\ \ \ \textcolor{keywordtype}{void}\ \textcolor{keyword}{import}(std::istream\&\ stream\ =\ std::cin);}
+\DoxyCodeLine{00047\ \ \ \textcolor{keywordtype}{void}\ \textcolor{keyword}{import}(std::string\_view\ filename);}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ Graph\&\ operator=(\textcolor{keyword}{const}\ Graph\&\ other);}
+\DoxyCodeLine{00050\ \ \ Graph\&\ operator=(Graph\&\&\ other)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \textcolor{keyword}{friend}\ std::ostream\&\ operator<<(std::ostream\&\ stream,\ \textcolor{keyword}{const}\ Graph\&\ g)\ \{}
+\DoxyCodeLine{00053\ \ \ \ \ g.print(stream);}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordflow}{return}\ stream;}
+\DoxyCodeLine{00055\ \ \ \}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \textcolor{keywordtype}{void}\ clear();}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00060\ \ \ \textcolor{keyword}{using\ }AdjMatrix\ =\ \mbox{\hyperlink{classlib_1_1Array}{lib::Array<lib::Array<std::optional<Identifier>}}>>;}
+\DoxyCodeLine{00061\ \ \ AdjMatrix\ adjMatrix\_;}
+\DoxyCodeLine{00062\ \ \ \mbox{\hyperlink{classGraph_1_1Nodes}{Nodes}}\ nodes\_;}
+\DoxyCodeLine{00063\ \ \ \mbox{\hyperlink{classGraph_1_1Edges}{Edges}}\ edges\_;}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classGraph_1_1Nodes}{Nodes}};}
+\DoxyCodeLine{00066\ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classGraph_1_1Edges}{Edges}};}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \textcolor{keywordtype}{void}\ expandMatrix();}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \textcolor{keywordtype}{void}\ parseNode(std::istringstream\&\ ss);}
+\DoxyCodeLine{00071\ \ \ \textcolor{keywordtype}{void}\ parseEdge(std::istringstream\&\ ss);}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ isDirected()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00076\ \ \ Graph()\ :\ nodes\_(\textcolor{keyword}{this}),\ edges\_(\textcolor{keyword}{this})\ \{\}}
+\DoxyCodeLine{00077\ \};}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00080\ \mbox{\hyperlink{classGraph}{Graph<NData,\ EData>}}\&\ Graph<NData,\ EData>::operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{classGraph}{Graph}}\&\ other)\ \{}
+\DoxyCodeLine{00081\ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{this}\ ==\ \&other)}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00083\ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00084\ \ \ \ \ this-\/>adjMatrix\_\ =\ other.adjMatrix\_;}
+\DoxyCodeLine{00085\ \ \ \ \ this-\/>nodes\_\ =\ other.nodes\_;}
+\DoxyCodeLine{00086\ \ \ \ \ this-\/>edges\_\ =\ other.edges\_;}
+\DoxyCodeLine{00087\ \ \ \ \ nodes\_.owner\_\ =\ \textcolor{keyword}{this};}
+\DoxyCodeLine{00088\ \ \ \ \ edges\_.owner\_\ =\ \textcolor{keyword}{this};}
+\DoxyCodeLine{00089\ \ \ \}\ \textcolor{keywordflow}{catch}\ (\textcolor{keyword}{const}\ std::bad\_alloc\&)\ \{}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{classMemoryException}{MemoryException}}(UNAVAILABLE\_MEMORY\_ASSIGN);}
+\DoxyCodeLine{00091\ \ \ \}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00094\ \}}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00097\ \mbox{\hyperlink{classGraph}{Graph<NData,\ EData>}}\&\ Graph<NData,\ EData>::operator=(\mbox{\hyperlink{classGraph}{Graph}}\&\&\ other)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00098\ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{this}\ ==\ \&other)}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00100\ \ \ clear();}
+\DoxyCodeLine{00101\ \ \ adjMatrix\_\ =\ std::move(other.adjMatrix\_);}
+\DoxyCodeLine{00102\ \ \ nodes\_\ =\ std::move(other.nodes\_);}
+\DoxyCodeLine{00103\ \ \ edges\_\ =\ std::move(other.edges\_);}
+\DoxyCodeLine{00104\ \ \ nodes\_.owner\_\ =\ \textcolor{keyword}{this};}
+\DoxyCodeLine{00105\ \ \ edges\_.owner\_\ =\ \textcolor{keyword}{this};}
+\DoxyCodeLine{00106\ \ \ other.nodes\_.owner\_\ =\ \&other;}
+\DoxyCodeLine{00107\ \ \ other.edges\_.owner\_\ =\ \&other;}
+\DoxyCodeLine{00108\ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00109\ \}}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>\ \textcolor{keywordtype}{void}\ Graph<NData,\ EData>::clear()\ \{}
+\DoxyCodeLine{00112\ \ \ adjMatrix\_.clear();}
+\DoxyCodeLine{00113\ \ \ nodes\_.clear();}
+\DoxyCodeLine{00114\ \ \ edges\_.clear();}
+\DoxyCodeLine{00115\ \}}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00118\ Graph<NData,\ EData>::Graph(\textcolor{keyword}{const}\ \mbox{\hyperlink{classGraph}{Graph}}\&\ other)\ \textcolor{keyword}{try}}
+\DoxyCodeLine{00119\ \ \ \ \ :\ adjMatrix\_(other.adjMatrix\_),\ nodes\_(other.nodes\_),\ edges\_(other.edges\_)\ \{}
+\DoxyCodeLine{00120\ \ \ nodes\_.owner\_\ =\ \textcolor{keyword}{this};}
+\DoxyCodeLine{00121\ \ \ edges\_.owner\_\ =\ \textcolor{keyword}{this};}
+\DoxyCodeLine{00122\ \}\ \textcolor{keywordflow}{catch}\ (\textcolor{keyword}{const}\ std::bad\_alloc\&)\ \{}
+\DoxyCodeLine{00123\ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{classMemoryException}{MemoryException}}(UNAVAILABLE\_MEMORY\_COPY);}
+\DoxyCodeLine{00124\ \}\ \textcolor{keywordflow}{catch}\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{classMemoryException}{MemoryException}}\&)\ \{}
+\DoxyCodeLine{00125\ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{classMemoryException}{MemoryException}}(UNAVAILABLE\_MEMORY\_COPY);}
+\DoxyCodeLine{00126\ \}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00129\ Graph<NData,\ EData>::Graph(\mbox{\hyperlink{classGraph}{Graph}}\&\&\ other)\ noexcept}
+\DoxyCodeLine{00130\ \ \ \ \ :\ adjMatrix\_(std::move(other.adjMatrix\_)),\ nodes\_(std::move(other.nodes\_)),}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ edges\_(std::move(other.edges\_))\ \{}
+\DoxyCodeLine{00132\ \ \ nodes\_.owner\_\ =\ \textcolor{keyword}{this};}
+\DoxyCodeLine{00133\ \ \ edges\_.owner\_\ =\ \textcolor{keyword}{this};}
+\DoxyCodeLine{00134\ \ \ other.nodes\_.owner\_\ =\ \&other;}
+\DoxyCodeLine{00135\ \ \ other.edges\_.owner\_\ =\ \&other;}
+\DoxyCodeLine{00136\ \}}
+\DoxyCodeLine{00137\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>\ \textcolor{keywordtype}{void}\ Graph<NData,\ EData>::parseNode(std::istringstream\&\ ss)\ \{}
+\DoxyCodeLine{00138\ \ \ \textcolor{keywordtype}{char}\ c;}
+\DoxyCodeLine{00139\ \ \ Identifier\ id;}
+\DoxyCodeLine{00140\ \ \ NData\ data;}
+\DoxyCodeLine{00141\ \ \ ss\ >>\ c\ >>\ \textcolor{keywordtype}{id}\ >>\ c;}
+\DoxyCodeLine{00142\ \ \ std::string\ rawData;}
+\DoxyCodeLine{00143\ \ \ std::getline(ss,\ rawData,\ \textcolor{charliteral}{'\}'});}
+\DoxyCodeLine{00144\ \ \ std::istringstream(rawData)\ >>\ data;}
+\DoxyCodeLine{00145\ \ \ nodes\_.add(\textcolor{keywordtype}{id},\ std::move(data));}
+\DoxyCodeLine{00146\ \}}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00149\ \textcolor{keywordtype}{void}\ Graph<NData,\ EData>::parseEdge(std::istringstream\&\ inputStream)\ \{}
+\DoxyCodeLine{00150\ \ \ \textcolor{keywordtype}{char}\ c;}
+\DoxyCodeLine{00151\ \ \ Identifier\ source,\ id,\ target;}
+\DoxyCodeLine{00152\ \ \ EData\ data;}
+\DoxyCodeLine{00153\ \ \ inputStream\ >>\ c\ >>\ source\ >>\ c\ >>\ c;}
+\DoxyCodeLine{00154\ \ \ inputStream\ >>\ c\ >>\ id;}
+\DoxyCodeLine{00155\ \ \ inputStream\ >>\ c;}
+\DoxyCodeLine{00156\ \ \ std::string\ rawData;}
+\DoxyCodeLine{00157\ \ \ std::getline(inputStream,\ rawData,\ \textcolor{charliteral}{'\}'});}
+\DoxyCodeLine{00158\ \ \ std::istringstream(rawData)\ >>\ data;}
+\DoxyCodeLine{00159\ \ \ inputStream\ >>\ c\ >>\ c\ >>\ c\ >>\ c\ >>\ target\ >>\ c;}
+\DoxyCodeLine{00160\ \ \ edges\_.add(\textcolor{keywordtype}{id},\ source,\ target,\ std::move(data));}
+\DoxyCodeLine{00161\ \}}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>\ \textcolor{keywordtype}{void}\ Graph<NData,\ EData>::import(std::istream\&\ inputStream)\ \{}
+\DoxyCodeLine{00164\ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00165\ \ \ \ \ std::string\ line;}
+\DoxyCodeLine{00166\ \ \ \ \ \textcolor{keywordflow}{while}\ (std::getline(inputStream,\ line))\ \{}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (line.empty())}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ std::istringstream\ lineStream(line);}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ std::string\ keyword;}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ lineStream\ >>\ keyword;}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (keyword\ ==\ \textcolor{stringliteral}{"{}node"{}})}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ parseNode(lineStream);}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (keyword\ ==\ \textcolor{stringliteral}{"{}edge"{}})}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ parseEdge(lineStream);}
+\DoxyCodeLine{00176\ \ \ \ \ \}}
+\DoxyCodeLine{00177\ \ \ \}\ \textcolor{keywordflow}{catch}\ (\textcolor{keyword}{const}\ std::bad\_alloc\&)\ \{}
+\DoxyCodeLine{00178\ \ \ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{classMemoryException}{MemoryException}}(UNAVAILABLE\_MEMORY\_IMPORT);}
+\DoxyCodeLine{00179\ \ \ \}\ \textcolor{keywordflow}{catch}\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{classMemoryException}{MemoryException}}\&)\ \{}
+\DoxyCodeLine{00180\ \ \ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{classMemoryException}{MemoryException}}(UNAVAILABLE\_MEMORY\_IMPORT);}
+\DoxyCodeLine{00181\ \ \ \}}
+\DoxyCodeLine{00182\ \}}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>\ \textcolor{keywordtype}{void}\ Graph<NData,\ EData>::import(std::string\_view\ filename)\ \{}
+\DoxyCodeLine{00185\ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00186\ \ \ \ \ std::ifstream\ file((std::string(filename)));}
+\DoxyCodeLine{00187\ \ \ \ \ \textcolor{keywordflow}{if}\ (!file.is\_open())}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{classFileException}{FileException}}(UNABLE\_TO\_OPEN\_INPUT\_FILE,\ filename);}
+\DoxyCodeLine{00189\ \ \ \ \ \textcolor{keyword}{import}(file);}
+\DoxyCodeLine{00190\ \ \ \}\ \textcolor{keywordflow}{catch}\ (\textcolor{keyword}{const}\ std::bad\_alloc\&)\ \{}
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{classMemoryException}{MemoryException}}(UNAVAILABLE\_MEMORY\_IMPORT);}
+\DoxyCodeLine{00192\ \ \ \}\ \textcolor{keywordflow}{catch}\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{classMemoryException}{MemoryException}}\&)\ \{}
+\DoxyCodeLine{00193\ \ \ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{classMemoryException}{MemoryException}}(UNAVAILABLE\_MEMORY\_IMPORT);}
+\DoxyCodeLine{00194\ \ \ \}}
+\DoxyCodeLine{00195\ \}}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>\ \textcolor{keywordtype}{void}\ Graph<NData,\ EData>::print(std::ostream\&\ stream)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00198\ \ \ nodes().print(stream);}
+\DoxyCodeLine{00199\ \ \ edges().print(stream);}
+\DoxyCodeLine{00200\ \}}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>\ \textcolor{keyword}{class\ }DirectedGraph\ :\ \textcolor{keyword}{public}\ Graph<NData,\ EData>\ \{}
+\DoxyCodeLine{00203\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00204\ \ \ DirectedGraph()\ :\ Graph<NData,\ EData>()\ \{\}}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00207\ \ \ \textcolor{keywordtype}{bool}\ isDirected()\ \textcolor{keyword}{const}\ \textcolor{keyword}{final}\ \textcolor{keyword}{override}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};\ \};}
+\DoxyCodeLine{00208\ \};}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>\ \textcolor{keyword}{class\ }UndirectedGraph\ :\ \textcolor{keyword}{public}\ Graph<NData,\ EData>\ \{}
+\DoxyCodeLine{00211\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00212\ \ \ UndirectedGraph()\ :\ Graph<NData,\ EData>()\ \{\}}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00214\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00215\ \ \ \textcolor{keywordtype}{bool}\ isDirected()\ \textcolor{keyword}{const}\ \textcolor{keyword}{override}\ \textcolor{keyword}{final}\ \{\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};\ \};}
+\DoxyCodeLine{00216\ \};}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00219\ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classGraph_1_1Nodes}{Graph<NData,\ EData>::Nodes}}\&\ Graph<NData,\ EData>::nodes()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00220\ \ \ \textcolor{keywordflow}{return}\ nodes\_;}
+\DoxyCodeLine{00221\ \}}
+\DoxyCodeLine{00222\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00223\ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classGraph_1_1Edges}{Graph<NData,\ EData>::Edges}}\&\ Graph<NData,\ EData>::edges()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00224\ \ \ \textcolor{keywordflow}{return}\ edges\_;}
+\DoxyCodeLine{00225\ \}}
+\DoxyCodeLine{00226\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classGraph_1_1Nodes}{Graph<NData,\ EData>::Nodes}}\&\ Graph<NData,\ EData>::nodes()\ \{}
+\DoxyCodeLine{00227\ \ \ \textcolor{keywordflow}{return}\ nodes\_;}
+\DoxyCodeLine{00228\ \}}
+\DoxyCodeLine{00229\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classGraph_1_1Edges}{Graph<NData,\ EData>::Edges}}\&\ Graph<NData,\ EData>::edges()\ \{}
+\DoxyCodeLine{00230\ \ \ \textcolor{keywordflow}{return}\ edges\_;}
+\DoxyCodeLine{00231\ \}}
+\DoxyCodeLine{00232\ }
+\DoxyCodeLine{00233\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>\ \textcolor{keywordtype}{void}\ Graph<NData,\ EData>::expandMatrix()\ \{}
+\DoxyCodeLine{00234\ \ \ \textcolor{keywordtype}{size\_t}\ n\ =\ adjMatrix\_.size();}
+\DoxyCodeLine{00235\ \ \ \textcolor{keywordtype}{size\_t}\ columns\_added\ =\ 0;}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00238\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ n;\ ++i)\ \{}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ adjMatrix\_[i].push\_back(std::nullopt);}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ ++columns\_added;}
+\DoxyCodeLine{00241\ \ \ \ \ \}}
+\DoxyCodeLine{00242\ \ \ \ \ \mbox{\hyperlink{classlib_1_1Array}{lib::Array<std::optional<Identifier>}}>\ new\_row;}
+\DoxyCodeLine{00243\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ j\ =\ 0;\ j\ <=\ n;\ ++j)}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ new\_row.push\_back(std::nullopt);}
+\DoxyCodeLine{00245\ \ \ \ \ adjMatrix\_.push\_back(std::move(new\_row));}
+\DoxyCodeLine{00246\ \ \ \}\ \textcolor{keywordflow}{catch}\ (...)\ \{}
+\DoxyCodeLine{00247\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ columns\_added;\ ++i)\ \{}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ adjMatrix\_[i].pop\_back();}
+\DoxyCodeLine{00249\ \ \ \ \ \}}
+\DoxyCodeLine{00250\ \ \ \ \ \textcolor{keywordflow}{throw};}
+\DoxyCodeLine{00251\ \ \ \}}
+\DoxyCodeLine{00252\ \}}
+\DoxyCodeLine{00253\ }
+\DoxyCodeLine{00254\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>\ \textcolor{keyword}{class\ }Graph<NData,\ EData>::Nodes\ \{}
+\DoxyCodeLine{00255\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00256\ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }Graph;}
+\DoxyCodeLine{00257\ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classGraph_1_1Nodes_1_1Node}{Node}};}
+\DoxyCodeLine{00258\ }
+\DoxyCodeLine{00259\ \ \ \textcolor{keyword}{explicit}\ Nodes(Graph*\ owner)\ :\ owner\_(owner)\ \{\}}
+\DoxyCodeLine{00260\ }
+\DoxyCodeLine{00261\ \ \ \textcolor{keywordtype}{bool}\ exists(Identifier\ \textcolor{keywordtype}{id})\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00262\ \ \ \textcolor{keywordtype}{size\_t}\ size()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00263\ \ \ \mbox{\hyperlink{classGraph_1_1Nodes_1_1Node}{Node}}\&\ add(\textcolor{keyword}{const}\ NData\&\ data);}
+\DoxyCodeLine{00264\ \ \ \mbox{\hyperlink{classGraph_1_1Nodes_1_1Node}{Node}}\&\ add(NData\&\&\ data);}
+\DoxyCodeLine{00265\ \ \ \mbox{\hyperlink{classGraph_1_1Nodes_1_1Node}{Node}}\&\ add(Identifier\ \textcolor{keywordtype}{id},\ \textcolor{keyword}{const}\ NData\&\ data);}
+\DoxyCodeLine{00266\ \ \ \mbox{\hyperlink{classGraph_1_1Nodes_1_1Node}{Node}}\&\ add(Identifier\ \textcolor{keywordtype}{id},\ NData\&\&\ data);}
+\DoxyCodeLine{00267\ }
+\DoxyCodeLine{00268\ \ \ \mbox{\hyperlink{classGraph_1_1Nodes_1_1Node}{Node}}\&\ get(Identifier\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00269\ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classGraph_1_1Nodes_1_1Node}{Node}}\&\ get(Identifier\ \textcolor{keywordtype}{id})\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00270\ \ \ \mbox{\hyperlink{classGraph_1_1Nodes_1_1Node}{Node}}\&\ operator[](Identifier\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00271\ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classGraph_1_1Nodes_1_1Node}{Node}}\&\ operator[](Identifier\ \textcolor{keywordtype}{id})\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00273\ \ \ \textcolor{keyword}{auto}\ begin()\ \{\ \textcolor{keywordflow}{return}\ nodes\_.begin();\ \}}
+\DoxyCodeLine{00274\ \ \ \textcolor{keyword}{auto}\ end()\ \{\ \textcolor{keywordflow}{return}\ nodes\_.end();\ \}}
+\DoxyCodeLine{00275\ \ \ \textcolor{keyword}{auto}\ begin()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ nodes\_.cbegin();\ \}}
+\DoxyCodeLine{00276\ \ \ \textcolor{keyword}{auto}\ end()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ nodes\_.cend();\ \}}
+\DoxyCodeLine{00277\ \ \ \textcolor{keyword}{auto}\ cbegin()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ nodes\_.cbegin();\ \}}
+\DoxyCodeLine{00278\ \ \ \textcolor{keyword}{auto}\ cend()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ nodes\_.cend();\ \}}
+\DoxyCodeLine{00279\ }
+\DoxyCodeLine{00280\ \ \ \textcolor{keywordtype}{void}\ print(std::ostream\&\ stream\ =\ std::cout)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00281\ }
+\DoxyCodeLine{00282\ \ \ \textcolor{keywordtype}{void}\ clear();}
+\DoxyCodeLine{00283\ }
+\DoxyCodeLine{00284\ \ \ \textcolor{keyword}{friend}\ std::ostream\&\ operator<<(std::ostream\&\ stream,\ \textcolor{keyword}{const}\ Nodes\&\ nodes)\ \{}
+\DoxyCodeLine{00285\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ node\ :\ nodes.nodes\_)}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ stream\ <<\ node\ <<\ \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{00287\ \ \ \ \ \textcolor{keywordflow}{return}\ stream;}
+\DoxyCodeLine{00288\ \ \ \}}
+\DoxyCodeLine{00289\ }
+\DoxyCodeLine{00290\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00291\ \ \ Graph*\ owner\_;}
+\DoxyCodeLine{00292\ \ \ \mbox{\hyperlink{classlib_1_1Array}{lib::Array<Node>}}\ nodes\_;}
+\DoxyCodeLine{00293\ }
+\DoxyCodeLine{00294\ \ \ \textcolor{keywordtype}{void}\ validateNewNode(Identifier\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00295\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ \mbox{\hyperlink{classGraph_1_1Nodes_1_1Node}{Node}}\&\ addInternal(Identifier\ \textcolor{keywordtype}{id},\ T\&\&\ data);}
+\DoxyCodeLine{00296\ \};}
+\DoxyCodeLine{00297\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>\ \textcolor{keywordtype}{void}\ Graph<NData,\ EData>::Nodes::clear()\ \{\ nodes\_.clear();\ \}}
+\DoxyCodeLine{00298\ }
+\DoxyCodeLine{00299\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00300\ \mbox{\hyperlink{classGraph_1_1Nodes_1_1Node}{Graph<NData,\ EData>::Nodes::Node}}\&\ Graph<NData,\ EData>::Nodes::get(Identifier\ \textcolor{keywordtype}{id})\ \{}
+\DoxyCodeLine{00301\ \ \ \textcolor{keywordflow}{if}\ (!exists(\textcolor{keywordtype}{id}))}
+\DoxyCodeLine{00302\ \ \ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{classElementException}{ElementException}}(NODE\_DOES\_NOT\_EXIST,\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00303\ \ \ \textcolor{keywordflow}{return}\ nodes\_.at(\textcolor{keywordtype}{id});}
+\DoxyCodeLine{00304\ \}}
+\DoxyCodeLine{00305\ }
+\DoxyCodeLine{00306\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00307\ \textcolor{keyword}{const}\ Graph<NData,\ EData>::Nodes::Node\&\ Graph<NData,\ EData>::Nodes::get(Identifier\ \textcolor{keywordtype}{id})\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00308\ \ \ \textcolor{keywordflow}{if}\ (!exists(\textcolor{keywordtype}{id}))}
+\DoxyCodeLine{00309\ \ \ \ \ \textcolor{keywordflow}{throw}\ ElementException(NODE\_DOES\_NOT\_EXIST,\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00310\ \ \ \textcolor{keywordflow}{return}\ nodes\_.at(\textcolor{keywordtype}{id});}
+\DoxyCodeLine{00311\ \}}
+\DoxyCodeLine{00312\ }
+\DoxyCodeLine{00313\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00314\ Graph<NData,\ EData>::Nodes::Node\&\ Graph<NData,\ EData>::Nodes::operator[](Identifier\ \textcolor{keywordtype}{id})\ \{}
+\DoxyCodeLine{00315\ \ \ \textcolor{keywordflow}{return}\ get(\textcolor{keywordtype}{id});}
+\DoxyCodeLine{00316\ \}}
+\DoxyCodeLine{00317\ }
+\DoxyCodeLine{00318\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00319\ \textcolor{keyword}{const}\ Graph<NData,\ EData>::Nodes::Node\&\ Graph<NData,\ EData>::Nodes::operator[](Identifier\ \textcolor{keywordtype}{id})\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00320\ \ \ \textcolor{keywordflow}{return}\ get(\textcolor{keywordtype}{id});}
+\DoxyCodeLine{00321\ \}}
+\DoxyCodeLine{00322\ }
+\DoxyCodeLine{00323\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00324\ \textcolor{keywordtype}{void}\ Graph<NData,\ EData>::Nodes::print(std::ostream\&\ stream)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00325\ \ \ stream\ <<\ *(\textcolor{keyword}{this});}
+\DoxyCodeLine{00326\ \}}
+\DoxyCodeLine{00327\ }
+\DoxyCodeLine{00328\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>\ \textcolor{keywordtype}{bool}\ Graph<NData,\ EData>::Nodes::exists(Identifier\ \textcolor{keywordtype}{id})\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00329\ \ \ \textcolor{keywordflow}{return}\ size()\ >\ id;}
+\DoxyCodeLine{00330\ \}}
+\DoxyCodeLine{00331\ }
+\DoxyCodeLine{00332\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>\ \textcolor{keywordtype}{void}\ Graph<NData,\ EData>::Nodes::validateNewNode(Identifier\ \textcolor{keywordtype}{id})\ \{}
+\DoxyCodeLine{00333\ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keywordtype}{id}\ ==\ SIZE\_MAX)\ \{}
+\DoxyCodeLine{00334\ \ \ \ \ \textcolor{keywordflow}{throw}\ IdentifierException(INVALID\_NODE\_IDENTIFIER,\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00335\ \ \ \}}
+\DoxyCodeLine{00336\ \ \ \textcolor{keywordflow}{if}\ (exists(\textcolor{keywordtype}{id}))\ \{}
+\DoxyCodeLine{00337\ \ \ \ \ \textcolor{keywordflow}{throw}\ ConflictException(NODE\_ALREADY\_EXISTS,\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00338\ \ \ \}}
+\DoxyCodeLine{00339\ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keywordtype}{id}\ !=\ nodes\_.size())\ \{}
+\DoxyCodeLine{00340\ \ \ \ \ \textcolor{keywordflow}{throw}\ IdentifierException(NON\_SUCCESSIVE\_NODE,\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00341\ \ \ \}}
+\DoxyCodeLine{00342\ \}}
+\DoxyCodeLine{00343\ }
+\DoxyCodeLine{00344\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00345\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00346\ Graph<NData,\ EData>::Nodes::Node\&\ Graph<NData,\ EData>::Nodes::addInternal(Identifier\ \textcolor{keywordtype}{id},\ T\&\&\ data)\ \{}
+\DoxyCodeLine{00347\ \ \ validateNewNode(\textcolor{keywordtype}{id});}
+\DoxyCodeLine{00348\ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00349\ \ \ \ \ nodes\_.emplace\_back(\textcolor{keywordtype}{id},\ std::forward<T>(data));}
+\DoxyCodeLine{00350\ \ \ \ \ owner\_-\/>expandMatrix();}
+\DoxyCodeLine{00351\ \ \ \}\ \textcolor{keywordflow}{catch}\ (\textcolor{keyword}{const}\ std::bad\_alloc\&)\ \{}
+\DoxyCodeLine{00352\ \ \ \ \ \textcolor{keywordflow}{if}\ (nodes\_.size()\ >\ \textcolor{keywordtype}{id})}
+\DoxyCodeLine{00353\ \ \ \ \ \ \ nodes\_.pop\_back();}
+\DoxyCodeLine{00354\ \ \ \ \ \textcolor{keywordflow}{throw}\ MemoryException(UNAVAILABLE\_MEMORY\_NODE);}
+\DoxyCodeLine{00355\ \ \ \}\ \textcolor{keywordflow}{catch}\ (...)\ \{}
+\DoxyCodeLine{00356\ \ \ \ \ \textcolor{keywordflow}{if}\ (nodes\_.size()\ >\ \textcolor{keywordtype}{id})}
+\DoxyCodeLine{00357\ \ \ \ \ \ \ nodes\_.pop\_back();}
+\DoxyCodeLine{00358\ \ \ \ \ \textcolor{keywordflow}{throw};}
+\DoxyCodeLine{00359\ \ \ \}}
+\DoxyCodeLine{00360\ \ \ \textcolor{keywordflow}{return}\ nodes\_.at(\textcolor{keywordtype}{id});}
+\DoxyCodeLine{00361\ \}}
+\DoxyCodeLine{00362\ }
+\DoxyCodeLine{00363\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00364\ Graph<NData,\ EData>::Nodes::Node\&\ Graph<NData,\ EData>::Nodes::add(\textcolor{keyword}{const}\ NData\&\ data)\ \{}
+\DoxyCodeLine{00365\ \ \ \textcolor{keywordflow}{return}\ addInternal(nodes\_.size(),\ data);}
+\DoxyCodeLine{00366\ \}}
+\DoxyCodeLine{00367\ }
+\DoxyCodeLine{00368\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00369\ Graph<NData,\ EData>::Nodes::Node\&\ Graph<NData,\ EData>::Nodes::add(Identifier\ \textcolor{keywordtype}{id},\ \textcolor{keyword}{const}\ NData\&\ data)\ \{}
+\DoxyCodeLine{00370\ \ \ \textcolor{keywordflow}{return}\ addInternal(\textcolor{keywordtype}{id},\ data);}
+\DoxyCodeLine{00371\ \}}
+\DoxyCodeLine{00372\ }
+\DoxyCodeLine{00373\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00374\ Graph<NData,\ EData>::Nodes::Node\&\ Graph<NData,\ EData>::Nodes::add(NData\&\&\ data)\ \{}
+\DoxyCodeLine{00375\ \ \ \textcolor{keywordflow}{return}\ addInternal(nodes\_.size(),\ std::move(data));}
+\DoxyCodeLine{00376\ \}}
+\DoxyCodeLine{00377\ }
+\DoxyCodeLine{00378\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00379\ Graph<NData,\ EData>::Nodes::Node\&\ Graph<NData,\ EData>::Nodes::add(Identifier\ \textcolor{keywordtype}{id},\ NData\&\&\ data)\ \{}
+\DoxyCodeLine{00380\ \ \ \textcolor{keywordflow}{return}\ addInternal(\textcolor{keywordtype}{id},\ std::move(data));}
+\DoxyCodeLine{00381\ \}}
+\DoxyCodeLine{00382\ }
+\DoxyCodeLine{00383\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>\ \textcolor{keywordtype}{size\_t}\ Graph<NData,\ EData>::Nodes::size()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00384\ \ \ \textcolor{keywordflow}{return}\ nodes\_.size();}
+\DoxyCodeLine{00385\ \}}
+\DoxyCodeLine{00386\ }
+\DoxyCodeLine{00387\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>\ \textcolor{keyword}{class\ }Graph<NData,\ EData>::Edges\ \{}
+\DoxyCodeLine{00388\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00389\ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }Graph;}
+\DoxyCodeLine{00390\ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classGraph_1_1Edges_1_1Edge}{Edge}};}
+\DoxyCodeLine{00391\ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structGraph_1_1Edges_1_1EdgeProxy}{EdgeProxy}}\ \{}
+\DoxyCodeLine{00392\ \ \ \ \ Edges\&\ edges\_;}
+\DoxyCodeLine{00393\ \ \ \ \ Identifier\ source\_;}
+\DoxyCodeLine{00394\ \ \ \ \ \mbox{\hyperlink{classGraph_1_1Edges_1_1Edge}{Edge}}\&\ operator[](Identifier\ target)\ \{\ \textcolor{keywordflow}{return}\ edges\_.get(source\_,\ target);\ \}}
+\DoxyCodeLine{00395\ \ \ \};}
+\DoxyCodeLine{00396\ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structGraph_1_1Edges_1_1ConstEdgeProxy}{ConstEdgeProxy}}\ \{}
+\DoxyCodeLine{00397\ \ \ \ \ \textcolor{keyword}{const}\ Edges\&\ edges\_;}
+\DoxyCodeLine{00398\ \ \ \ \ Identifier\ source\_;}
+\DoxyCodeLine{00399\ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classGraph_1_1Edges_1_1Edge}{Edge}}\&\ operator[](Identifier\ target)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ edges\_.get(source\_,\ target);\ \}}
+\DoxyCodeLine{00400\ \ \ \};}
+\DoxyCodeLine{00401\ }
+\DoxyCodeLine{00402\ \ \ \mbox{\hyperlink{structGraph_1_1Edges_1_1EdgeProxy}{EdgeProxy}}\ operator[](Identifier\ source)\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structGraph_1_1Edges_1_1EdgeProxy}{EdgeProxy}}\{*\textcolor{keyword}{this},\ source\};\ \}}
+\DoxyCodeLine{00403\ \ \ ConstEdgeProxy\ operator[](Identifier\ source)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ ConstEdgeProxy\{*\textcolor{keyword}{this},\ source\};\ \}}
+\DoxyCodeLine{00404\ }
+\DoxyCodeLine{00405\ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classGraph_1_1Edges}{Edges}}(Graph*\ owner)\ :\ owner\_(owner)\ \{\}}
+\DoxyCodeLine{00406\ }
+\DoxyCodeLine{00407\ \ \ \textcolor{keywordtype}{size\_t}\ size()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00408\ }
+\DoxyCodeLine{00409\ \ \ \textcolor{keywordtype}{bool}\ exists(Identifier\ \textcolor{keywordtype}{id})\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00410\ \ \ \textcolor{keywordtype}{bool}\ exists(Identifier\ source,\ Identifier\ target)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00411\ }
+\DoxyCodeLine{00412\ \ \ Edge\&\ get(Identifier\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00413\ \ \ \textcolor{keyword}{const}\ Edge\&\ get(Identifier\ \textcolor{keywordtype}{id})\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00414\ \ \ Edge\&\ get(Identifier\ source,\ Identifier\ target);}
+\DoxyCodeLine{00415\ \ \ \textcolor{keyword}{const}\ Edge\&\ get(Identifier\ source,\ Identifier\ target)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00416\ }
+\DoxyCodeLine{00417\ \ \ \textcolor{keyword}{auto}\ begin()\ \{\ \textcolor{keywordflow}{return}\ edges\_.begin();\ \}}
+\DoxyCodeLine{00418\ \ \ \textcolor{keyword}{auto}\ end()\ \{\ \textcolor{keywordflow}{return}\ edges\_.end();\ \}}
+\DoxyCodeLine{00419\ \ \ \textcolor{keyword}{auto}\ begin()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ edges\_.cbegin();\ \}}
+\DoxyCodeLine{00420\ \ \ \textcolor{keyword}{auto}\ end()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ edges\_.cend();\ \}}
+\DoxyCodeLine{00421\ \ \ \textcolor{keyword}{auto}\ cbegin()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ edges\_.cbegin();\ \}}
+\DoxyCodeLine{00422\ \ \ \textcolor{keyword}{auto}\ cend()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ edges\_.cend();\ \}}
+\DoxyCodeLine{00423\ }
+\DoxyCodeLine{00424\ \ \ \textcolor{keywordtype}{void}\ print(std::ostream\&\ stream\ =\ std::cout)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00425\ \ \ \textcolor{keywordtype}{void}\ printMatrix(std::ostream\&\ stream\ =\ std::cout)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00426\ }
+\DoxyCodeLine{00427\ \ \ \textcolor{keyword}{friend}\ std::ostream\&\ operator<<(std::ostream\&\ stream,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classGraph_1_1Edges}{Edges}}\&\ edges)\ \{}
+\DoxyCodeLine{00428\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ edges.size();\ ++i)\ \{}
+\DoxyCodeLine{00429\ \ \ \ \ \ \ stream\ <<\ edges.edges\_[i]\ <<\ std::endl;}
+\DoxyCodeLine{00430\ \ \ \ \ \}}
+\DoxyCodeLine{00431\ \ \ \ \ \textcolor{keywordflow}{return}\ stream;}
+\DoxyCodeLine{00432\ \ \ \}}
+\DoxyCodeLine{00433\ }
+\DoxyCodeLine{00434\ \ \ Edge\&\ add(Identifier\ \textcolor{keywordtype}{id},\ Identifier\ source,\ Identifier\ target,\ \textcolor{keyword}{const}\ EData\&\ data);}
+\DoxyCodeLine{00435\ \ \ Edge\&\ add(Identifier\ \textcolor{keywordtype}{id},\ Identifier\ source,\ Identifier\ target,\ EData\&\&\ data);}
+\DoxyCodeLine{00436\ \ \ Edge\&\ add(Identifier\ source,\ Identifier\ target,\ \textcolor{keyword}{const}\ EData\&\ data);}
+\DoxyCodeLine{00437\ \ \ Edge\&\ add(Identifier\ source,\ Identifier\ target,\ EData\&\&\ data);}
+\DoxyCodeLine{00438\ }
+\DoxyCodeLine{00439\ \ \ \textcolor{keywordtype}{void}\ clear();}
+\DoxyCodeLine{00440\ }
+\DoxyCodeLine{00441\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00442\ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>\ Edge\&\ addInternal(Identifier\ \textcolor{keywordtype}{id},\ Identifier\ source,\ Identifier\ target,\ T\&\&\ data);}
+\DoxyCodeLine{00443\ \ \ \textcolor{keywordtype}{void}\ validateEdge(Identifier\ \textcolor{keywordtype}{id},\ Identifier\ source,\ Identifier\ target);}
+\DoxyCodeLine{00444\ }
+\DoxyCodeLine{00445\ \ \ Graph*\ owner\_;}
+\DoxyCodeLine{00446\ \ \ lib::Array<Edge>\ edges\_;}
+\DoxyCodeLine{00447\ \};}
+\DoxyCodeLine{00448\ }
+\DoxyCodeLine{00449\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>\ \textcolor{keywordtype}{size\_t}\ Graph<NData,\ EData>::Edges::size()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00450\ \ \ \textcolor{keywordflow}{return}\ edges\_.size();}
+\DoxyCodeLine{00451\ \}}
+\DoxyCodeLine{00452\ }
+\DoxyCodeLine{00453\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>\ \textcolor{keywordtype}{void}\ Graph<NData,\ EData>::Edges::clear()\ \{\ edges\_.clear();\ \};}
+\DoxyCodeLine{00454\ }
+\DoxyCodeLine{00455\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00456\ Graph<NData,\ EData>::Edges::Edge\&\ Graph<NData,\ EData>::Edges::get(Identifier\ \textcolor{keywordtype}{id})\ \{}
+\DoxyCodeLine{00457\ \ \ \textcolor{keywordflow}{if}\ (!exists(\textcolor{keywordtype}{id}))}
+\DoxyCodeLine{00458\ \ \ \ \ \textcolor{keywordflow}{throw}\ ElementException(EDGE\_DOES\_NOT\_EXIST,\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00459\ \ \ \textcolor{keywordflow}{return}\ edges\_.at(\textcolor{keywordtype}{id});}
+\DoxyCodeLine{00460\ \}}
+\DoxyCodeLine{00461\ }
+\DoxyCodeLine{00462\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00463\ \textcolor{keyword}{const}\ Graph<NData,\ EData>::Edges::Edge\&\ Graph<NData,\ EData>::Edges::get(Identifier\ \textcolor{keywordtype}{id})\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00464\ \ \ \textcolor{keywordflow}{if}\ (!exists(\textcolor{keywordtype}{id}))}
+\DoxyCodeLine{00465\ \ \ \ \ \textcolor{keywordflow}{throw}\ ElementException(EDGE\_DOES\_NOT\_EXIST,\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00466\ \ \ \textcolor{keywordflow}{return}\ edges\_.at(\textcolor{keywordtype}{id});}
+\DoxyCodeLine{00467\ \}}
+\DoxyCodeLine{00468\ }
+\DoxyCodeLine{00469\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00470\ Graph<NData,\ EData>::Edges::Edge\&\ Graph<NData,\ EData>::Edges::get(Identifier\ source,\ Identifier\ target)\ \{}
+\DoxyCodeLine{00471\ \ \ \textcolor{keywordflow}{if}\ (!owner\_-\/>nodes\_.exists(source))}
+\DoxyCodeLine{00472\ \ \ \ \ \textcolor{keywordflow}{throw}\ ElementException(SOURCE\_NOT\_EXIST,\ source);}
+\DoxyCodeLine{00473\ \ \ \textcolor{keywordflow}{if}\ (!owner\_-\/>nodes\_.exists(target))}
+\DoxyCodeLine{00474\ \ \ \ \ \textcolor{keywordflow}{throw}\ ElementException(TARGET\_NOT\_EXIST,\ target);}
+\DoxyCodeLine{00475\ \ \ \textcolor{keywordflow}{if}\ (!exists(source,\ target))}
+\DoxyCodeLine{00476\ \ \ \ \ \textcolor{keywordflow}{throw}\ ElementException(EDGE\_BETWEEN\_SRC\_TRGT\_NOT\_EXIST,\ source,\ target);}
+\DoxyCodeLine{00477\ \ \ \textcolor{keywordflow}{return}\ edges\_.at(owner\_-\/>adjMatrix\_[source][target].value());}
+\DoxyCodeLine{00478\ \}}
+\DoxyCodeLine{00479\ }
+\DoxyCodeLine{00480\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00481\ \textcolor{keyword}{const}\ Graph<NData,\ EData>::Edges::Edge\&\ Graph<NData,\ EData>::Edges::get(Identifier\ source,}
+\DoxyCodeLine{00482\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Identifier\ target)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00483\ \ \ \textcolor{keywordflow}{if}\ (!owner\_-\/>nodes\_.exists(source))}
+\DoxyCodeLine{00484\ \ \ \ \ \textcolor{keywordflow}{throw}\ ElementException(SOURCE\_NOT\_EXIST,\ source);}
+\DoxyCodeLine{00485\ \ \ \textcolor{keywordflow}{if}\ (!owner\_-\/>nodes\_.exists(target))}
+\DoxyCodeLine{00486\ \ \ \ \ \textcolor{keywordflow}{throw}\ ElementException(TARGET\_NOT\_EXIST,\ target);}
+\DoxyCodeLine{00487\ \ \ \textcolor{keywordflow}{if}\ (!exists(source,\ target))}
+\DoxyCodeLine{00488\ \ \ \ \ \textcolor{keywordflow}{throw}\ ElementException(EDGE\_BETWEEN\_SRC\_TRGT\_NOT\_EXIST,\ source,\ target);}
+\DoxyCodeLine{00489\ \ \ \textcolor{keywordflow}{return}\ edges\_.at(owner\_-\/>adjMatrix\_[source][target].value());}
+\DoxyCodeLine{00490\ \}}
+\DoxyCodeLine{00491\ }
+\DoxyCodeLine{00492\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00493\ \textcolor{keywordtype}{void}\ Graph<NData,\ EData>::Edges::print(std::ostream\&\ stream)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00494\ \ \ stream\ <<\ *(\textcolor{keyword}{this});}
+\DoxyCodeLine{00495\ \}}
+\DoxyCodeLine{00496\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00497\ Graph<NData,\ EData>::Edges::Edge\&\ Graph<NData,\ EData>::Edges::add(Identifier\ \textcolor{keywordtype}{id},\ Identifier\ source,}
+\DoxyCodeLine{00498\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Identifier\ target,\ \textcolor{keyword}{const}\ EData\&\ data)\ \{}
+\DoxyCodeLine{00499\ \ \ \textcolor{keywordflow}{return}\ addInternal(\textcolor{keywordtype}{id},\ source,\ target,\ data);}
+\DoxyCodeLine{00500\ \}}
+\DoxyCodeLine{00501\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00502\ Graph<NData,\ EData>::Edges::Edge\&\ Graph<NData,\ EData>::Edges::add(Identifier\ \textcolor{keywordtype}{id},\ Identifier\ source,}
+\DoxyCodeLine{00503\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Identifier\ target,\ EData\&\&\ data)\ \{}
+\DoxyCodeLine{00504\ \ \ \textcolor{keywordflow}{return}\ addInternal(\textcolor{keywordtype}{id},\ source,\ target,\ std::move(data));}
+\DoxyCodeLine{00505\ \}}
+\DoxyCodeLine{00506\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00507\ Graph<NData,\ EData>::Edges::Edge\&\ Graph<NData,\ EData>::Edges::add(Identifier\ source,\ Identifier\ target,}
+\DoxyCodeLine{00508\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ EData\&\ data)\ \{}
+\DoxyCodeLine{00509\ \ \ Identifier\ \textcolor{keywordtype}{id}\ =\ size();}
+\DoxyCodeLine{00510\ \ \ \textcolor{keywordflow}{return}\ addInternal(\textcolor{keywordtype}{id},\ source,\ target,\ std::move(data));}
+\DoxyCodeLine{00511\ \}}
+\DoxyCodeLine{00512\ }
+\DoxyCodeLine{00513\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00514\ Graph<NData,\ EData>::Edges::Edge\&\ Graph<NData,\ EData>::Edges::add(Identifier\ source,\ Identifier\ target,}
+\DoxyCodeLine{00515\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EData\&\&\ data)\ \{}
+\DoxyCodeLine{00516\ \ \ Identifier\ \textcolor{keywordtype}{id}\ =\ size();}
+\DoxyCodeLine{00517\ \ \ \textcolor{keywordflow}{return}\ addInternal(\textcolor{keywordtype}{id},\ source,\ target,\ std::move(data));}
+\DoxyCodeLine{00518\ \}}
+\DoxyCodeLine{00519\ }
+\DoxyCodeLine{00520\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00521\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00522\ Graph<NData,\ EData>::Edges::Edge\&\ Graph<NData,\ EData>::Edges::addInternal(Identifier\ \textcolor{keywordtype}{id},\ Identifier\ source,}
+\DoxyCodeLine{00523\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Identifier\ target,\ T\&\&\ data)\ \{}
+\DoxyCodeLine{00524\ \ \ validateEdge(\textcolor{keywordtype}{id},\ source,\ target);}
+\DoxyCodeLine{00525\ \ \ \textcolor{keywordflow}{try}\ \{}
+\DoxyCodeLine{00526\ \ \ \ \ edges\_.emplace\_back(\textcolor{keywordtype}{id},\ source,\ target,\ std::forward<T>(data));}
+\DoxyCodeLine{00527\ \ \ \}\ \textcolor{keywordflow}{catch}\ (\textcolor{keyword}{const}\ std::bad\_alloc\&)\ \{}
+\DoxyCodeLine{00528\ \ \ \ \ \textcolor{keywordflow}{throw}\ MemoryException(UNAVAILABLE\_MEMORY\_EDGE);}
+\DoxyCodeLine{00529\ \ \ \}}
+\DoxyCodeLine{00530\ \ \ owner\_-\/>adjMatrix\_[source][target]\ =\ id;}
+\DoxyCodeLine{00531\ \ \ \textcolor{keywordflow}{if}\ (!owner\_-\/>isDirected())}
+\DoxyCodeLine{00532\ \ \ \ \ owner\_-\/>adjMatrix\_[target][source]\ =\ id;}
+\DoxyCodeLine{00533\ \ \ \textcolor{keywordflow}{return}\ edges\_.at(\textcolor{keywordtype}{id});}
+\DoxyCodeLine{00534\ \}}
+\DoxyCodeLine{00535\ }
+\DoxyCodeLine{00536\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>\ \textcolor{keywordtype}{bool}\ Graph<NData,\ EData>::Edges::exists(Identifier\ \textcolor{keywordtype}{id})\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00537\ \ \ \textcolor{keywordflow}{return}\ (size()\ >\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00538\ \}}
+\DoxyCodeLine{00539\ }
+\DoxyCodeLine{00540\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00541\ \textcolor{keywordtype}{bool}\ Graph<NData,\ EData>::Edges::exists(Identifier\ source,\ Identifier\ target)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00542\ \ \ \textcolor{keywordflow}{if}\ (!owner\_-\/>nodes\_.exists(source))}
+\DoxyCodeLine{00543\ \ \ \ \ \textcolor{keywordflow}{throw}\ ElementException(SOURCE\_NOT\_EXIST,\ source);}
+\DoxyCodeLine{00544\ \ \ \textcolor{keywordflow}{if}\ (!owner\_-\/>nodes\_.exists(target))}
+\DoxyCodeLine{00545\ \ \ \ \ \textcolor{keywordflow}{throw}\ ElementException(TARGET\_NOT\_EXIST,\ target);}
+\DoxyCodeLine{00546\ \ \ \textcolor{keywordflow}{return}\ (owner\_-\/>adjMatrix\_[source][target]\ !=\ std::nullopt);}
+\DoxyCodeLine{00547\ \}}
+\DoxyCodeLine{00548\ }
+\DoxyCodeLine{00549\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00550\ \textcolor{keywordtype}{void}\ Graph<NData,\ EData>::Edges::validateEdge(Identifier\ \textcolor{keywordtype}{id},\ Identifier\ source,\ Identifier\ target)\ \{}
+\DoxyCodeLine{00551\ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keywordtype}{id}\ ==\ SIZE\_MAX)\ \{}
+\DoxyCodeLine{00552\ \ \ \ \ \textcolor{keywordflow}{throw}\ IdentifierException(INVALID\_EDGE\_IDENTIFIER,\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00553\ \ \ \}}
+\DoxyCodeLine{00554\ \ \ \textcolor{keywordflow}{if}\ (exists(\textcolor{keywordtype}{id}))\ \{}
+\DoxyCodeLine{00555\ \ \ \ \ \textcolor{keywordflow}{throw}\ ConflictException(ID\_EDGE\_ALREADY\_EXISTS,\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00556\ \ \ \}}
+\DoxyCodeLine{00557\ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keywordtype}{id}\ !=\ edges\_.size())\ \{}
+\DoxyCodeLine{00558\ \ \ \ \ \textcolor{keywordflow}{throw}\ IdentifierException(NON\_SUCCESSIVE\_EDGE,\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00559\ \ \ \}}
+\DoxyCodeLine{00560\ \ \ \textcolor{keywordflow}{if}\ (!owner\_-\/>nodes().exists(source))\ \{}
+\DoxyCodeLine{00561\ \ \ \ \ \textcolor{keywordflow}{throw}\ ElementException(SOURCE\_NOT\_EXIST,\ source);}
+\DoxyCodeLine{00562\ \ \ \}}
+\DoxyCodeLine{00563\ \ \ \textcolor{keywordflow}{if}\ (!owner\_-\/>nodes().exists(target))\ \{}
+\DoxyCodeLine{00564\ \ \ \ \ \textcolor{keywordflow}{throw}\ ElementException(TARGET\_NOT\_EXIST,\ target);}
+\DoxyCodeLine{00565\ \ \ \}}
+\DoxyCodeLine{00566\ \ \ \textcolor{keywordflow}{if}\ (exists(source,\ target))\ \{}
+\DoxyCodeLine{00567\ \ \ \ \ \textcolor{keywordflow}{throw}\ ConflictException(EDGE\_ALREADY\_EXISTS,\ source,\ target);}
+\DoxyCodeLine{00568\ \ \ \}}
+\DoxyCodeLine{00569\ \}}
+\DoxyCodeLine{00570\ }
+\DoxyCodeLine{00571\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>}
+\DoxyCodeLine{00572\ \textcolor{keywordtype}{void}\ Graph<NData,\ EData>::Edges::printMatrix(std::ostream\&\ stream)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00573\ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ row\ =\ 0;\ row\ <\ owner\_-\/>adjMatrix\_.size();\ ++row)\ \{}
+\DoxyCodeLine{00574\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ column\ =\ 0;\ column\ +\ 1\ <\ owner\_-\/>adjMatrix\_[row].size();\ ++column)\ \{}
+\DoxyCodeLine{00575\ \ \ \ \ \ \ std::optional<Identifier>\ cell\ =\ owner\_-\/>adjMatrix\_[row][column];}
+\DoxyCodeLine{00576\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (cell)}
+\DoxyCodeLine{00577\ \ \ \ \ \ \ \ \ stream\ <<\ cell.value()\ <<\ \textcolor{charliteral}{'|'};}
+\DoxyCodeLine{00578\ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00579\ \ \ \ \ \ \ \ \ stream\ <<\ \textcolor{charliteral}{'-\/'}\ <<\ \textcolor{charliteral}{'|'};}
+\DoxyCodeLine{00580\ \ \ \ \ \}}
+\DoxyCodeLine{00581\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ last\_column\ =\ owner\_-\/>adjMatrix\_[row].size()\ -\/\ 1;}
+\DoxyCodeLine{00582\ \ \ \ \ std::optional<Identifier>\ cell\ =\ owner\_-\/>adjMatrix\_[row][last\_column];}
+\DoxyCodeLine{00583\ \ \ \ \ \textcolor{keywordflow}{if}\ (cell)}
+\DoxyCodeLine{00584\ \ \ \ \ \ \ stream\ <<\ cell.value();}
+\DoxyCodeLine{00585\ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00586\ \ \ \ \ \ \ stream\ <<\ \textcolor{charliteral}{'-\/'};}
+\DoxyCodeLine{00587\ \ \ \ \ stream\ <<\ std::endl;}
+\DoxyCodeLine{00588\ \ \ \}}
+\DoxyCodeLine{00589\ \}}
+\DoxyCodeLine{00590\ }
+\DoxyCodeLine{00591\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>\ \textcolor{keyword}{class\ }Graph<NData,\ EData>::\mbox{\hyperlink{classGraph_1_1Nodes_1_1Node}{Nodes::Node}}\ \{}
+\DoxyCodeLine{00592\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00593\ \ \ Node(Identifier\ \textcolor{keywordtype}{id},\ NData\ data)\ :\ id\_(\textcolor{keywordtype}{id}),\ data\_(std::move(data))\ \{\}}
+\DoxyCodeLine{00594\ \ \ Identifier\ getId()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ id\_;\ \}}
+\DoxyCodeLine{00595\ \ \ NData\&\ getData()\ \{\ \textcolor{keywordflow}{return}\ data\_;\ \}}
+\DoxyCodeLine{00596\ \ \ \textcolor{keyword}{const}\ NData\&\ getData()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ data\_;\ \}}
+\DoxyCodeLine{00597\ }
+\DoxyCodeLine{00598\ \ \ \textcolor{keyword}{friend}\ std::ostream\&\ operator<<(std::ostream\&\ stream,\ \textcolor{keyword}{const}\ Node\&\ node)\ \{}
+\DoxyCodeLine{00599\ \ \ \ \ stream\ <<\ \textcolor{stringliteral}{"{}node\ ("{}}\ <<\ node.id\_\ <<\ \textcolor{stringliteral}{"{}\ \{"{}}\ <<\ node.data\_\ <<\ \textcolor{stringliteral}{"{}\})"{}};}
+\DoxyCodeLine{00600\ \ \ \ \ \textcolor{keywordflow}{return}\ stream;}
+\DoxyCodeLine{00601\ \ \ \}}
+\DoxyCodeLine{00602\ }
+\DoxyCodeLine{00603\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00604\ \ \ Identifier\ id\_;}
+\DoxyCodeLine{00605\ \ \ NData\ data\_;}
+\DoxyCodeLine{00606\ \};}
+\DoxyCodeLine{00607\ }
+\DoxyCodeLine{00608\ \textcolor{keyword}{template}\ <GraphData\ NData,\ GraphData\ EData>\ \textcolor{keyword}{class\ }Graph<NData,\ EData>::\mbox{\hyperlink{classGraph_1_1Edges_1_1Edge}{Edges::Edge}}\ \{}
+\DoxyCodeLine{00609\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00610\ \ \ Edge(Identifier\ \textcolor{keywordtype}{id},\ Identifier\ source,\ Identifier\ target,\ EData\ data)}
+\DoxyCodeLine{00611\ \ \ \ \ \ \ :\ id\_(\textcolor{keywordtype}{id}),\ source\_(source),\ target\_(target),\ data\_(std::move(data))\ \{\}}
+\DoxyCodeLine{00612\ \ \ Identifier\ getId()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ id\_;\ \}}
+\DoxyCodeLine{00613\ \ \ Identifier\ getSource()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ source\_;\ \}}
+\DoxyCodeLine{00614\ \ \ Identifier\ getTarget()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ target\_;\ \}}
+\DoxyCodeLine{00615\ \ \ EData\&\ getData()\ \{\ \textcolor{keywordflow}{return}\ data\_;\ \}}
+\DoxyCodeLine{00616\ \ \ \textcolor{keyword}{const}\ EData\&\ getData()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ data\_;\ \}}
+\DoxyCodeLine{00617\ }
+\DoxyCodeLine{00618\ \ \ \textcolor{keyword}{friend}\ std::ostream\&\ operator<<(std::ostream\&\ stream,\ \textcolor{keyword}{const}\ Edge\&\ edge)\ \{}
+\DoxyCodeLine{00619\ \ \ \ \ stream\ <<\ \textcolor{stringliteral}{"{}edge\ ("{}}\ <<\ edge.getSource()\ <<\ \textcolor{stringliteral}{"{})-\/["{}}\ <<\ edge.getId()\ <<\ \textcolor{stringliteral}{"{}\ \{"{}}\ <<\ edge.getData()\ <<\ \textcolor{stringliteral}{"{}\}]-\/>("{}}}
+\DoxyCodeLine{00620\ \ \ \ \ \ \ \ \ \ \ \ <<\ edge.getTarget()\ <<\ \textcolor{stringliteral}{"{})"{}};}
+\DoxyCodeLine{00621\ \ \ \ \ \textcolor{keywordflow}{return}\ stream;}
+\DoxyCodeLine{00622\ \ \ \}}
+\DoxyCodeLine{00623\ }
+\DoxyCodeLine{00624\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00625\ \ \ Identifier\ id\_;}
+\DoxyCodeLine{00626\ \ \ Identifier\ source\_;}
+\DoxyCodeLine{00627\ \ \ Identifier\ target\_;}
+\DoxyCodeLine{00628\ \ \ EData\ data\_;}
+\DoxyCodeLine{00629\ \};}
+\DoxyCodeLine{00630\ }
+\DoxyCodeLine{00631\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

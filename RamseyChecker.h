@@ -1,11 +1,22 @@
 #ifndef RAMSEY_CHECKER_H
 #define RAMSEY_CHECKER_H
+
+/// @file RamseyChecker.h
+/// @brief Clique detection and Ramsey property checking for 2-colored graphs.
+
 #include "Color.h"
 #include "Graph.h"
 #include "Utils.h"
 #include <numeric>
 #include <vector>
 
+/// @brief Advances index_vector to the next combination of k elements from n.
+/// @details Uses the standard combination enumeration algorithm — finds the
+///          rightmost index with room to increment, increments it, resets
+///          everything to its right. Called repeatedly by hasClique.
+/// @param index_vector Current combination indices, modified in place.
+/// @param n Total number of elements to choose from.
+/// @return true if a next combination exists, false if all exhausted.
 inline bool advance_combination(std::vector<size_t>& index_vector, size_t n) {
   size_t k = index_vector.size();
 
@@ -23,6 +34,15 @@ inline bool advance_combination(std::vector<size_t>& index_vector, size_t n) {
   return true;
 }
 
+/// @brief Checks whether a 2-colored graph contains a monochromatic clique.
+/// @details Tries every C(n, clique_size) subset of nodes using combination
+///          enumeration. Returns true on the first subset where all edges
+///          between members have the given color.
+/// @tparam NData Node data type — must satisfy GraphData concept.
+/// @param graph The colored undirected graph to search.
+/// @param clique_size Size of clique to look for.
+/// @param color Color to check (Red or Blue).
+/// @return true if a monochromatic clique of given size and color exists.
 template <GraphData NData>
 bool hasClique(const UndirectedGraph<NData, Color>& graph, size_t clique_size, Color color) {
   std::vector<Identifier> nodes;
@@ -57,6 +77,15 @@ bool hasClique(const UndirectedGraph<NData, Color>& graph, size_t clique_size, C
   }
 }
 
+/// @brief Checks whether a 2-colored graph satisfies the Ramsey property for R(s,t).
+/// @details A coloring satisfies R(s,t) if it contains a red clique of size s
+///          OR a blue clique of size t. A coloring that satisfies neither is a
+///          counterexample — proof that more nodes are needed.
+/// @tparam NData Node data type — must satisfy GraphData concept.
+/// @param graph The colored undirected graph to check.
+/// @param s Required size of red clique.
+/// @param t Required size of blue clique.
+/// @return true if the coloring contains a red K_s or blue K_t.
 template <GraphData NData>
 bool checkRamseyProperty(const UndirectedGraph<NData, Color>& graph, size_t s, size_t t) {
   return hasClique(graph, s, Color::Red) || hasClique(graph, t, Color::Blue);

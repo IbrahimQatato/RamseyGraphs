@@ -1,0 +1,107 @@
+\doxysection{Utils.\+h}
+\hypertarget{Utils_8h_source}{}\label{Utils_8h_source}\index{graph\_module/Utils.h@{graph\_module/Utils.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ UTILS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ UTILS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <cstddef>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{using\ }Identifier\ =\ size\_t;}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classException}{Exception}}\ \{}
+\DoxyCodeLine{00010\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00011\ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classException}{\string~Exception}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00012\ \ \ \textcolor{keyword}{virtual}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ message()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00013\ \};}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{class\ }MemoryException\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classException}{Exception}}\ \{}
+\DoxyCodeLine{00016\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ \ \ MemoryException(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ msg)\ :\ msg\_(msg)\ \{\}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ message()\textcolor{keyword}{\ const\ override\ }\{\ \textcolor{keywordflow}{return}\ msg\_;\ \}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00022\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ msg\_;}
+\DoxyCodeLine{00023\ \};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{class\ }VariableException\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classException}{Exception}}\ \{}
+\DoxyCodeLine{00026\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00027\ \ \ VariableException(std::string\ msg)\ :\ msg\_(std::move(msg))\ \{\}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ message()\textcolor{keyword}{\ const\ override\ }\{\ \textcolor{keywordflow}{return}\ msg\_.c\_str();\ \}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00032\ \ \ \textcolor{keywordtype}{void}\ replace(\textcolor{keyword}{const}\ std::string\&\ placeholder,\ \textcolor{keyword}{const}\ std::string\&\ value)\ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ pos\ =\ msg\_.find(placeholder);}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordflow}{if}\ (pos\ !=\ std::string::npos)\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ msg\_.replace(pos,\ placeholder.length(),\ value);}
+\DoxyCodeLine{00036\ \ \ \ \ \}}
+\DoxyCodeLine{00037\ \ \ \}}
+\DoxyCodeLine{00038\ \ \ std::string\ msg\_;}
+\DoxyCodeLine{00039\ \};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{keyword}{class\ }IdentifierException\ :\ \textcolor{keyword}{public}\ VariableException\ \{}
+\DoxyCodeLine{00042\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00043\ \ \ IdentifierException(\textcolor{keyword}{const}\ std::string\&\ templateMsg,\ Identifier\ \textcolor{keywordtype}{id})\ :\ VariableException(templateMsg)\ \{}
+\DoxyCodeLine{00044\ \ \ \ \ replace(\textcolor{stringliteral}{"{}\$id"{}},\ std::to\_string(\textcolor{keywordtype}{id}));}
+\DoxyCodeLine{00045\ \ \ \}}
+\DoxyCodeLine{00046\ \};}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \textcolor{keyword}{class\ }ElementException\ :\ \textcolor{keyword}{public}\ VariableException\ \{}
+\DoxyCodeLine{00049\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00050\ \ \ ElementException(\textcolor{keyword}{const}\ std::string\&\ templateMsg,\ Identifier\ \textcolor{keywordtype}{id})\ :\ VariableException(templateMsg)\ \{}
+\DoxyCodeLine{00051\ \ \ \ \ replace(\textcolor{stringliteral}{"{}\$id"{}},\ std::to\_string(\textcolor{keywordtype}{id}));}
+\DoxyCodeLine{00052\ \ \ \}}
+\DoxyCodeLine{00053\ \ \ ElementException(\textcolor{keyword}{const}\ std::string\&\ templateMsg,\ Identifier\ source,\ Identifier\ target)}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ :\ VariableException(templateMsg)\ \{}
+\DoxyCodeLine{00055\ \ \ \ \ replace(\textcolor{stringliteral}{"{}\$source"{}},\ std::to\_string(source));}
+\DoxyCodeLine{00056\ \ \ \ \ replace(\textcolor{stringliteral}{"{}\$target"{}},\ std::to\_string(target));}
+\DoxyCodeLine{00057\ \ \ \}}
+\DoxyCodeLine{00058\ \};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \textcolor{keyword}{class\ }ConflictException\ :\ \textcolor{keyword}{public}\ VariableException\ \{}
+\DoxyCodeLine{00061\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00062\ \ \ ConflictException(\textcolor{keyword}{const}\ std::string\&\ templateMsg,\ Identifier\ \textcolor{keywordtype}{id})\ :\ VariableException(templateMsg)\ \{}
+\DoxyCodeLine{00063\ \ \ \ \ replace(\textcolor{stringliteral}{"{}\$id"{}},\ std::to\_string(\textcolor{keywordtype}{id}));}
+\DoxyCodeLine{00064\ \ \ \}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ ConflictException(\textcolor{keyword}{const}\ std::string\&\ templateMsg,\ Identifier\ source,\ Identifier\ target)}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ :\ VariableException(templateMsg)\ \{}
+\DoxyCodeLine{00068\ \ \ \ \ replace(\textcolor{stringliteral}{"{}\$source"{}},\ std::to\_string(source));}
+\DoxyCodeLine{00069\ \ \ \ \ replace(\textcolor{stringliteral}{"{}\$target"{}},\ std::to\_string(target));}
+\DoxyCodeLine{00070\ \ \ \}}
+\DoxyCodeLine{00071\ \};}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \textcolor{keyword}{class\ }FileException\ :\ \textcolor{keyword}{public}\ VariableException\ \{}
+\DoxyCodeLine{00074\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00075\ \ \ FileException(\textcolor{keyword}{const}\ std::string\&\ templateMsg,\ \textcolor{keyword}{const}\ std::string\_view\&\ filename)}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ :\ VariableException(templateMsg)\ \{}
+\DoxyCodeLine{00077\ \ \ \ \ replace(\textcolor{stringliteral}{"{}\$filename"{}},\ filename.data());}
+\DoxyCodeLine{00078\ \ \ \}}
+\DoxyCodeLine{00079\ \};}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ UNAVAILABLE\_MEMORY\_NODE[]\ =\ \textcolor{stringliteral}{"{}Unavailable\ memory\ for\ a\ new\ node\ insertion"{}};}
+\DoxyCodeLine{00082\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ UNAVAILABLE\_MEMORY\_EDGE[]\ =\ \textcolor{stringliteral}{"{}Unavailable\ memory\ for\ a\ new\ edge\ insertion"{}};}
+\DoxyCodeLine{00083\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ INVALID\_NODE\_IDENTIFIER[]\ =\ \textcolor{stringliteral}{"{}Invalid\ node\ identifier\ \$id\ requested"{}};}
+\DoxyCodeLine{00084\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ INVALID\_EDGE\_IDENTIFIER[]\ =\ \textcolor{stringliteral}{"{}Invalid\ edge\ identifier\ \$id\ requested"{}};}
+\DoxyCodeLine{00085\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ NODE\_ALREADY\_EXISTS[]\ =\ \textcolor{stringliteral}{"{}Node\ with\ identifier\ \$id\ already\ exists"{}};}
+\DoxyCodeLine{00086\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ ID\_EDGE\_ALREADY\_EXISTS[]\ =\ \textcolor{stringliteral}{"{}Edge\ with\ identifier\ \$id\ already\ exists"{}};}
+\DoxyCodeLine{00087\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ NON\_SUCCESSIVE\_NODE[]\ =\ \textcolor{stringliteral}{"{}Non-\/successive\ node\ identifier\ \$id\ requested"{}};}
+\DoxyCodeLine{00088\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ NON\_SUCCESSIVE\_EDGE[]\ =\ \textcolor{stringliteral}{"{}Non-\/successive\ edge\ identifier\ \$id\ requested"{}};}
+\DoxyCodeLine{00089\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ SOURCE\_NOT\_EXIST[]\ =\ \textcolor{stringliteral}{"{}Source\ node\ with\ identifier\ \$id\ does\ not\ exist"{}};}
+\DoxyCodeLine{00090\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ TARGET\_NOT\_EXIST[]\ =\ \textcolor{stringliteral}{"{}Target\ node\ with\ identifier\ \$id\ does\ not\ exist"{}};}
+\DoxyCodeLine{00091\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ EDGE\_ALREADY\_EXISTS[]\ =\ \textcolor{stringliteral}{"{}Edge\ between\ nodes\ \$source\ and\ \$target\ already\ exists"{}};}
+\DoxyCodeLine{00092\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ EDGE\_BETWEEN\_SRC\_TRGT\_NOT\_EXIST[]\ =\ \textcolor{stringliteral}{"{}Edge\ between\ nodes\ \$source\ and\ \$target\ does\ not\ exist"{}};}
+\DoxyCodeLine{00093\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ UNABLE\_TO\_OPEN\_INPUT\_FILE[]\ =\ \textcolor{stringliteral}{"{}Unable\ to\ open\ input\ file\ \$filename"{}};}
+\DoxyCodeLine{00094\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ UNABLE\_TO\_OPEN\_OUTPUT\_FILE[]\ =\ \textcolor{stringliteral}{"{}Unable\ to\ open\ output\ file\ \$filename"{}};}
+\DoxyCodeLine{00095\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ NODE\_DOES\_NOT\_EXIST[]\ =\ \textcolor{stringliteral}{"{}Node\ with\ identifier\ \$id\ does\ not\ exist"{}};}
+\DoxyCodeLine{00096\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ EDGE\_DOES\_NOT\_EXIST[]\ =\ \textcolor{stringliteral}{"{}Edge\ with\ identifier\ \$id\ does\ not\ exist"{}};}
+\DoxyCodeLine{00097\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ UNAVAILABLE\_MEMORY\_IMPORT[]\ =\ \textcolor{stringliteral}{"{}Unavailable\ memory\ for\ importing\ graph\ content"{}};}
+\DoxyCodeLine{00098\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ UNAVAILABLE\_MEMORY\_COPY[]\ =\ \textcolor{stringliteral}{"{}Unavailable\ memory\ for\ creating\ a\ graph\ copy"{}};}
+\DoxyCodeLine{00099\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ UNAVAILABLE\_MEMORY\_ASSIGN[]\ =\ \textcolor{stringliteral}{"{}Unavailable\ memory\ for\ assigning\ a\ graph\ copy"{}};}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,14 @@
+\doxysection{Graph\+Data Concept Reference}
+\hypertarget{conceptGraphData}{}\label{conceptGraphData}\index{GraphData@{GraphData}}
+\doxysubsection{Concept definition}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{\textcolor{keyword}{concept\ }\mbox{\hyperlink{conceptGraphData}{GraphData}}\ =\ \ !std::is\_pointer\_v<T>\ \&\&\ std::copyable<T>\ \&\&\ std::movable<T>\ \&\&}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::is\_nothrow\_move\_constructible\_v<T>\ \&\&\ std::is\_nothrow\_move\_assignable\_v<T>\ \&\&}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::default\_initializable<T>\ \&\&\ \textcolor{keyword}{requires}(std::ostream\&\ os,\ std::istream\&\ is,\ T\ data)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ os\ <<\ data\ \}\ -\/>\ std::same\_as<std::ostream\&>;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ is\ >>\ data\ \}\ -\/>\ std::same\_as<std::istream\&>;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+
+\end{DoxyCode}

@@ -1,0 +1,72 @@
+\doxysection{Ramsey\+Checker.\+h}
+\hypertarget{RamseyChecker_8h_source}{}\label{RamseyChecker_8h_source}\mbox{\hyperlink{RamseyChecker_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ RAMSEY\_CHECKER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ RAMSEY\_CHECKER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Color_8h}{Color.h}}"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}Graph.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}Utils.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <numeric>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{RamseyChecker_8h_a5e64e7b52721518e0af5f8722df8963c}{advance\_combination}}(std::vector<size\_t>\&\ index\_vector,\ \textcolor{keywordtype}{size\_t}\ n)\ \{}
+\DoxyCodeLine{00021\ \ \ \textcolor{keywordtype}{size\_t}\ k\ =\ index\_vector.size();}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \textcolor{keywordtype}{int}\ i\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(k)\ -\/\ 1;}
+\DoxyCodeLine{00024\ \ \ \textcolor{keywordflow}{while}\ (i\ >=\ 0\ \&\&\ index\_vector[i]\ ==\ n\ -\/\ k\ +\ i)}
+\DoxyCodeLine{00025\ \ \ \ \ -\/-\/i;}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \textcolor{keywordflow}{if}\ (i\ <\ 0)}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ ++index\_vector[i];}
+\DoxyCodeLine{00031\ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ j\ =\ i\ +\ 1;\ j\ <\ k;\ ++j)}
+\DoxyCodeLine{00032\ \ \ \ \ index\_vector[j]\ =\ index\_vector[j\ -\/\ 1]\ +\ 1;}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00035\ \}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00046\ \textcolor{keyword}{template}\ <GraphData\ NData>}
+\DoxyCodeLine{00047\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{RamseyChecker_8h_a669626347d0c3f083b7ff6c117b13e82}{hasClique}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classUndirectedGraph}{UndirectedGraph<NData,\ Color>}}\&\ graph,\ \textcolor{keywordtype}{size\_t}\ clique\_size,\ \mbox{\hyperlink{Color_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color}}\ color)\ \{}
+\DoxyCodeLine{00048\ \ \ std::vector<Identifier>\ nodes;}
+\DoxyCodeLine{00049\ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ node\ :\ graph.nodes())}
+\DoxyCodeLine{00050\ \ \ \ \ nodes.push\_back(node.getId());}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \textcolor{keywordtype}{size\_t}\ n\ =\ nodes.size();}
+\DoxyCodeLine{00053\ \ \ \textcolor{keywordflow}{if}\ (n\ <\ clique\_size)}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ std::vector<size\_t>\ index\_vector(clique\_size);}
+\DoxyCodeLine{00057\ \ \ std::iota(index\_vector.begin(),\ index\_vector.end(),\ 0);}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \textcolor{keywordflow}{while}\ (\textcolor{keyword}{true})\ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_clique\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ clique\_size\ \&\&\ is\_clique;\ ++i)\ \{}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ j\ =\ i\ +\ 1;\ j\ <\ clique\_size\ \&\&\ is\_clique;\ ++j)\ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ Identifier\ node1\ =\ nodes[index\_vector[i]];}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ Identifier\ node2\ =\ nodes[index\_vector[j]];}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!graph.edges().exists(node1,\ node2)\ ||}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ graph.edges().get(node1,\ node2).getData()\ !=\ color)}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ is\_clique\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00070\ \ \ \ \ \}}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordflow}{if}\ (is\_clique)}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{RamseyChecker_8h_a5e64e7b52721518e0af5f8722df8963c}{advance\_combination}}(index\_vector,\ n))}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00077\ \ \ \}}
+\DoxyCodeLine{00078\ \}}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00089\ \textcolor{keyword}{template}\ <GraphData\ NData>}
+\DoxyCodeLine{00090\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{RamseyChecker_8h_aa1aa2f56cb715fab299b75e946a96bcb}{checkRamseyProperty}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classUndirectedGraph}{UndirectedGraph<NData,\ Color>}}\&\ graph,\ \textcolor{keywordtype}{size\_t}\ s,\ \textcolor{keywordtype}{size\_t}\ t)\ \{}
+\DoxyCodeLine{00091\ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{RamseyChecker_8h_a669626347d0c3f083b7ff6c117b13e82}{hasClique}}(graph,\ s,\ Color::Red)\ ||\ \mbox{\hyperlink{RamseyChecker_8h_a669626347d0c3f083b7ff6c117b13e82}{hasClique}}(graph,\ t,\ Color::Blue);}
+\DoxyCodeLine{00092\ \}}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ !RAMSEY\_CHECKER\_H}}
+
+\end{DoxyCode}

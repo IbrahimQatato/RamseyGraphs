@@ -1,0 +1,180 @@
+\doxysection{Exhaustive\+Search Class Reference}
+\hypertarget{classExhaustiveSearch}{}\label{classExhaustiveSearch}\index{ExhaustiveSearch@{ExhaustiveSearch}}
+
+
+Searches for the Ramsey number R(s,t) by exhaustively testing all 2-\/colorings of K\+\_\+n for increasing n until all colorings satisfy the Ramsey property.  
+
+
+
+
+{\ttfamily \#include $<$Exhaustive\+Search.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classExhaustiveSearch_a683482cbf218de99babdf93808c0ca70}{Exhaustive\+Search}} (size\+\_\+t s, size\+\_\+t t)
+\begin{DoxyCompactList}\small\item\em Constructs a fresh search for R(s,t). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classExhaustiveSearch_a88c96d41cc41efcfa61c781135b60d6c}{run}} (bool verbose)
+\begin{DoxyCompactList}\small\item\em Runs the exhaustive search until R(s,t) is found or the 64-\/bit coloring limit is exceeded. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classUndirectedGraph}{Undirected\+Graph}}$<$ Identifier, \mbox{\hyperlink{Color_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color}} $>$ \mbox{\hyperlink{classExhaustiveSearch_a81d01d28be1354c78368bed3227bb181}{get\+Coloring}} (size\+\_\+t n, uint64\+\_\+t coloring\+\_\+index) const
+\begin{DoxyCompactList}\small\item\em Reconstructs a specific coloring of K\+\_\+n as a graph. \end{DoxyCompactList}\item 
+const std\+::vector$<$ uint64\+\_\+t $>$ \& \mbox{\hyperlink{classExhaustiveSearch_a2efe7d93f9617789ed1527f5e92684db}{counterexamples}} (size\+\_\+t n) const
+\begin{DoxyCompactList}\small\item\em Returns the list of counterexample coloring indices for K\+\_\+n. \end{DoxyCompactList}\item 
+\Hypertarget{classExhaustiveSearch_afa75f5b4c939688cf83a0c3c4dab72bc}\label{classExhaustiveSearch_afa75f5b4c939688cf83a0c3c4dab72bc} 
+bool {\bfseries is\+Done} () const
+\begin{DoxyCompactList}\small\item\em Returns true if R(s,t) has been found. \end{DoxyCompactList}\item 
+\Hypertarget{classExhaustiveSearch_a0cfec65b8aeca8545503604aba7d97e4}\label{classExhaustiveSearch_a0cfec65b8aeca8545503604aba7d97e4} 
+size\+\_\+t {\bfseries result} () const
+\begin{DoxyCompactList}\small\item\em Returns R(s,t). Only valid if \doxylink{classExhaustiveSearch_afa75f5b4c939688cf83a0c3c4dab72bc}{is\+Done()} is true. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classExhaustiveSearch_a4a8c47451a3856e558fb97450a06c190}{print\+Summary}} (std\+::ostream \&out=std\+::cout) const
+\begin{DoxyCompactList}\small\item\em Prints a summary of search progress to the given stream. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classExhaustiveSearch_af90058fe926366c4a9c49c381630da4a}{save}} (const std\+::string \&filename) const
+\begin{DoxyCompactList}\small\item\em Saves the current search state to a file for later resumption. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{classExhaustiveSearch}{Exhaustive\+Search}} \mbox{\hyperlink{classExhaustiveSearch_ad0bc56b0d81e53eaf2ed5f54ba6945ab}{load}} (const std\+::string \&filename)
+\begin{DoxyCompactList}\small\item\em Loads a previously saved search state from a file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Searches for the Ramsey number R(s,t) by exhaustively testing all 2-\/colorings of K\+\_\+n for increasing n until all colorings satisfy the Ramsey property. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classExhaustiveSearch_a683482cbf218de99babdf93808c0ca70}\index{ExhaustiveSearch@{ExhaustiveSearch}!ExhaustiveSearch@{ExhaustiveSearch}}
+\index{ExhaustiveSearch@{ExhaustiveSearch}!ExhaustiveSearch@{ExhaustiveSearch}}
+\doxysubsubsection{\texorpdfstring{ExhaustiveSearch()}{ExhaustiveSearch()}}
+{\footnotesize\ttfamily \label{classExhaustiveSearch_a683482cbf218de99babdf93808c0ca70} 
+Exhaustive\+Search\+::\+Exhaustive\+Search (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{s}{, }\item[{size\+\_\+t}]{t}{}\end{DoxyParamCaption})}
+
+
+
+Constructs a fresh search for R(s,t). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & Required red clique size. \\
+\hline
+{\em t} & Required blue clique size. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classExhaustiveSearch_a2efe7d93f9617789ed1527f5e92684db}\index{ExhaustiveSearch@{ExhaustiveSearch}!counterexamples@{counterexamples}}
+\index{counterexamples@{counterexamples}!ExhaustiveSearch@{ExhaustiveSearch}}
+\doxysubsubsection{\texorpdfstring{counterexamples()}{counterexamples()}}
+{\footnotesize\ttfamily \label{classExhaustiveSearch_a2efe7d93f9617789ed1527f5e92684db} 
+const std\+::vector$<$ uint64\+\_\+t $>$ \& Exhaustive\+Search\+::counterexamples (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{n}{}\end{DoxyParamCaption}) const}
+
+
+
+Returns the list of counterexample coloring indices for K\+\_\+n. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & Number of nodes. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Const reference to the list of bitmask indices — empty if none found. 
+\end{DoxyReturn}
+\Hypertarget{classExhaustiveSearch_a81d01d28be1354c78368bed3227bb181}\index{ExhaustiveSearch@{ExhaustiveSearch}!getColoring@{getColoring}}
+\index{getColoring@{getColoring}!ExhaustiveSearch@{ExhaustiveSearch}}
+\doxysubsubsection{\texorpdfstring{getColoring()}{getColoring()}}
+{\footnotesize\ttfamily \label{classExhaustiveSearch_a81d01d28be1354c78368bed3227bb181} 
+\mbox{\hyperlink{classUndirectedGraph}{Undirected\+Graph}}$<$ Identifier, \mbox{\hyperlink{Color_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color}} $>$ Exhaustive\+Search\+::get\+Coloring (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{n}{, }\item[{uint64\+\_\+t}]{coloring\+\_\+index}{}\end{DoxyParamCaption}) const}
+
+
+
+Reconstructs a specific coloring of K\+\_\+n as a graph. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & Number of nodes in the complete graph. \\
+\hline
+{\em coloring\+\_\+index} & Bitmask index of the coloring. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The colored undirected graph. 
+\end{DoxyReturn}
+\Hypertarget{classExhaustiveSearch_ad0bc56b0d81e53eaf2ed5f54ba6945ab}\index{ExhaustiveSearch@{ExhaustiveSearch}!load@{load}}
+\index{load@{load}!ExhaustiveSearch@{ExhaustiveSearch}}
+\doxysubsubsection{\texorpdfstring{load()}{load()}}
+{\footnotesize\ttfamily \label{classExhaustiveSearch_ad0bc56b0d81e53eaf2ed5f54ba6945ab} 
+\mbox{\hyperlink{classExhaustiveSearch}{Exhaustive\+Search}} Exhaustive\+Search\+::load (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filename}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Loads a previously saved search state from a file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & Path to the save file. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\doxylink{classExhaustiveSearch}{Exhaustive\+Search} object with restored state. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em \doxylink{classFileException}{File\+Exception}} & if the file cannot be opened. \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{classExhaustiveSearch_a4a8c47451a3856e558fb97450a06c190}\index{ExhaustiveSearch@{ExhaustiveSearch}!printSummary@{printSummary}}
+\index{printSummary@{printSummary}!ExhaustiveSearch@{ExhaustiveSearch}}
+\doxysubsubsection{\texorpdfstring{printSummary()}{printSummary()}}
+{\footnotesize\ttfamily \label{classExhaustiveSearch_a4a8c47451a3856e558fb97450a06c190} 
+void Exhaustive\+Search\+::print\+Summary (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{out}{ = {\ttfamily std\+:\+:cout}}\end{DoxyParamCaption}) const}
+
+
+
+Prints a summary of search progress to the given stream. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em out} & Output stream (defaults to stdout). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classExhaustiveSearch_a88c96d41cc41efcfa61c781135b60d6c}\index{ExhaustiveSearch@{ExhaustiveSearch}!run@{run}}
+\index{run@{run}!ExhaustiveSearch@{ExhaustiveSearch}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily \label{classExhaustiveSearch_a88c96d41cc41efcfa61c781135b60d6c} 
+void Exhaustive\+Search\+::run (\begin{DoxyParamCaption}\item[{bool}]{verbose}{}\end{DoxyParamCaption})}
+
+
+
+Runs the exhaustive search until R(s,t) is found or the 64-\/bit coloring limit is exceeded. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em verbose} & If true, prints every coloring and waits for Enter. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classExhaustiveSearch_af90058fe926366c4a9c49c381630da4a}\index{ExhaustiveSearch@{ExhaustiveSearch}!save@{save}}
+\index{save@{save}!ExhaustiveSearch@{ExhaustiveSearch}}
+\doxysubsubsection{\texorpdfstring{save()}{save()}}
+{\footnotesize\ttfamily \label{classExhaustiveSearch_af90058fe926366c4a9c49c381630da4a} 
+void Exhaustive\+Search\+::save (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filename}{}\end{DoxyParamCaption}) const}
+
+
+
+Saves the current search state to a file for later resumption. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & Path to the save file. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em \doxylink{classFileException}{File\+Exception}} & if the file cannot be opened. \\
+\hline
+\end{DoxyExceptions}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{ExhaustiveSearch_8h}{Exhaustive\+Search.\+h}}\item 
+Exhaustive\+Search.\+cpp\end{DoxyCompactItemize}

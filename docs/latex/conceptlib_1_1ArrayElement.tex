@@ -1,0 +1,12 @@
+\doxysection{lib\+::Array\+Element Concept Reference}
+\hypertarget{conceptlib_1_1ArrayElement}{}\label{conceptlib_1_1ArrayElement}\index{lib::ArrayElement@{lib::ArrayElement}}
+\doxysubsection{Concept definition}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{\textcolor{keyword}{concept\ }\mbox{\hyperlink{conceptlib_1_1ArrayElement}{lib::ArrayElement}}\ =\ }
+\DoxyCodeLine{\ \ \ \ (std::copy\_constructible<T>\ ||\ std::move\_constructible<T>\ ||}
+\DoxyCodeLine{\ \ \ \ \ std::default\_initializable<T>)\ \&\&}
+\DoxyCodeLine{\ \ \ \ std::destructible<T>}
+
+\end{DoxyCode}

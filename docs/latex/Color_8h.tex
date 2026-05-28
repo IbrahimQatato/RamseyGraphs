@@ -1,0 +1,73 @@
+\doxysection{Color.\+h File Reference}
+\hypertarget{Color_8h}{}\label{Color_8h}\index{Color.h@{Color.h}}
+
+
+Defines the \doxylink{Color_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} enum and its stream operators for graph edge coloring.  
+
+
+{\ttfamily \#include $<$istream$>$}\newline
+{\ttfamily \#include $<$ostream$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{Color_8h_ab87bacfdad76e61b9412d7124be44c1c}\label{Color_8h_ab87bacfdad76e61b9412d7124be44c1c} 
+enum class \mbox{\hyperlink{Color_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color}} \{ {\bfseries Red}
+, {\bfseries Blue}
+ \}
+\begin{DoxyCompactList}\small\item\em Represents the two possible colors for Ramsey graph edge coloring. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::ostream \& \mbox{\hyperlink{Color_8h_a4730368d0aa3ad2b90de71931b021292}{operator$<$$<$}} (std\+::ostream \&stream, \mbox{\hyperlink{Color_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color}} color)
+\begin{DoxyCompactList}\small\item\em Writes "{}\+Red"{} or "{}\+Blue"{} to the stream. \end{DoxyCompactList}\item 
+std\+::istream \& \mbox{\hyperlink{Color_8h_aeae7c83f2fb02612b9ef43ea7776b68e}{operator$>$$>$}} (std\+::istream \&stream, \mbox{\hyperlink{Color_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color}} \&color)
+\begin{DoxyCompactList}\small\item\em Reads "{}\+Red"{} or "{}\+Blue"{} from the stream. Sets failbit on unknown input. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Defines the \doxylink{Color_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} enum and its stream operators for graph edge coloring. 
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{Color_8h_a4730368d0aa3ad2b90de71931b021292}\index{Color.h@{Color.h}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!Color.h@{Color.h}}
+\doxysubsubsection{\texorpdfstring{operator$<$$<$()}{operator<<()}}
+{\footnotesize\ttfamily \label{Color_8h_a4730368d0aa3ad2b90de71931b021292} 
+std\+::ostream \& operator$<$$<$ (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{stream}{, }\item[{\mbox{\hyperlink{Color_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color}}}]{color}{}\end{DoxyParamCaption})}
+
+
+
+Writes "{}\+Red"{} or "{}\+Blue"{} to the stream. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stream} & Output stream. \\
+\hline
+{\em color} & \doxylink{Color_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} to write. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Reference to the stream. 
+\end{DoxyReturn}
+\Hypertarget{Color_8h_aeae7c83f2fb02612b9ef43ea7776b68e}\index{Color.h@{Color.h}!operator$>$$>$@{operator$>$$>$}}
+\index{operator$>$$>$@{operator$>$$>$}!Color.h@{Color.h}}
+\doxysubsubsection{\texorpdfstring{operator$>$$>$()}{operator>>()}}
+{\footnotesize\ttfamily \label{Color_8h_aeae7c83f2fb02612b9ef43ea7776b68e} 
+std\+::istream \& operator$>$$>$ (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{stream}{, }\item[{\mbox{\hyperlink{Color_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color}} \&}]{color}{}\end{DoxyParamCaption})}
+
+
+
+Reads "{}\+Red"{} or "{}\+Blue"{} from the stream. Sets failbit on unknown input. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stream} & Input stream. \\
+\hline
+{\em color} & \doxylink{Color_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} to read into. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Reference to the stream. 
+\end{DoxyReturn}

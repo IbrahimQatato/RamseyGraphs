@@ -1,0 +1,44 @@
+\doxysection{Options.\+h}
+\hypertarget{Options_8h_source}{}\label{Options_8h_source}\index{options\_module/Options.h@{options\_module/Options.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ OPTIONS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ OPTIONS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{comment}{//\ Define\ a\ type\ alias\ for\ a\ vector\ of\ strings\ (args\_t)}}
+\DoxyCodeLine{00009\ \textcolor{keyword}{using\ }args\_t\ =\ std::vector<std::string>;}
+\DoxyCodeLine{00010\ \textcolor{keyword}{using\ }iterator\_t\ =\ args\_t::const\_iterator;}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{char}\ OPTION\_VERBOSE\_SHORT\ =\ \textcolor{charliteral}{'v'};}
+\DoxyCodeLine{00013\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{char}\ OPTION\_VERBOSE\_LONG[]\ =\ \textcolor{stringliteral}{"{}verbose"{}};}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{char}\ VALUE\_OPTION\_RESUME\_LONG[]\ =\ \textcolor{stringliteral}{"{}resume"{}};}
+\DoxyCodeLine{00016\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{char}\ VALUE\_OPTION\_CHECK\_LONG[]\ =\ \textcolor{stringliteral}{"{}check"{}};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ EXIT\_CODE\_SUCCESS\ =\ 0;}
+\DoxyCodeLine{00019\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ EXIT\_CODE\_FAILURE\ =\ 1;}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structOptions}{Options}}\ \{}
+\DoxyCodeLine{00022\ \ \ \textcolor{keywordtype}{bool}\ verbose\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00023\ \ \ \textcolor{keywordtype}{bool}\ check\_mode\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00024\ \ \ std::string\ resume\_file;}
+\DoxyCodeLine{00025\ \ \ std::string\ check\_file;}
+\DoxyCodeLine{00026\ \ \ \textcolor{keywordtype}{bool}\ valid\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00027\ \};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{keywordtype}{void}\ print\_unkown(\textcolor{keyword}{const}\ std::string\&\ option);}
+\DoxyCodeLine{00030\ \textcolor{keywordtype}{void}\ read\_value\_option(\textcolor{keyword}{const}\ std::string\&\ option,\ iterator\_t\&\ it,}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ iterator\_t\ end,\ std::string\&\ out,\ \textcolor{keywordtype}{bool}\&\ valid);}
+\DoxyCodeLine{00032\ \textcolor{keywordtype}{void}\ process\_short\_options(\textcolor{keyword}{const}\ std::string\&\ arg,\ iterator\_t\&\ it,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ iterator\_t\ end,\ \mbox{\hyperlink{structOptions}{Options}}\&\ opts);}
+\DoxyCodeLine{00034\ \textcolor{keywordtype}{void}\ process\_long\_options(\textcolor{keyword}{const}\ std::string\&\ arg,\ iterator\_t\&\ it,}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ iterator\_t\ end,\ \mbox{\hyperlink{structOptions}{Options}}\&\ opts);}
+\DoxyCodeLine{00036\ \mbox{\hyperlink{structOptions}{Options}}\ process\_options(\textcolor{keyword}{const}\ args\_t\&\ arguments);}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ OPTIONS\_H}}
+
+\end{DoxyCode}

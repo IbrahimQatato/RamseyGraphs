@@ -1,0 +1,105 @@
+\doxysection{Ramsey\+Checker.\+h File Reference}
+\hypertarget{RamseyChecker_8h}{}\label{RamseyChecker_8h}\index{RamseyChecker.h@{RamseyChecker.h}}
+
+
+Clique detection and Ramsey property checking for 2-\/colored graphs.  
+
+
+{\ttfamily \#include "{}Color.\+h"{}}\newline
+{\ttfamily \#include "{}Graph.\+h"{}}\newline
+{\ttfamily \#include "{}Utils.\+h"{}}\newline
+{\ttfamily \#include $<$numeric$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{RamseyChecker_8h_a5e64e7b52721518e0af5f8722df8963c}{advance\+\_\+combination}} (std\+::vector$<$ size\+\_\+t $>$ \&index\+\_\+vector, size\+\_\+t n)
+\begin{DoxyCompactList}\small\item\em Advances index\+\_\+vector to the next combination of k elements from n. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{conceptGraphData}{Graph\+Data}} NData$>$ }\\bool \mbox{\hyperlink{RamseyChecker_8h_a669626347d0c3f083b7ff6c117b13e82}{has\+Clique}} (const \mbox{\hyperlink{classUndirectedGraph}{Undirected\+Graph}}$<$ NData, \mbox{\hyperlink{Color_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color}} $>$ \&graph, size\+\_\+t clique\+\_\+size, \mbox{\hyperlink{Color_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color}} color)
+\begin{DoxyCompactList}\small\item\em Checks whether a 2-\/colored graph contains a monochromatic clique. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{conceptGraphData}{Graph\+Data}} NData$>$ }\\bool \mbox{\hyperlink{RamseyChecker_8h_aa1aa2f56cb715fab299b75e946a96bcb}{check\+Ramsey\+Property}} (const \mbox{\hyperlink{classUndirectedGraph}{Undirected\+Graph}}$<$ NData, \mbox{\hyperlink{Color_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color}} $>$ \&graph, size\+\_\+t s, size\+\_\+t t)
+\begin{DoxyCompactList}\small\item\em Checks whether a 2-\/colored graph satisfies the Ramsey property for R(s,t). \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Clique detection and Ramsey property checking for 2-\/colored graphs. 
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{RamseyChecker_8h_a5e64e7b52721518e0af5f8722df8963c}\index{RamseyChecker.h@{RamseyChecker.h}!advance\_combination@{advance\_combination}}
+\index{advance\_combination@{advance\_combination}!RamseyChecker.h@{RamseyChecker.h}}
+\doxysubsubsection{\texorpdfstring{advance\_combination()}{advance\_combination()}}
+{\footnotesize\ttfamily \label{RamseyChecker_8h_a5e64e7b52721518e0af5f8722df8963c} 
+bool advance\+\_\+combination (\begin{DoxyParamCaption}\item[{std\+::vector$<$ size\+\_\+t $>$ \&}]{index\+\_\+vector}{, }\item[{size\+\_\+t}]{n}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Advances index\+\_\+vector to the next combination of k elements from n. 
+
+Uses the standard combination enumeration algorithm — finds the rightmost index with room to increment, increments it, resets everything to its right. Called repeatedly by has\+Clique. 
+\begin{DoxyParams}{Parameters}
+{\em index\+\_\+vector} & Current combination indices, modified in place. \\
+\hline
+{\em n} & Total number of elements to choose from. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if a next combination exists, false if all exhausted. 
+\end{DoxyReturn}
+\Hypertarget{RamseyChecker_8h_aa1aa2f56cb715fab299b75e946a96bcb}\index{RamseyChecker.h@{RamseyChecker.h}!checkRamseyProperty@{checkRamseyProperty}}
+\index{checkRamseyProperty@{checkRamseyProperty}!RamseyChecker.h@{RamseyChecker.h}}
+\doxysubsubsection{\texorpdfstring{checkRamseyProperty()}{checkRamseyProperty()}}
+{\footnotesize\ttfamily \label{RamseyChecker_8h_aa1aa2f56cb715fab299b75e946a96bcb} 
+template$<$\mbox{\hyperlink{conceptGraphData}{Graph\+Data}} NData$>$ \\
+bool check\+Ramsey\+Property (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classUndirectedGraph}{Undirected\+Graph}}$<$ NData, \mbox{\hyperlink{Color_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color}} $>$ \&}]{graph}{, }\item[{size\+\_\+t}]{s}{, }\item[{size\+\_\+t}]{t}{}\end{DoxyParamCaption})}
+
+
+
+Checks whether a 2-\/colored graph satisfies the Ramsey property for R(s,t). 
+
+A coloring satisfies R(s,t) if it contains a red clique of size s OR a blue clique of size t. A coloring that satisfies neither is a counterexample — proof that more nodes are needed. 
+\begin{DoxyTemplParams}{Template Parameters}
+{\em NData} & Node data type — must satisfy \doxylink{conceptGraphData}{Graph\+Data} concept. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em graph} & The colored undirected graph to check. \\
+\hline
+{\em s} & Required size of red clique. \\
+\hline
+{\em t} & Required size of blue clique. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the coloring contains a red K\+\_\+s or blue K\+\_\+t. 
+\end{DoxyReturn}
+\Hypertarget{RamseyChecker_8h_a669626347d0c3f083b7ff6c117b13e82}\index{RamseyChecker.h@{RamseyChecker.h}!hasClique@{hasClique}}
+\index{hasClique@{hasClique}!RamseyChecker.h@{RamseyChecker.h}}
+\doxysubsubsection{\texorpdfstring{hasClique()}{hasClique()}}
+{\footnotesize\ttfamily \label{RamseyChecker_8h_a669626347d0c3f083b7ff6c117b13e82} 
+template$<$\mbox{\hyperlink{conceptGraphData}{Graph\+Data}} NData$>$ \\
+bool has\+Clique (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classUndirectedGraph}{Undirected\+Graph}}$<$ NData, \mbox{\hyperlink{Color_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color}} $>$ \&}]{graph}{, }\item[{size\+\_\+t}]{clique\+\_\+size}{, }\item[{\mbox{\hyperlink{Color_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color}}}]{color}{}\end{DoxyParamCaption})}
+
+
+
+Checks whether a 2-\/colored graph contains a monochromatic clique. 
+
+Tries every C(n, clique\+\_\+size) subset of nodes using combination enumeration. Returns true on the first subset where all edges between members have the given color. 
+\begin{DoxyTemplParams}{Template Parameters}
+{\em NData} & Node data type — must satisfy \doxylink{conceptGraphData}{Graph\+Data} concept. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em graph} & The colored undirected graph to search. \\
+\hline
+{\em clique\+\_\+size} & Size of clique to look for. \\
+\hline
+{\em color} & \doxylink{Color_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} to check (Red or Blue). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if a monochromatic clique of given size and color exists. 
+\end{DoxyReturn}

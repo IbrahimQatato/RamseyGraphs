@@ -1,0 +1,146 @@
+\doxysection{lib\+::Array\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classlib_1_1Array}{}\label{classlib_1_1Array}\index{lib::Array$<$ T $>$@{lib::Array$<$ T $>$}}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator\+\_\+base}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classlib_1_1Array_a016a763f4c969c83acb3550eee045c48}\label{classlib_1_1Array_a016a763f4c969c83acb3550eee045c48} 
+using {\bfseries value\+\_\+type} = T
+\item 
+\Hypertarget{classlib_1_1Array_a948f1a9a0ec8dae7c3c6d480f3ac4f37}\label{classlib_1_1Array_a948f1a9a0ec8dae7c3c6d480f3ac4f37} 
+using {\bfseries size\+\_\+type} = std\+::size\+\_\+t
+\item 
+\Hypertarget{classlib_1_1Array_aa5d5d3c187b46cc317258a08072ca5f2}\label{classlib_1_1Array_aa5d5d3c187b46cc317258a08072ca5f2} 
+using {\bfseries difference\+\_\+type} = std\+::ptrdiff\+\_\+t
+\item 
+\Hypertarget{classlib_1_1Array_a8ab7bd7b00399ad9d7ad63c432051c33}\label{classlib_1_1Array_a8ab7bd7b00399ad9d7ad63c432051c33} 
+using {\bfseries reference} = T \&
+\item 
+\Hypertarget{classlib_1_1Array_a7c981f9e61f434e14c57a5698d78442b}\label{classlib_1_1Array_a7c981f9e61f434e14c57a5698d78442b} 
+using {\bfseries const\+\_\+reference} = const T \&
+\item 
+\Hypertarget{classlib_1_1Array_a540d5b23dae4a1d5708d77200d7e8d51}\label{classlib_1_1Array_a540d5b23dae4a1d5708d77200d7e8d51} 
+using {\bfseries pointer} = T \texorpdfstring{$\ast$}{*}
+\item 
+\Hypertarget{classlib_1_1Array_ab5da46fc83fa091f334f8c62ab9bd59a}\label{classlib_1_1Array_ab5da46fc83fa091f334f8c62ab9bd59a} 
+using {\bfseries const\+\_\+pointer} = const T \texorpdfstring{$\ast$}{*}
+\item 
+\Hypertarget{classlib_1_1Array_a463b357d2d3a8aaf7319ac2dd3531bfd}\label{classlib_1_1Array_a463b357d2d3a8aaf7319ac2dd3531bfd} 
+using {\bfseries iterator} = \mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator\+\_\+base}}$<$false$>$
+\item 
+\Hypertarget{classlib_1_1Array_af23a1e00b3a8c77986f7e8a506580f64}\label{classlib_1_1Array_af23a1e00b3a8c77986f7e8a506580f64} 
+using {\bfseries const\+\_\+iterator} = \mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator\+\_\+base}}$<$true$>$
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classlib_1_1Array_a3412aff2ce8c8498b7168eab8da27cbd}\label{classlib_1_1Array_a3412aff2ce8c8498b7168eab8da27cbd} 
+{\bfseries Array} (size\+\_\+type block\+\_\+size=DEFAULT\+\_\+\+BLOCK\+\_\+\+SIZE)
+\item 
+\Hypertarget{classlib_1_1Array_a86826cf395b7283f6bf1880aa4bde83c}\label{classlib_1_1Array_a86826cf395b7283f6bf1880aa4bde83c} 
+{\bfseries Array} (size\+\_\+type count, const\+\_\+reference item)
+\item 
+\Hypertarget{classlib_1_1Array_ad6b9e26d2817c5e3a5aab350eed37bd2}\label{classlib_1_1Array_ad6b9e26d2817c5e3a5aab350eed37bd2} 
+{\bfseries Array} (std\+::initializer\+\_\+list$<$ T $>$ items)
+\item 
+\Hypertarget{classlib_1_1Array_a73608939e6d505971803ad85c36e3049}\label{classlib_1_1Array_a73608939e6d505971803ad85c36e3049} 
+{\footnotesize template$<$std\+::input\+\_\+iterator Input\+Iterator$>$ }\\{\bfseries Array} (Input\+Iterator first, Input\+Iterator last)
+\item 
+\Hypertarget{classlib_1_1Array_a2323f8335f2d0c35a7059d225625f5ca}\label{classlib_1_1Array_a2323f8335f2d0c35a7059d225625f5ca} 
+{\bfseries Array} (const \mbox{\hyperlink{classlib_1_1Array}{Array}} \&other)
+\item 
+\Hypertarget{classlib_1_1Array_a51ee136abc91a8b1df963c876b5415e3}\label{classlib_1_1Array_a51ee136abc91a8b1df963c876b5415e3} 
+{\bfseries Array} (\mbox{\hyperlink{classlib_1_1Array}{Array}} \&\&other) noexcept
+\item 
+\Hypertarget{classlib_1_1Array_a003401dba579303ea702427aac22dde9}\label{classlib_1_1Array_a003401dba579303ea702427aac22dde9} 
+\mbox{\hyperlink{classlib_1_1Array}{Array}} \& {\bfseries operator=} (const \mbox{\hyperlink{classlib_1_1Array}{Array}} \&other)
+\item 
+\Hypertarget{classlib_1_1Array_a0d1f03b3ae80035152e72d80f5ce0094}\label{classlib_1_1Array_a0d1f03b3ae80035152e72d80f5ce0094} 
+\mbox{\hyperlink{classlib_1_1Array}{Array}} \& {\bfseries operator=} (\mbox{\hyperlink{classlib_1_1Array}{Array}} \&\&other) noexcept
+\item 
+\Hypertarget{classlib_1_1Array_a9049ba5bda71edff4df7b83a3024409d}\label{classlib_1_1Array_a9049ba5bda71edff4df7b83a3024409d} 
+void {\bfseries add\+\_\+block} ()
+\item 
+\Hypertarget{classlib_1_1Array_a26625444e25253866251237b6366172a}\label{classlib_1_1Array_a26625444e25253866251237b6366172a} 
+void {\bfseries remove\+\_\+block} ()
+\item 
+\Hypertarget{classlib_1_1Array_a936f679bc58bb1bfd15c9bc98ef6bfe6}\label{classlib_1_1Array_a936f679bc58bb1bfd15c9bc98ef6bfe6} 
+size\+\_\+type {\bfseries size} () const
+\item 
+\Hypertarget{classlib_1_1Array_a9fe859cac3319263e4da460291c04cfc}\label{classlib_1_1Array_a9fe859cac3319263e4da460291c04cfc} 
+size\+\_\+type {\bfseries capacity} () const
+\item 
+\Hypertarget{classlib_1_1Array_ab79a7744c22f8e8eb66b15b081bc0764}\label{classlib_1_1Array_ab79a7744c22f8e8eb66b15b081bc0764} 
+bool {\bfseries empty} () const
+\item 
+\Hypertarget{classlib_1_1Array_a569e737299a53aacd92dcbc5fc91f7d5}\label{classlib_1_1Array_a569e737299a53aacd92dcbc5fc91f7d5} 
+void {\bfseries print} (std\+::ostream \&stream=std\+::cout) const
+\item 
+\Hypertarget{classlib_1_1Array_a204fdd4ff3f5a2b494989b39e4d27cb3}\label{classlib_1_1Array_a204fdd4ff3f5a2b494989b39e4d27cb3} 
+{\footnotesize template$<$typename Source$>$ \newline
+requires std\+::constructible\+\_\+from$<$T, Source \&\&$>$}\\void {\bfseries push\+\_\+back} (Source \&\&item)
+\item 
+\Hypertarget{classlib_1_1Array_a7e108f1af630caa5610f92afb67037fb}\label{classlib_1_1Array_a7e108f1af630caa5610f92afb67037fb} 
+{\footnotesize template$<$typename... Args$>$ \newline
+requires std\+::constructible\+\_\+from$<$T, Args \&\&...$>$}\\T \& {\bfseries emplace\+\_\+back} (Args \&\&...args)
+\item 
+\Hypertarget{classlib_1_1Array_a3db8f1249005b0e4a10ff1fe9c407b85}\label{classlib_1_1Array_a3db8f1249005b0e4a10ff1fe9c407b85} 
+void {\bfseries pop\+\_\+back} ()
+\item 
+\Hypertarget{classlib_1_1Array_aa415b93cb0cf3aa48346f4cd472aa5d5}\label{classlib_1_1Array_aa415b93cb0cf3aa48346f4cd472aa5d5} 
+void {\bfseries clear} () noexcept
+\item 
+\Hypertarget{classlib_1_1Array_a125d9355a7977d7f1f0fed1ac207285c}\label{classlib_1_1Array_a125d9355a7977d7f1f0fed1ac207285c} 
+reference {\bfseries at} (size\+\_\+type index)
+\item 
+\Hypertarget{classlib_1_1Array_acbd97e4672ede9dd3110710862f3c1a8}\label{classlib_1_1Array_acbd97e4672ede9dd3110710862f3c1a8} 
+const\+\_\+reference {\bfseries at} (size\+\_\+type index) const
+\item 
+\Hypertarget{classlib_1_1Array_ad9b08d3cf1abfebcadcff5ffcece346f}\label{classlib_1_1Array_ad9b08d3cf1abfebcadcff5ffcece346f} 
+reference {\bfseries operator\mbox{[}$\,$\mbox{]}} (size\+\_\+type index)
+\item 
+\Hypertarget{classlib_1_1Array_a5b9962d73d5acb9f7e42c70fb60948f6}\label{classlib_1_1Array_a5b9962d73d5acb9f7e42c70fb60948f6} 
+const\+\_\+reference {\bfseries operator\mbox{[}$\,$\mbox{]}} (size\+\_\+type index) const
+\item 
+\Hypertarget{classlib_1_1Array_af7eecf234db5eaf50dee1b727d55110d}\label{classlib_1_1Array_af7eecf234db5eaf50dee1b727d55110d} 
+\mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator}} {\bfseries begin} ()
+\item 
+\Hypertarget{classlib_1_1Array_a18306e21763413c38eeebb62f76af39b}\label{classlib_1_1Array_a18306e21763413c38eeebb62f76af39b} 
+\mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator}} {\bfseries end} ()
+\item 
+\Hypertarget{classlib_1_1Array_ac6bcb43466e28607d075ef25d093d1db}\label{classlib_1_1Array_ac6bcb43466e28607d075ef25d093d1db} 
+\mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{const\+\_\+iterator}} {\bfseries begin} () const
+\item 
+\Hypertarget{classlib_1_1Array_a1ed55782717ec8cd1e1eb64d8f6575e9}\label{classlib_1_1Array_a1ed55782717ec8cd1e1eb64d8f6575e9} 
+\mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{const\+\_\+iterator}} {\bfseries end} () const
+\item 
+\Hypertarget{classlib_1_1Array_ab406dcd63e3dd6245aafed7a2f0709e9}\label{classlib_1_1Array_ab406dcd63e3dd6245aafed7a2f0709e9} 
+\mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{const\+\_\+iterator}} {\bfseries cbegin} () const
+\item 
+\Hypertarget{classlib_1_1Array_afed831d4e65445f0d3803d2678308ab0}\label{classlib_1_1Array_afed831d4e65445f0d3803d2678308ab0} 
+\mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{const\+\_\+iterator}} {\bfseries cend} () const
+\item 
+\Hypertarget{classlib_1_1Array_a448ce6f909857c83d14dae01ac71c2b9}\label{classlib_1_1Array_a448ce6f909857c83d14dae01ac71c2b9} 
+void {\bfseries resize} (size\+\_\+t size)
+\item 
+\Hypertarget{classlib_1_1Array_a32d6c8f5a6e2ccfa4e0854dbc4fd453a}\label{classlib_1_1Array_a32d6c8f5a6e2ccfa4e0854dbc4fd453a} 
+\mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator}} {\bfseries erase} (\mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{const\+\_\+iterator}} first, \mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{const\+\_\+iterator}} last)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classlib_1_1Array_a657f519ef54dff34ee277782a8b30774}\label{classlib_1_1Array_a657f519ef54dff34ee277782a8b30774} 
+std\+::ostream \& {\bfseries operator$<$$<$} (std\+::ostream \&stream, const \mbox{\hyperlink{classlib_1_1Array}{Array}}$<$ T $>$ \&array)
+\item 
+\Hypertarget{classlib_1_1Array_ac5096bc89cfe8bb054592a3a0e53b24c}\label{classlib_1_1Array_ac5096bc89cfe8bb054592a3a0e53b24c} 
+void {\bfseries swap} (\mbox{\hyperlink{classlib_1_1Array}{Array}}$<$ T $>$ \&a, \mbox{\hyperlink{classlib_1_1Array}{Array}}$<$ T $>$ \&b)
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+graph\+\_\+module/Array.\+h\end{DoxyCompactItemize}

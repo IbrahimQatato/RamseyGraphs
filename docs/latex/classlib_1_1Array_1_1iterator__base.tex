@@ -1,0 +1,97 @@
+\doxysection{lib\+::Array\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+::iterator\+\_\+base\texorpdfstring{$<$}{<} Constant \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classlib_1_1Array_1_1iterator__base}{}\label{classlib_1_1Array_1_1iterator__base}\index{lib::Array$<$ T $>$::iterator\_base$<$ Constant $>$@{lib::Array$<$ T $>$::iterator\_base$<$ Constant $>$}}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_a1ee456fa77c5b8036eeed76a90908596}\label{classlib_1_1Array_1_1iterator__base_a1ee456fa77c5b8036eeed76a90908596} 
+using {\bfseries iterator\+\_\+category} = std\+::random\+\_\+access\+\_\+iterator\+\_\+tag
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_a507268f332cbab4e6438374a60c93029}\label{classlib_1_1Array_1_1iterator__base_a507268f332cbab4e6438374a60c93029} 
+using {\bfseries value\+\_\+type} = std\+::conditional\+\_\+t$<$Constant, const T, T$>$
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_a052f28c4cbc97836c4f079e68884c6a1}\label{classlib_1_1Array_1_1iterator__base_a052f28c4cbc97836c4f079e68884c6a1} 
+using {\bfseries difference\+\_\+type} = std\+::ptrdiff\+\_\+t
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_a1297d68412347f44067cde1adade582f}\label{classlib_1_1Array_1_1iterator__base_a1297d68412347f44067cde1adade582f} 
+using {\bfseries pointer} = std\+::conditional\+\_\+t$<$Constant, const T \texorpdfstring{$\ast$}{*}, T \texorpdfstring{$\ast$}{*}$>$
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_ad464c28eb98bbf0df1a3addd46475806}\label{classlib_1_1Array_1_1iterator__base_ad464c28eb98bbf0df1a3addd46475806} 
+using {\bfseries reference} = std\+::conditional\+\_\+t$<$Constant, const T \&, T \&$>$
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_a4b2d02b106f0b888ae4602e0bd0c9bcc}\label{classlib_1_1Array_1_1iterator__base_a4b2d02b106f0b888ae4602e0bd0c9bcc} 
+{\bfseries iterator\+\_\+base} (array\+\_\+pointer parent, size\+\_\+type index)
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_a867fdfc4d2ab7896c74a992709169138}\label{classlib_1_1Array_1_1iterator__base_a867fdfc4d2ab7896c74a992709169138} 
+{\bfseries operator iterator\+\_\+base$<$ true $>$} () const
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_a36f63e4086e20c08d4ba39abc8fff606}\label{classlib_1_1Array_1_1iterator__base_a36f63e4086e20c08d4ba39abc8fff606} 
+bool {\bfseries operator==} (const \mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator\+\_\+base}} \&other) const
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_ae0617dea1b154bcd29426ae99b4b18e9}\label{classlib_1_1Array_1_1iterator__base_ae0617dea1b154bcd29426ae99b4b18e9} 
+bool {\bfseries operator!=} (const \mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator\+\_\+base}} \&other) const
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_a6fd2d14a93091d149978fc2da1987c2e}\label{classlib_1_1Array_1_1iterator__base_a6fd2d14a93091d149978fc2da1987c2e} 
+\mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator\+\_\+base}} \& {\bfseries operator++} ()
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_aafb8da5745653472f3a11ad8d3b43599}\label{classlib_1_1Array_1_1iterator__base_aafb8da5745653472f3a11ad8d3b43599} 
+\mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator\+\_\+base}} {\bfseries operator++} (int)
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_a172e314b5f0f5f6d370e9aa1e4ebc831}\label{classlib_1_1Array_1_1iterator__base_a172e314b5f0f5f6d370e9aa1e4ebc831} 
+\mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator\+\_\+base}} \& {\bfseries operator-\/-\/} ()
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_a61741df563ddc3f4469cf9ea14cd6357}\label{classlib_1_1Array_1_1iterator__base_a61741df563ddc3f4469cf9ea14cd6357} 
+\mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator\+\_\+base}} {\bfseries operator-\/-\/} (int)
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_a59cf4a3357db38c95d02fe007aa42f3d}\label{classlib_1_1Array_1_1iterator__base_a59cf4a3357db38c95d02fe007aa42f3d} 
+reference {\bfseries operator\texorpdfstring{$\ast$}{*}} () const
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_a0a36e1ea8fda16d5f4a19b1faeddfea9}\label{classlib_1_1Array_1_1iterator__base_a0a36e1ea8fda16d5f4a19b1faeddfea9} 
+pointer {\bfseries operator-\/$>$} () const
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_ae789ab35cf133197ee0b74c023c24484}\label{classlib_1_1Array_1_1iterator__base_ae789ab35cf133197ee0b74c023c24484} 
+\mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator\+\_\+base}} {\bfseries operator+} (difference\+\_\+type n) const
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_a410ec55b93053cf3a757f9801a3335e1}\label{classlib_1_1Array_1_1iterator__base_a410ec55b93053cf3a757f9801a3335e1} 
+\mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator\+\_\+base}} {\bfseries operator-\/} (difference\+\_\+type n) const
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_a11283c07e3006e053f267cbfdc0afce7}\label{classlib_1_1Array_1_1iterator__base_a11283c07e3006e053f267cbfdc0afce7} 
+difference\+\_\+type {\bfseries operator-\/} (const \mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator\+\_\+base}} \&other) const
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_a56f7da7eaaea9435b106d13fafbfddda}\label{classlib_1_1Array_1_1iterator__base_a56f7da7eaaea9435b106d13fafbfddda} 
+\mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator\+\_\+base}} \& {\bfseries operator+=} (difference\+\_\+type n)
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_a5e6cbfd01a52bba21576e64053872ddb}\label{classlib_1_1Array_1_1iterator__base_a5e6cbfd01a52bba21576e64053872ddb} 
+\mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator\+\_\+base}} \& {\bfseries operator-\/=} (difference\+\_\+type n)
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_a58d0b89c5ba30168075da7a59856d813}\label{classlib_1_1Array_1_1iterator__base_a58d0b89c5ba30168075da7a59856d813} 
+reference {\bfseries operator\mbox{[}$\,$\mbox{]}} (difference\+\_\+type n) const
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_a093b0219f50e51439a79c2ef3ffdbb1e}\label{classlib_1_1Array_1_1iterator__base_a093b0219f50e51439a79c2ef3ffdbb1e} 
+bool {\bfseries operator$<$} (const \mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator\+\_\+base}} \&other) const
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_a78b55bd046e455e3dcf1444696825ffc}\label{classlib_1_1Array_1_1iterator__base_a78b55bd046e455e3dcf1444696825ffc} 
+bool {\bfseries operator$<$=} (const \mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator\+\_\+base}} \&other) const
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_af18f3839eb99f4ab100aeb879f984e20}\label{classlib_1_1Array_1_1iterator__base_af18f3839eb99f4ab100aeb879f984e20} 
+bool {\bfseries operator$>$} (const \mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator\+\_\+base}} \&other) const
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_abb4ee8802f260d1a31d92e08f144af72}\label{classlib_1_1Array_1_1iterator__base_abb4ee8802f260d1a31d92e08f144af72} 
+bool {\bfseries operator$>$=} (const \mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator\+\_\+base}} \&other) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_a1584e975b2e217614a86ddbfbdee793c}\label{classlib_1_1Array_1_1iterator__base_a1584e975b2e217614a86ddbfbdee793c} 
+class {\bfseries Array$<$ T $>$}
+\item 
+\Hypertarget{classlib_1_1Array_1_1iterator__base_ab7ba87c6dce23693e6a32ebb27a89aae}\label{classlib_1_1Array_1_1iterator__base_ab7ba87c6dce23693e6a32ebb27a89aae} 
+\mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator\+\_\+base}} {\bfseries operator+} (difference\+\_\+type n, const \mbox{\hyperlink{classlib_1_1Array_1_1iterator__base}{iterator\+\_\+base}} \&it)
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+graph\+\_\+module/Array.\+h\end{DoxyCompactItemize}
