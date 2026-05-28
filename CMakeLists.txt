@@ -16,7 +16,13 @@ add_executable(playground
     graph_module/Main.cpp
 )
 
-foreach(target ramsey playground)
+add_executable(tests
+    ./tests/Tests.cpp
+    ./Color.cpp
+    ./ExhaustiveSearch.cpp
+)
+
+foreach(target ramsey playground tests)
     target_include_directories(${target} PRIVATE graph_module . options_module)
     target_compile_options(${target} PRIVATE
         $<$<CXX_COMPILER_ID:MSVC>:/W4>
