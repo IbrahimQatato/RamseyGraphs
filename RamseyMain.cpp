@@ -1,18 +1,19 @@
 #include "ExhaustiveSearch.h"
 #include "Options.h"
+#include "SearchStrategy.h"
 #include <csignal>
 #include <cstddef>
 #include <filesystem>
 #include <iostream>
-#include <optional>
+#include <memory>
 #include <sstream>
 #include <string>
 
-static std::optional<ExhaustiveSearch> g_search;
+static std::unique_ptr<SearchStrategy> g_search;
 static std::string g_save_file;
 
 void signal_handler(int) {
-  if (g_search.has_value())
+  if (g_search)
     g_search->save(g_save_file);
   std::cout << "\nSaved to " << g_save_file << "\n";
   std::exit(0);
@@ -31,7 +32,7 @@ int main(int argc, char** argv) {
 
   if (opts.check_mode) {
     g_save_file = opts.check_file;
-    g_search = ExhaustiveSearch::load(opts.check_file);
+    g_search = std::make_unique<ExhaustiveSearch>(ExhaustiveSearch::load(opts.check_file));
 
     g_search->printSummary();
     std::cout << "\nCommands: list <n>  |  show <n> <index>  |  quit\n";
@@ -78,9 +79,11 @@ int main(int argc, char** argv) {
     std::string save_file = "data/R_" + std::to_string(s) + "_" + std::to_string(t) + ".txt";
     g_save_file = save_file;
 
-    g_search = std::filesystem::exists(save_file)
-                   ? ExhaustiveSearch::load(save_file)
-                   : ExhaustiveSearch(s, t);
+    if (std::filesystem::exists(save_file)) {
+      g_search = std::make_unique<ExhaustiveSearch>(ExhaustiveSearch::load(save_file));
+    } else {
+      g_search = std::make_unique<ExhaustiveSearch>(ExhaustiveSearch(s, t));
+    }
 
     g_search->run(opts.verbose);
     g_search->save(save_file);

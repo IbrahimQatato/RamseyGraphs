@@ -152,3 +152,5 @@ ExhaustiveSearch ExhaustiveSearch::load(const std::string& filename) {
 
   return search;
 }
+
+std::string ExhaustiveSearch::name() const { return "ExhaustiveSearch"; }
