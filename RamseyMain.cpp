@@ -4,14 +4,15 @@
 #include <cstddef>
 #include <filesystem>
 #include <iostream>
+#include <optional>
 #include <sstream>
 #include <string>
 
-static ExhaustiveSearch* g_search = nullptr;
+static std::optional<ExhaustiveSearch> g_search;
 static std::string g_save_file;
 
 void signal_handler(int) {
-  if (g_search)
+  if (g_search.has_value())
     g_search->save(g_save_file);
   std::cout << "\nSaved to " << g_save_file << "\n";
   std::exit(0);
@@ -20,9 +21,8 @@ void signal_handler(int) {
 int main(int argc, char** argv) {
   args_t arguments(argv + 1, argv + argc);
   Options opts = process_options(arguments);
-  if (!opts.valid) {
+  if (!opts.valid)
     return EXIT_CODE_FAILURE;
-  }
 
   std::signal(SIGINT, signal_handler);
   std::signal(SIGTERM, signal_handler);
@@ -31,10 +31,9 @@ int main(int argc, char** argv) {
 
   if (opts.check_mode) {
     g_save_file = opts.check_file;
-    ExhaustiveSearch search = ExhaustiveSearch::load(opts.check_file);
-    g_search = &search;
+    g_search = ExhaustiveSearch::load(opts.check_file);
 
-    search.printSummary();
+    g_search->printSummary();
     std::cout << "\nCommands: list <n>  |  show <n> <index>  |  quit\n";
 
     std::string line;
@@ -49,7 +48,7 @@ int main(int argc, char** argv) {
       } else if (command == "list") {
         size_t n;
         stringstream >> n;
-        const auto& indices = search.counterexamples(n);
+        const auto& indices = g_search->counterexamples(n);
         if (indices.empty()) {
           std::cout << "No counterexamples for K_" << n << "\n";
         } else {
@@ -57,14 +56,13 @@ int main(int argc, char** argv) {
             std::cout << "  [" << i << "] coloring index " << indices[i] << "\n";
         }
       } else if (command == "show") {
-        size_t n;
-        size_t index;
+        size_t n, index;
         stringstream >> n >> index;
-        const auto& indices = search.counterexamples(n);
+        const auto& indices = g_search->counterexamples(n);
         if (index >= indices.size()) {
           std::cout << "Index out of range\n";
         } else {
-          auto graph = search.getColoring(n, indices[index]);
+          auto graph = g_search->getColoring(n, indices[index]);
           graph.print();
           graph.edges().printMatrix();
         }
@@ -80,12 +78,12 @@ int main(int argc, char** argv) {
     std::string save_file = "data/R_" + std::to_string(s) + "_" + std::to_string(t) + ".txt";
     g_save_file = save_file;
 
-    ExhaustiveSearch search =
-        std::filesystem::exists(save_file) ? ExhaustiveSearch::load(save_file) : ExhaustiveSearch(s, t);
-    g_search = &search;
+    g_search = std::filesystem::exists(save_file)
+                   ? ExhaustiveSearch::load(save_file)
+                   : ExhaustiveSearch(s, t);
 
-    search.run(opts.verbose);
-    search.save(save_file);
+    g_search->run(opts.verbose);
+    g_search->save(save_file);
   }
   return EXIT_CODE_SUCCESS;
 }
