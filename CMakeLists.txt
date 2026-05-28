@@ -9,6 +9,7 @@ add_executable(ramsey
     ./RamseyMain.cpp
     ./Color.cpp
     ./ExhaustiveSearch.cpp
+    ./options_module/Options.cpp
 )
 
 add_executable(playground
@@ -16,7 +17,7 @@ add_executable(playground
 )
 
 foreach(target ramsey playground)
-    target_include_directories(${target} PRIVATE graph_module .)
+    target_include_directories(${target} PRIVATE graph_module . options_module)
     target_compile_options(${target} PRIVATE
         $<$<CXX_COMPILER_ID:MSVC>:/W4>
         $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra>
