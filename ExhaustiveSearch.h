@@ -6,8 +6,8 @@
 
 #include "Color.h"
 #include "Graph.h"
-#include "SearchStrategy.h"
 #include "RamseyChecker.h"
+#include "SearchStrategy.h"
 #include <cstdint>
 #include <map>
 #include <string>
@@ -59,7 +59,7 @@ public:
   /// @return ExhaustiveSearch object with restored state.
   /// @throws FileException if the file cannot be opened.
   static ExhaustiveSearch load(const std::string& filename);
-  
+
   std::string name() const override;
 
 private:
@@ -70,9 +70,6 @@ private:
   bool done_;
   size_t result_;
   std::map<size_t, std::vector<uint64_t>> counterexamples_;
-
-  /// @brief Returns the number of edges in K_n: n*(n-1)/2.
-  static size_t total_edges(size_t n);
 
   /// @brief Returns all edges of K_n in a fixed order for consistent bitmask mapping.
   static std::vector<std::pair<Identifier, Identifier>> edge_order(size_t n);

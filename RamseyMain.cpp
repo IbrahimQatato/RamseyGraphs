@@ -12,6 +12,15 @@
 static std::unique_ptr<SearchStrategy> g_search;
 static std::string g_save_file;
 
+std::unique_ptr<SearchStrategy> make_strategy(const Options& opts, size_t s, size_t t, std::string save_file) {
+  if (std::filesystem::exists(save_file)) {
+    g_search = std::make_unique<ExhaustiveSearch>(ExhaustiveSearch::load(save_file));
+  } //TODO need to change it later so it reads the algorithm from the save_File
+  // if(opts.strategy == "random")
+  //   return std::make_unique<RandomSampler>(s,t);
+  return std::make_unique<ExhaustiveSearch>(s, t);
+}
+
 void signal_handler(int) {
   if (g_search)
     g_search->save(g_save_file);
@@ -79,12 +88,7 @@ int main(int argc, char** argv) {
     std::string save_file = "data/R_" + std::to_string(s) + "_" + std::to_string(t) + ".txt";
     g_save_file = save_file;
 
-    if (std::filesystem::exists(save_file)) {
-      g_search = std::make_unique<ExhaustiveSearch>(ExhaustiveSearch::load(save_file));
-    } else {
-      g_search = std::make_unique<ExhaustiveSearch>(ExhaustiveSearch(s, t));
-    }
-
+    g_search = make_strategy(opts, s, t, save_file);
     g_search->run(opts.verbose);
     g_search->save(save_file);
   }

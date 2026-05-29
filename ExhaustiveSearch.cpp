@@ -12,7 +12,6 @@
 ExhaustiveSearch::ExhaustiveSearch(size_t s, size_t t)
     : s_(s), t_(t), current_n_(std::max(s, t)), current_coloring_(0), done_(false), result_(0) {}
 
-size_t ExhaustiveSearch::total_edges(size_t n) { return n * (n - 1) / 2; }
 
 std::vector<std::pair<Identifier, Identifier>> ExhaustiveSearch::edge_order(size_t n) {
   std::vector<std::pair<Identifier, Identifier>> result;

@@ -19,6 +19,9 @@ public:
   virtual void save(const std::string& filename) const = 0;
   virtual std::string name() const = 0;
   virtual ~SearchStrategy() = default;
+
+  /// @brief Returns the number of edges in K_n: n*(n-1)/2.
+  static size_t total_edges(size_t n) { return n * (n - 1) / 2; }
 };
 
 #endif // !SEARCH_STRAT_H
