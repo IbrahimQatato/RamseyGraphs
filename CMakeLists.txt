@@ -9,6 +9,7 @@ add_executable(ramsey
     ./RamseyMain.cpp
     ./Color.cpp
     ./ExhaustiveSearch.cpp
+    ./RandomSampler.cpp
     ./options_module/Options.cpp
 )
 
@@ -20,6 +21,7 @@ add_executable(tests
     ./tests/Tests.cpp
     ./Color.cpp
     ./ExhaustiveSearch.cpp
+    ./RandomSampler.cpp
 )
 
 foreach(target ramsey playground tests)

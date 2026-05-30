@@ -1,4 +1,5 @@
 #include "ExhaustiveSearch.h"
+#include "RandomSampler.h"
 #include "RamseyChecker.h"
 #include <filesystem>
 #include <iostream>
@@ -106,6 +107,37 @@ void test_resume_already_done() {
   expect(search.result() == 6, "result unchanged after re-run");
 }
 
+// --- RandomSampler tests ---
+
+void test_random_sampler() {
+  // name() returns the tag used in save files
+  RandomSampler sampler(3, 3, 5000);
+  expect(sampler.name() == "random", "RandomSampler name is 'random'");
+
+  // after run, search declares a result — exact value is probabilistic
+  // but must be >= max(s,t) = 3
+  sampler.run(false);
+  expect(sampler.isDone(), "RandomSampler completes");
+  expect(sampler.result() >= 3, "RandomSampler result is plausible");
+
+  // save/load round-trip: loaded state matches original
+  std::filesystem::create_directories("data");
+  const std::string file = "data/test_random_save.txt";
+  sampler.save(file);
+  RandomSampler loaded = RandomSampler::load(file);
+  expect(loaded.isDone() == sampler.isDone(), "loaded RandomSampler isDone matches");
+  expect(loaded.result() == sampler.result(), "loaded RandomSampler result matches");
+  expect(loaded.counterexamples(5).size() == sampler.counterexamples(5).size(),
+         "loaded RandomSampler counterexamples match");
+  std::filesystem::remove(file);
+
+  // polymorphism: SearchStrategy pointer calls RandomSampler methods via vtable
+  std::unique_ptr<SearchStrategy> ptr = std::make_unique<RandomSampler>(3, 3, 1000);
+  ptr->run(false);
+  expect(ptr->isDone(), "RandomSampler via SearchStrategy ptr completes");
+  expect(ptr->name() == "random", "SearchStrategy ptr dispatches name() to RandomSampler");
+}
+
 // --- main ---
 
 int main() {
@@ -123,6 +155,9 @@ int main() {
 
   std::cout << "\n=== Integration: resume ===\n";
   test_resume_already_done();
+
+  std::cout << "\n=== RandomSampler ===\n";
+  test_random_sampler();
 
   std::cout << "\n--- Results: " << passed << " passed, " << failed << " failed ---\n";
   return failed > 0 ? 1 : 0;
