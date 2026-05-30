@@ -6,7 +6,6 @@
 #include "RamseyChecker.h"
 #include "SearchStrategy.h"
 #include <cstdint>
-#include <map>
 #include <random>
 #include <string>
 #include <vector>
@@ -21,12 +20,6 @@ public:
 
   const std::vector<uint64_t>& counterexamples(size_t n) const override;
 
-  bool isDone() const override;
-
-  size_t result() const override;
-
-  void printSummary(std::ostream& out = std::cout) const override;
-
   void save(const std::string& filename) const override;
 
   static RandomSampler load(const std::string& filename);
@@ -34,13 +27,7 @@ public:
   std::string name() const override;
 
 private:
-  size_t s_;
-  size_t t_;
-  size_t current_n_;
   size_t samples_per_n_;
-  bool done_;
-  size_t result_;
-  std::map<size_t, std::vector<uint64_t>> counterexamples_;
   std::mt19937_64 rng_;
 
   static std::vector<std::pair<Identifier, Identifier>> edge_order(size_t n);

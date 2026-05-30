@@ -10,7 +10,7 @@
 #include <vector>
 
 ExhaustiveSearch::ExhaustiveSearch(size_t s, size_t t)
-    : s_(s), t_(t), current_n_(std::max(s, t)), current_coloring_(0), done_(false), result_(0) {}
+    : SearchStrategy(s, t, std::max(s, t)), current_coloring_(0) {}
 
 
 std::vector<std::pair<Identifier, Identifier>> ExhaustiveSearch::edge_order(size_t n) {
@@ -42,18 +42,6 @@ UndirectedGraph<Identifier, Color> ExhaustiveSearch::getColoring(size_t n, uint6
   return build_colored_kn(n, coloring_index);
 }
 
-bool ExhaustiveSearch::isDone() const { return done_; }
-size_t ExhaustiveSearch::result() const { return result_; }
-
-void ExhaustiveSearch::printSummary(std::ostream& out) const {
-  out << "\nLoaded R(" << s_ << "," << t_ << ") search\n";
-  for (const auto& [n, indices] : counterexamples_)
-    out << "  K_" << n << ": " << indices.size() << " counterexamples\n";
-  if (isDone())
-    out << "  Result: R(" << s_ << "," << t_ << ") = " << result_ << "\n";
-  else
-    out << "  In progress: K_" << current_n_ << " (coloring " << current_coloring_ << ")\n";
-}
 
 const std::vector<uint64_t>& ExhaustiveSearch::counterexamples(size_t n) const {
   static const std::vector<uint64_t> empty;
@@ -114,17 +102,10 @@ void ExhaustiveSearch::run(bool verbose) {
 
 void ExhaustiveSearch::save(const std::string& filename) const {
   std::ofstream file(filename);
-  if (!file.is_open()) {
+  if (!file.is_open())
     throw FileException(UNABLE_TO_OPEN_OUTPUT_FILE, filename);
-  }
-  file << s_ << " " << t_ << std::endl;
-  file << current_n_ << " " << current_coloring_ << " " << done_ << " " << result_ << std::endl;
-  for (const auto& [n, indices] : counterexamples_) {
-    file << n << " " << indices.size();
-    for (uint64_t index : indices)
-      file << " " << index;
-    file << std::endl;
-  }
+  file << "exhaustive " << s_ << " " << t_ << " " << current_coloring_ << "\n";
+  save_common(file);
 }
 
 ExhaustiveSearch ExhaustiveSearch::load(const std::string& filename) {
@@ -132,24 +113,15 @@ ExhaustiveSearch ExhaustiveSearch::load(const std::string& filename) {
   if (!file.is_open())
     throw FileException(UNABLE_TO_OPEN_INPUT_FILE, filename);
 
+  std::string tag;
   size_t s, t;
-  file >> s >> t;
+  uint64_t current_coloring;
+  file >> tag >> s >> t >> current_coloring;
 
   ExhaustiveSearch search(s, t);
-  file >> search.current_n_ >> search.current_coloring_ >> search.done_ >> search.result_;
-
-  size_t n, count;
-  while (file >> n >> count) {
-    std::vector<uint64_t> indices;
-    for (size_t i = 0; i < count; ++i) {
-      uint64_t index;
-      file >> index;
-      indices.push_back(index);
-    }
-    search.counterexamples_[n] = std::move(indices);
-  }
-
+  search.current_coloring_ = current_coloring;
+  load_common(file, search);
   return search;
 }
 
-std::string ExhaustiveSearch::name() const { return "ExhaustiveSearch"; }
+std::string ExhaustiveSearch::name() const { return "exhaustive"; }

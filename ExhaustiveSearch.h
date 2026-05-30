@@ -39,16 +39,6 @@ public:
   /// @return Const reference to the list of bitmask indices — empty if none found.
   const std::vector<uint64_t>& counterexamples(size_t n) const override;
 
-  /// @brief Returns true if R(s,t) has been found.
-  bool isDone() const override;
-
-  /// @brief Returns R(s,t). Only valid if isDone() is true.
-  size_t result() const override;
-
-  /// @brief Prints a summary of search progress to the given stream.
-  /// @param out Output stream (defaults to stdout).
-  void printSummary(std::ostream& out = std::cout) const override;
-
   /// @brief Saves the current search state to a file for later resumption.
   /// @param filename Path to the save file.
   /// @throws FileException if the file cannot be opened.
@@ -63,13 +53,7 @@ public:
   std::string name() const override;
 
 private:
-  size_t s_;
-  size_t t_;
-  size_t current_n_;
   uint64_t current_coloring_;
-  bool done_;
-  size_t result_;
-  std::map<size_t, std::vector<uint64_t>> counterexamples_;
 
   /// @brief Returns all edges of K_n in a fixed order for consistent bitmask mapping.
   static std::vector<std::pair<Identifier, Identifier>> edge_order(size_t n);
