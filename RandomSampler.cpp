@@ -1,12 +1,15 @@
 /// @file RandomSampler.cpp
 /// @brief Probabilistic Ramsey search implementation.
 #include "RandomSampler.h"
+#include "Options.h"
 #include "RamseyChecker.h"
 #include "Utils.h"
 #include <string>
 
-RandomSampler::RandomSampler(size_t s, size_t t, size_t samples_per_n)
-    : SearchStrategy(s, t, std::max(s, t)), samples_per_n_(samples_per_n), rng_(std::random_device{}()) {}
+RandomSampler::RandomSampler(size_t red_size, size_t blue_size, size_t samples_per_n)
+    : SearchStrategy(red_size, blue_size, std::max(red_size, blue_size)),
+      samples_per_n_(samples_per_n),
+      rng_(std::random_device{}()) {}
 
 std::vector<std::pair<Identifier, Identifier>> RandomSampler::edge_order(size_t n) {
   std::vector<std::pair<Identifier, Identifier>> result;
@@ -37,7 +40,7 @@ void RandomSampler::test_n(size_t n, bool verbose) {
   for (size_t i = 0; i < samples_per_n_; ++i) {
     uint64_t mask = dist(rng_);
     auto graph = build_colored_kn(n, mask);
-    bool satisfies = checkRamseyProperty(graph, s_, t_);
+    bool satisfies = checkRamseyProperty(graph, red_size_, blue_size_);
     if (!satisfies)
       counterexamples_[n].push_back(mask);
 
@@ -58,7 +61,7 @@ const std::vector<uint64_t>& RandomSampler::counterexamples(size_t n) const {
   return it != counterexamples_.end() ? it->second : empty;
 }
 
-std::string RandomSampler::name() const { return "random"; }
+std::string RandomSampler::name() const { return STRATEGY_RANDOM; }
 
 UndirectedGraph<Identifier, Color> RandomSampler::getColoring(size_t n, uint64_t coloring_index) const {
   return build_colored_kn(n, coloring_index);
@@ -69,7 +72,7 @@ void RandomSampler::save(const std::string& filename) const {
   if (!file.is_open()) {
     throw FileException(UNABLE_TO_OPEN_OUTPUT_FILE, filename);
   }
-  file << "random " << s_ << " " << t_ << " " << samples_per_n_ << "\n";
+  file << STRATEGY_RANDOM << " " << red_size_ << " " << blue_size_ << " " << samples_per_n_ << "\n";
   save_common(file);
 }
 
@@ -79,9 +82,9 @@ RandomSampler RandomSampler::load(const std::string& filename) {
     FileException(UNABLE_TO_OPEN_INPUT_FILE, filename);
   }
   std::string tag;
-  size_t s, t, samples_per_n;
-  file >> tag >> s >> t >> samples_per_n;
-  RandomSampler search(s, t);
+  size_t red_size, blue_size, samples_per_n;
+  file >> tag >> red_size >> blue_size >> samples_per_n;
+  RandomSampler search(red_size, blue_size);
   search.samples_per_n_ = samples_per_n;
   load_common(file, search);
   return search;

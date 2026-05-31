@@ -11,6 +11,9 @@
 /// @brief Represents the two possible colors for Ramsey graph edge coloring.
 enum class Color { Red, Blue };
 
+constexpr char COLOR_NAME_RED[] = "Red";
+constexpr char COLOR_NAME_BLUE[] = "Blue";
+
 /// @brief Writes "Red" or "Blue" to the stream.
 /// @param stream Output stream.
 /// @param color Color to write.

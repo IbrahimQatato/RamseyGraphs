@@ -9,6 +9,9 @@
 #include <ostream>
 #include <string>
 
+constexpr char DOT_COLOR_RED[] = "red";
+constexpr char DOT_COLOR_BLUE[] = "blue";
+
 /// @brief Writes a 2-colored graph in Graphviz DOT format to a stream.
 /// @details Red edges are written as `color=red`, blue as `color=blue`.
 ///          Output can be rendered with: `dot -Tpng file.dot -o file.png`

@@ -13,11 +13,14 @@
 #include <string>
 #include <vector>
 
+/// @brief Maximum number of edges that fit in a 64-bit coloring bitmask.
+constexpr size_t MAX_COLORING_BITS = 64;
+
 /// @brief Abstract base class for Ramsey number search strategies.
 /// @details Implements the Template Method pattern: run() provides the outer
-///          search loop (increment n, check 64-bit limit, detect completion);
+///          search loop (increment n, check MAX_COLORING_BITS limit, detect completion);
 ///          subclasses implement test_n() to fill counterexamples for one n.
-///          Shared state (s_, t_, current_n_, done_, result_, counterexamples_)
+///          Shared state (red_size_, blue_size_, current_n_, done_, result_, counterexamples_)
 ///          lives here as protected members.
 class SearchStrategy {
 public:
@@ -35,20 +38,20 @@ public:
   /// @param verbose Passed through to test_n on each iteration.
   void run(bool verbose) {
     if (done_) {
-      std::cout << "Already complete: R(" << s_ << "," << t_ << ") = " << result_ << "\n";
+      std::cout << "Already complete: R(" << red_size_ << "," << blue_size_ << ") = " << result_ << "\n";
       return;
     }
     while (!done_) {
       size_t edges = total_edges(current_n_);
-      if (edges > 64) {
-        std::cout << "K_" << current_n_ << " exceeds 64-bit limit, stopping.\n";
+      if (edges > MAX_COLORING_BITS) {
+        std::cout << "K_" << current_n_ << " exceeds " << MAX_COLORING_BITS << "-bit limit, stopping.\n";
         break;
       }
       test_n(current_n_, verbose);
       if (!counterexamples_.count(current_n_)) {
         done_ = true;
         result_ = current_n_;
-        std::cout << "R(" << s_ << "," << t_ << ") = " << result_ << "\n";
+        std::cout << "R(" << red_size_ << "," << blue_size_ << ") = " << result_ << "\n";
       } else {
         std::cout << "  → " << counterexamples_[current_n_].size()
                   << " counterexamples — K_" << current_n_ << " not sufficient\n";
@@ -81,11 +84,11 @@ public:
   /// @brief Prints a summary of search progress to the given stream.
   /// @param out Output stream (defaults to stdout).
   void printSummary(std::ostream& out = std::cout) const {
-    out << name() << " — R(" << s_ << "," << t_ << ")\n";
+    out << name() << " — R(" << red_size_ << "," << blue_size_ << ")\n";
     for (const auto& [n, indices] : counterexamples_)
       out << "  K_" << n << ": " << indices.size() << " counterexamples\n";
     if (done_)
-      out << "  Result: R(" << s_ << "," << t_ << ") = " << result_ << "\n";
+      out << "  Result: R(" << red_size_ << "," << blue_size_ << ") = " << result_ << "\n";
     else
       out << "  In progress: K_" << current_n_ << "\n";
   }
@@ -94,10 +97,13 @@ public:
   static size_t total_edges(size_t n) { return n * (n - 1) / 2; }
 
 protected:
-  SearchStrategy(size_t s, size_t t, size_t start_n)
-      : s_(s), t_(t), current_n_(start_n) {}
+  /// @param red_size Required red clique size (the s in R(s,t)).
+  /// @param blue_size Required blue clique size (the t in R(s,t)).
+  /// @param start_n First K_n to test.
+  SearchStrategy(size_t red_size, size_t blue_size, size_t start_n)
+      : red_size_(red_size), blue_size_(blue_size), current_n_(start_n) {}
 
-  size_t s_, t_, current_n_;
+  size_t red_size_, blue_size_, current_n_;
   bool done_ = false;
   size_t result_ = 0;
   std::map<size_t, std::vector<uint64_t>> counterexamples_;

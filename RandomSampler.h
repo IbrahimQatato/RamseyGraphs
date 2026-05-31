@@ -20,11 +20,11 @@
 ///          Useful for large n where exhaustive search is infeasible.
 class RandomSampler : public SearchStrategy {
 public:
-  /// @brief Constructs a fresh probabilistic search for R(s,t).
-  /// @param s Required red clique size.
-  /// @param t Required blue clique size.
+  /// @brief Constructs a fresh probabilistic search for R(red_size, blue_size).
+  /// @param red_size Required red clique size.
+  /// @param blue_size Required blue clique size.
   /// @param samples_per_n Number of random colorings to test per K_n.
-  RandomSampler(size_t s, size_t t, size_t samples_per_n = 1000);
+  RandomSampler(size_t red_size, size_t blue_size, size_t samples_per_n = 1000);
 
   /// @brief Samples samples_per_n random colorings of K_n and stores counterexamples.
   /// @param n Number of nodes in the complete graph.

@@ -26,7 +26,7 @@ std::unique_ptr<SearchStrategy> load_strategy(const std::string& filename) {
   std::ifstream f(filename);
   std::string tag;
   f >> tag;
-  if (tag == "random")
+  if (tag == STRATEGY_RANDOM)
     return std::make_unique<RandomSampler>(RandomSampler::load(filename));
   return std::make_unique<ExhaustiveSearch>(ExhaustiveSearch::load(filename));
 }
@@ -44,7 +44,7 @@ std::unique_ptr<SearchStrategy> make_strategy(const Options& opts, size_t s, siz
                                               const std::string& save_file) {
   if (std::filesystem::exists(save_file))
     return load_strategy(save_file);
-  if (opts.strategy == "random")
+  if (opts.strategy == STRATEGY_RANDOM)
     return std::make_unique<RandomSampler>(s, t, opts.samples);
   return std::make_unique<ExhaustiveSearch>(s, t);
 }
@@ -85,9 +85,9 @@ int main(int argc, char** argv) {
       std::string command;
       stringstream >> command;
 
-      if (command == "quit") {
+      if (command == CMD_QUIT) {
         break;
-      } else if (command == "list") {
+      } else if (command == CMD_LIST) {
         size_t n;
         stringstream >> n;
         const auto& indices = g_search->counterexamples(n);
@@ -97,7 +97,7 @@ int main(int argc, char** argv) {
           for (size_t i = 0; i < indices.size(); ++i)
             std::cout << "  [" << i << "] coloring index " << indices[i] << "\n";
         }
-      } else if (command == "show") {
+      } else if (command == CMD_SHOW) {
         size_t n, index;
         stringstream >> n >> index;
         const auto& indices = g_search->counterexamples(n);
@@ -108,7 +108,7 @@ int main(int argc, char** argv) {
           graph.print();
           graph.edges().printMatrix();
         }
-      } else if (command == "export") {
+      } else if (command == CMD_EXPORT) {
         size_t n, index;
         std::string dotfile;
         stringstream >> n >> index >> dotfile;

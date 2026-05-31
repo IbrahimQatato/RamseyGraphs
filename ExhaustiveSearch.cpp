@@ -1,6 +1,7 @@
 /// @file ExhaustiveSearch.cpp
 /// @brief Exhaustive 2-coloring search implementation.
 #include "ExhaustiveSearch.h"
+#include "Options.h"
 #include "RamseyChecker.h"
 #include "Utils.h"
 #include <algorithm>
@@ -11,8 +12,8 @@
 #include <ostream>
 #include <vector>
 
-ExhaustiveSearch::ExhaustiveSearch(size_t s, size_t t)
-    : SearchStrategy(s, t, std::max(s, t)), current_coloring_(0) {}
+ExhaustiveSearch::ExhaustiveSearch(size_t red_size, size_t blue_size)
+    : SearchStrategy(red_size, blue_size, std::max(red_size, blue_size)), current_coloring_(0) {}
 
 
 std::vector<std::pair<Identifier, Identifier>> ExhaustiveSearch::edge_order(size_t n) {
@@ -56,7 +57,7 @@ void ExhaustiveSearch::test_n(size_t n, bool verbose) {
 
   while (current_coloring_ < total_colorings) {
     auto graph = build_colored_kn(n, current_coloring_);
-    bool satisfies = checkRamseyProperty(graph, s_, t_);
+    bool satisfies = checkRamseyProperty(graph, red_size_, blue_size_);
     if (!satisfies)
       counterexamples_[n].push_back(current_coloring_);
 
@@ -75,7 +76,7 @@ void ExhaustiveSearch::save(const std::string& filename) const {
   std::ofstream file(filename);
   if (!file.is_open())
     throw FileException(UNABLE_TO_OPEN_OUTPUT_FILE, filename);
-  file << "exhaustive " << s_ << " " << t_ << " " << current_coloring_ << "\n";
+  file << STRATEGY_EXHAUSTIVE << " " << red_size_ << " " << blue_size_ << " " << current_coloring_ << "\n";
   save_common(file);
 }
 
@@ -85,14 +86,14 @@ ExhaustiveSearch ExhaustiveSearch::load(const std::string& filename) {
     throw FileException(UNABLE_TO_OPEN_INPUT_FILE, filename);
 
   std::string tag;
-  size_t s, t;
+  size_t red_size, blue_size;
   uint64_t current_coloring;
-  file >> tag >> s >> t >> current_coloring;
+  file >> tag >> red_size >> blue_size >> current_coloring;
 
-  ExhaustiveSearch search(s, t);
+  ExhaustiveSearch search(red_size, blue_size);
   search.current_coloring_ = current_coloring;
   load_common(file, search);
   return search;
 }
 
-std::string ExhaustiveSearch::name() const { return "exhaustive"; }
+std::string ExhaustiveSearch::name() const { return STRATEGY_EXHAUSTIVE; }

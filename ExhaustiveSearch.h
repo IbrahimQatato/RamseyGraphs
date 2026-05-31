@@ -18,10 +18,10 @@
 ///        Ramsey property.
 class ExhaustiveSearch : public SearchStrategy {
 public:
-  /// @brief Constructs a fresh search for R(s,t).
-  /// @param s Required red clique size.
-  /// @param t Required blue clique size.
-  ExhaustiveSearch(size_t s, size_t t);
+  /// @brief Constructs a fresh search for R(red_size, blue_size).
+  /// @param red_size Required red clique size.
+  /// @param blue_size Required blue clique size.
+  ExhaustiveSearch(size_t red_size, size_t blue_size);
 
   /// @brief Runs the exhaustive search until R(s,t) is found or the 64-bit
   ///        coloring limit is exceeded.

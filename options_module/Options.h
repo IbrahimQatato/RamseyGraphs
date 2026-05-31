@@ -17,6 +17,14 @@ constexpr char VALUE_OPTION_CHECK_LONG[] = "check";
 constexpr char VALUE_OPTION_STRATEGY_LONG[] = "strategy";
 constexpr char VALUE_OPTION_SAMPLES_LONG[] = "samples";
 
+constexpr char STRATEGY_EXHAUSTIVE[] = "exhaustive";
+constexpr char STRATEGY_RANDOM[] = "random";
+
+constexpr char CMD_LIST[] = "list";
+constexpr char CMD_SHOW[] = "show";
+constexpr char CMD_EXPORT[] = "export";
+constexpr char CMD_QUIT[] = "quit";
+
 constexpr int EXIT_CODE_SUCCESS = 0;
 constexpr int EXIT_CODE_FAILURE = 1;
 
@@ -25,7 +33,7 @@ struct Options {
   bool check_mode = false;
   std::string resume_file;
   std::string check_file;
-  std::string strategy = "exhaustive";
+  std::string strategy = STRATEGY_EXHAUSTIVE;
   size_t samples = 10000;
   bool valid = true;
 };

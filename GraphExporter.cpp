@@ -4,7 +4,7 @@
 #include "Utils.h"
 #include <fstream>
 
-static std::string toDOTColor(Color color) { return color == Color::Red ? "red" : "blue"; }
+static std::string toDOTColor(Color color) { return color == Color::Red ? DOT_COLOR_RED : DOT_COLOR_BLUE; }
 
 void exportDOT(const UndirectedGraph<Identifier, Color>& graph, std::ostream& out) {
   out << "graph G {\n";
