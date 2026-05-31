@@ -38,7 +38,7 @@ void RandomSampler::test_n(size_t n, bool verbose) { //TODO add verbose instruct
     if (!checkRamseyProperty(graph, s_, t_))
       counterexamples_[n].push_back(mask);
   }
-  std::cout << "Sampled K_" << n << " (" << samples_per_n_ << " samples)\n";
+  std::cout << "\nSampled K_" << n << " (" << samples_per_n_ << " samples)\n";
 }
 
 const std::vector<uint64_t>& RandomSampler::counterexamples(size_t n) const {

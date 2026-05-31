@@ -32,9 +32,10 @@ Results are saved automatically to `data/R_s_t.txt`. Running again with the same
 
 Loads a saved search and lets you browse results interactively:
 ```
-list <n>         — list counterexample indices for K_n
-show <n> <idx>   — display counterexample graph
-quit             — exit
+list <n>                  — list counterexample indices for K_n
+show <n> <index>          — display counterexample graph
+export <n> <index> <out>  — display counterexample graph
+quit                      — exit
 ```
 
 ### Run tests
@@ -46,14 +47,10 @@ quit             — exit
 
 Press Ctrl+C at any time — the search saves its state before exiting.
 
-## Architecture
+## Exporting
+in check mode you can export the a dot file and see it in Graphviz
+```
+dot -[Tpng/Tsvg/Tpdf] <out.dot> -o <out.png>
+```
 
-| File | Description |
-|------|-------------|
-| `Color.h/cpp` | `enum class Color { Red, Blue }` with stream operators. |
-| `RamseyChecker.h` | `hasClique` and `checkRamseyProperty` — clique detection via combination enumeration. |
-| `ExhaustiveSearch.h/cpp` | Exhaustive 2-coloring search. Encodes colorings as bitmasks. Supports save/load/resume. |
-| `options_module/Options.h/cpp` | Command line argument parsing. |
-| `RamseyMain.cpp` | Entry point — CLI, signal handling, mode dispatch. |
-| `tests/Tests.cpp` | Unit and integration tests. |
 
