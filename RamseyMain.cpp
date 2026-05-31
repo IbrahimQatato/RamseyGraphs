@@ -89,36 +89,45 @@ int main(int argc, char** argv) {
         break;
       } else if (command == CMD_LIST) {
         size_t n;
-        stringstream >> n;
-        const auto& indices = g_search->counterexamples(n);
-        if (indices.empty()) {
-          std::cout << "No counterexamples for K_" << n << "\n";
+        if (!(stringstream >> n)) {
+          std::cout << "Usage: list <n>\n";
         } else {
-          for (size_t i = 0; i < indices.size(); ++i)
-            std::cout << "  [" << i << "] coloring index " << indices[i] << "\n";
+          const auto& indices = g_search->counterexamples(n);
+          if (indices.empty()) {
+            std::cout << "No counterexamples for K_" << n << "\n";
+          } else {
+            for (size_t i = 0; i < indices.size(); ++i)
+              std::cout << "  [" << i << "] coloring index " << indices[i] << "\n";
+          }
         }
       } else if (command == CMD_SHOW) {
         size_t n, index;
-        stringstream >> n >> index;
-        const auto& indices = g_search->counterexamples(n);
-        if (index >= indices.size()) {
-          std::cout << "Index out of range\n";
+        if (!(stringstream >> n >> index)) {
+          std::cout << "Usage: show <n> <index>\n";
         } else {
-          auto graph = g_search->getColoring(n, indices[index]);
-          graph.print();
-          graph.edges().printMatrix();
+          const auto& indices = g_search->counterexamples(n);
+          if (index >= indices.size()) {
+            std::cout << "No counterexample at index " << index << " for K_" << n << "\n";
+          } else {
+            auto graph = g_search->getColoring(n, indices[index]);
+            graph.print();
+            graph.edges().printMatrix();
+          }
         }
       } else if (command == CMD_EXPORT) {
         size_t n, index;
         std::string dotfile;
-        stringstream >> n >> index >> dotfile;
-        const auto& indices = g_search->counterexamples(n);
-        if (index >= indices.size()) {
-          std::cout << "Index out of range\n";
+        if (!(stringstream >> n >> index >> dotfile)) {
+          std::cout << "Usage: export <n> <index> <file.dot>\n";
         } else {
-          auto graph = g_search->getColoring(n, indices[index]);
-          exportDOT(graph, dotfile);
-          std::cout << "Exported to " << dotfile << "\n";
+          const auto& indices = g_search->counterexamples(n);
+          if (index >= indices.size()) {
+            std::cout << "No counterexample at index " << index << " for K_" << n << "\n";
+          } else {
+            auto graph = g_search->getColoring(n, indices[index]);
+            exportDOT(graph, dotfile);
+            std::cout << "Exported to " << dotfile << "\n";
+          }
         }
       } else {
         std::cout << "Unknown command\n";
