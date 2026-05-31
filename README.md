@@ -14,8 +14,10 @@ Requires: CMake 3.20+, a C++23 compiler (GCC 13+, Clang 16+, MSVC 2022+).
 
 ### Search mode
 ```bash
-./build/ramsey              # fresh search — prompts for s and t
-./build/ramsey --verbose    # shows every coloring, waits for Enter
+./build/ramsey                                  # exhaustive search — prompts for s and t
+./build/ramsey --verbose                        # step through every coloring, press Enter to advance
+./build/ramsey --strategy random                # probabilistic search (faster, not a proof)
+./build/ramsey --strategy random --samples 5000 # random search with 5000 samples per K_n
 ```
 
 Enter s and t when prompted:
@@ -23,7 +25,7 @@ Enter s and t when prompted:
 Enter s and t for R(s,t): 3 3
 ```
 
-Results are saved automatically to `data/R_s_t.txt`. Running again with the same s and t resumes from where it left off.
+Results are saved automatically to `data/R_s_t.txt`. Running again with the same s and t resumes from where it left off. The strategy is inferred from the save file — no need to pass `--strategy` on resume.
 
 ### Check mode
 ```bash
@@ -32,10 +34,10 @@ Results are saved automatically to `data/R_s_t.txt`. Running again with the same
 
 Loads a saved search and lets you browse results interactively:
 ```
-list <n>                  — list counterexample indices for K_n
-show <n> <index>          — display counterexample graph
-export <n> <index> <out>  — display counterexample graph
-quit                      — exit
+list <n>                       — list counterexample indices for K_n
+show <n> <index>               — display counterexample graph and adjacency matrix
+export <n> <index> <file.dot>  — export counterexample as Graphviz DOT file
+quit                           — exit
 ```
 
 ### Run tests
