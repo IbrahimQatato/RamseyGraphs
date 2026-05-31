@@ -23,6 +23,7 @@ add_executable(tests
     ./Color.cpp
     ./ExhaustiveSearch.cpp
     ./RandomSampler.cpp
+    ./GraphExporter.cpp
 )
 
 foreach(target ramsey playground tests)

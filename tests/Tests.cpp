@@ -1,11 +1,12 @@
 #include "ExhaustiveSearch.h"
+#include "GraphExporter.h"
 #include "RandomSampler.h"
 #include "RamseyChecker.h"
 #include <filesystem>
+#include <fstream>
 #include <iostream>
+#include <sstream>
 #include <string>
-
-// --- test helpers ---
 
 static int passed = 0;
 static int failed = 0;
@@ -20,7 +21,6 @@ void expect(bool condition, const std::string& name) {
   }
 }
 
-// builds a K_n with all edges set to given color
 UndirectedGraph<Identifier, Color> make_uniform_kn(size_t n, Color color) {
   UndirectedGraph<Identifier, Color> graph;
   for (Identifier i = 0; i < n; ++i)
@@ -32,47 +32,37 @@ UndirectedGraph<Identifier, Color> make_uniform_kn(size_t n, Color color) {
   return graph;
 }
 
-// --- hasClique tests ---
 
 void test_has_clique() {
-  // all red K_3 — has red K_3
   auto g1 = make_uniform_kn(3, Color::Red);
   expect(hasClique(g1, 3, Color::Red), "all-red K_3 has red K_3");
   expect(!hasClique(g1, 3, Color::Blue), "all-red K_3 has no blue K_3");
 
-  // all blue K_4 — has blue K_4 and blue K_3, no red clique
   auto g2 = make_uniform_kn(4, Color::Blue);
   expect(hasClique(g2, 4, Color::Blue), "all-blue K_4 has blue K_4");
   expect(hasClique(g2, 3, Color::Blue), "all-blue K_4 has blue K_3");
   expect(!hasClique(g2, 3, Color::Red), "all-blue K_4 has no red K_3");
 
-  // k=1 — always true (single node is trivially a clique)
   auto g3 = make_uniform_kn(3, Color::Red);
   expect(hasClique(g3, 1, Color::Red), "k=1 always true");
 
-  // k > n — impossible
   auto g4 = make_uniform_kn(2, Color::Red);
   expect(!hasClique(g4, 3, Color::Red), "k > n returns false");
 }
 
-// --- checkRamseyProperty tests ---
 
 void test_check_ramsey_property() {
-  // all red K_6 — has red K_3, satisfies R(3,3)
   auto g1 = make_uniform_kn(6, Color::Red);
   expect(checkRamseyProperty(g1, 3, 3), "all-red K_6 satisfies R(3,3)");
 
-  // all blue K_6 — has blue K_3, satisfies R(3,3)
   auto g2 = make_uniform_kn(6, Color::Blue);
   expect(checkRamseyProperty(g2, 3, 3), "all-blue K_6 satisfies R(3,3)");
 
-  // known R(3,3) counterexample on K_5: coloring index 220
   ExhaustiveSearch search(3, 3);
   auto g3 = search.getColoring(5, 220);
   expect(!checkRamseyProperty(g3, 3, 3), "known K_5 counterexample does not satisfy R(3,3)");
 }
 
-// --- integration tests ---
 
 void test_r33_result() {
   ExhaustiveSearch search(3, 3);
@@ -107,20 +97,15 @@ void test_resume_already_done() {
   expect(search.result() == 6, "result unchanged after re-run");
 }
 
-// --- RandomSampler tests ---
 
 void test_random_sampler() {
-  // name() returns the tag used in save files
   RandomSampler sampler(3, 3, 5000);
   expect(sampler.name() == "random", "RandomSampler name is 'random'");
 
-  // after run, search declares a result — exact value is probabilistic
-  // but must be >= max(s,t) = 3
   sampler.run(false);
   expect(sampler.isDone(), "RandomSampler completes");
   expect(sampler.result() >= 3, "RandomSampler result is plausible");
 
-  // save/load round-trip: loaded state matches original
   std::filesystem::create_directories("data");
   const std::string file = "data/test_random_save.txt";
   sampler.save(file);
@@ -131,33 +116,111 @@ void test_random_sampler() {
          "loaded RandomSampler counterexamples match");
   std::filesystem::remove(file);
 
-  // polymorphism: SearchStrategy pointer calls RandomSampler methods via vtable
   std::unique_ptr<SearchStrategy> ptr = std::make_unique<RandomSampler>(3, 3, 1000);
   ptr->run(false);
   expect(ptr->isDone(), "RandomSampler via SearchStrategy ptr completes");
   expect(ptr->name() == "random", "SearchStrategy ptr dispatches name() to RandomSampler");
 }
 
+
+void test_graph_exporter() {
+  ExhaustiveSearch es(3, 3);
+  auto graph = es.getColoring(3, 2);
+
+  std::ostringstream oss;
+  exportDOT(graph, oss);
+  std::string out = oss.str();
+
+  expect(out.find("graph G {") != std::string::npos, "DOT has graph header");
+  expect(out.find("node [shape=circle]") != std::string::npos, "DOT has node style");
+  expect(out.find("color=red") != std::string::npos, "DOT has red edges");
+  expect(out.find("color=blue") != std::string::npos, "DOT has blue edges");
+  expect(out.find("--") != std::string::npos, "DOT has undirected edge syntax");
+}
+
+
+void test_save_tags() {
+  std::filesystem::create_directories("data");
+  const std::string es_file = "data/test_es_tag.txt";
+  const std::string rs_file = "data/test_rs_tag.txt";
+
+  ExhaustiveSearch es(3, 3);
+  es.run(false);
+  es.save(es_file);
+
+  std::ifstream f1(es_file);
+  std::string tag1;
+  f1 >> tag1;
+  expect(tag1 == "exhaustive", "ExhaustiveSearch saves 'exhaustive' tag");
+
+  RandomSampler rs(3, 3, 1000);
+  rs.run(false);
+  rs.save(rs_file);
+
+  std::ifstream f2(rs_file);
+  std::string tag2;
+  f2 >> tag2;
+  expect(tag2 == "random", "RandomSampler saves 'random' tag");
+
+  std::filesystem::remove(es_file);
+  std::filesystem::remove(rs_file);
+}
+
+void test_r24_result() {
+  ExhaustiveSearch search(2, 4);
+  search.run(false);
+  expect(search.isDone(), "R(2,4) search completes");
+  expect(search.result() == 4, "R(2,4) = 4");
+}
+
+
+void test_mid_search_resume() {
+  std::filesystem::create_directories("data");
+  const std::string file = "data/test_mid_resume.txt";
+
+  ExhaustiveSearch search(3, 3);
+  search.save(file);
+
+  ExhaustiveSearch resumed = ExhaustiveSearch::load(file);
+  resumed.run(false);
+  expect(resumed.isDone(), "mid-search resume completes");
+  expect(resumed.result() == 6, "mid-search resume gives correct result");
+
+  std::filesystem::remove(file);
+}
+
 // --- main ---
 
 int main() {
-  std::cout << "=== hasClique ===\n";
+  std::cout << "hasClique:\n";
   test_has_clique();
 
-  std::cout << "\n=== checkRamseyProperty ===\n";
+  std::cout << "\ncheckRamseyProperty:\n";
   test_check_ramsey_property();
 
-  std::cout << "\n=== Integration: R(3,3) ===\n";
+  std::cout << "\nIntegration: R(3,3):n";
   test_r33_result();
 
-  std::cout << "\n=== Integration: save/load ===\n";
+  std::cout << "\nIntegration: save/load:\n";
   test_save_load();
 
-  std::cout << "\n=== Integration: resume ===\n";
+  std::cout << "\nIntegration: resume:\n";
   test_resume_already_done();
 
-  std::cout << "\n=== RandomSampler ===\n";
+  std::cout << "\nRandomSampler:\n";
   test_random_sampler();
+
+  std::cout << "\nGraphExporter:\n";
+  test_graph_exporter();
+
+  std::cout << "\nSave tags:\n";
+  test_save_tags();
+
+  std::cout << "\nIntegration: R(2,4):\n";
+  test_r24_result();
+
+  std::cout << "\nIntegration: mid-search resume:\n";
+  test_mid_search_resume();
 
   std::cout << "\n--- Results: " << passed << " passed, " << failed << " failed ---\n";
   return failed > 0 ? 1 : 0;
