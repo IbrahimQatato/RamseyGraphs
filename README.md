@@ -47,6 +47,16 @@ quit                      — exit
 
 Press Ctrl+C at any time — the search saves its state before exiting.
 
+## Generating Docs
+
+Requires Doxygen (`sudo apt install doxygen` / `brew install doxygen`).
+
+```bash
+doxygen Doxyfile
+```
+
+Then open `docs/html/index.html` in a browser.
+
 ## Exporting
 in check mode you can export the a dot file and see it in Graphviz
 ```
