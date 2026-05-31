@@ -31,14 +31,23 @@ UndirectedGraph<Identifier, Color> RandomSampler::build_colored_kn(size_t n, uin
   return graph;
 }
 
-void RandomSampler::test_n(size_t n, bool verbose) { //TODO add verbose instructions
+void RandomSampler::test_n(size_t n, bool verbose) {
   size_t edges = total_edges(n);
   std::uniform_int_distribution<uint64_t> dist(0, (1ULL << edges) - 1);
   for (size_t i = 0; i < samples_per_n_; ++i) {
     uint64_t mask = dist(rng_);
     auto graph = build_colored_kn(n, mask);
-    if (!checkRamseyProperty(graph, s_, t_))
+    bool satisfies = checkRamseyProperty(graph, s_, t_);
+    if (!satisfies)
       counterexamples_[n].push_back(mask);
+
+    if (verbose) {
+      std::cout << "Sample #" << i << " mask=" << mask
+                << (satisfies ? "  [satisfies]" : "  [counterexample]") << "\n";
+      graph.print();
+      std::cout << "Press Enter to continue ... ";
+      std::cin.ignore();
+    }
   }
   std::cout << "\nSampled K_" << n << " (" << samples_per_n_ << " samples)\n";
 }

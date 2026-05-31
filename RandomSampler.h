@@ -28,7 +28,7 @@ public:
 
   /// @brief Samples samples_per_n random colorings of K_n and stores counterexamples.
   /// @param n Number of nodes in the complete graph.
-  /// @param verbose Unused (random sampling does not support step-through).
+  /// @param verbose If true, prints each sampled coloring and waits for Enter.
   void test_n(size_t n, bool verbose) override;
 
   /// @brief Reconstructs a specific coloring of K_n from a bitmask index.
