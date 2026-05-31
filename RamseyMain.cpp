@@ -127,7 +127,7 @@ int main(int argc, char** argv) {
     }
   } else {
     size_t s, t;
-    std::cout << "Enter s and t for R(s,t): ";
+    std::cout << "Where s: size of red clique, and t : size of blue clique \nEnter s and t for R(s,t): ";
     std::cin >> s >> t;
 
     std::string save_file = "data/R_" + std::to_string(s) + "_" + std::to_string(t) + ".txt";
