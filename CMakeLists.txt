@@ -10,6 +10,7 @@ add_executable(ramsey
     ./Color.cpp
     ./ExhaustiveSearch.cpp
     ./RandomSampler.cpp
+    ./GraphExporter.cpp
     ./options_module/Options.cpp
 )
 

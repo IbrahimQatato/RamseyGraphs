@@ -41,6 +41,12 @@ void process_long_options(const std::string& arg, iterator_t& it,
   } else if (name == VALUE_OPTION_CHECK_LONG) {
     opts.check_mode = true;
     read_value_option(name, it, end, opts.check_file, opts.valid);
+  } else if (name == VALUE_OPTION_STRATEGY_LONG) {
+    read_value_option(name, it, end, opts.strategy, opts.valid);
+  } else if (name == VALUE_OPTION_SAMPLES_LONG) {
+    std::string val;
+    read_value_option(name, it, end, val, opts.valid);
+    if (opts.valid) opts.samples = std::stoul(val);
   } else {
     print_unkown(name);
     opts.valid = false;

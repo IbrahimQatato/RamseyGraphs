@@ -1,9 +1,12 @@
 #include "ExhaustiveSearch.h"
+#include "GraphExporter.h"
 #include "Options.h"
+#include "RandomSampler.h"
 #include "SearchStrategy.h"
 #include <csignal>
 #include <cstddef>
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <memory>
 #include <sstream>
@@ -12,12 +15,20 @@
 static std::unique_ptr<SearchStrategy> g_search;
 static std::string g_save_file;
 
-std::unique_ptr<SearchStrategy> make_strategy(const Options& opts, size_t s, size_t t, std::string save_file) {
-  if (std::filesystem::exists(save_file)) {
-    g_search = std::make_unique<ExhaustiveSearch>(ExhaustiveSearch::load(save_file));
-  } //TODO need to change it later so it reads the algorithm from the save_File
-  // if(opts.strategy == "random")
-  //   return std::make_unique<RandomSampler>(s,t);
+std::unique_ptr<SearchStrategy> load_strategy(const std::string& filename) {
+  std::ifstream f(filename);
+  std::string tag;
+  f >> tag;
+  if (tag == "random")
+    return std::make_unique<RandomSampler>(RandomSampler::load(filename));
+  return std::make_unique<ExhaustiveSearch>(ExhaustiveSearch::load(filename));
+}
+
+std::unique_ptr<SearchStrategy> make_strategy(const Options& opts, size_t s, size_t t, const std::string& save_file) {
+  if (std::filesystem::exists(save_file))
+    return load_strategy(save_file);
+  if (opts.strategy == "random")
+    return std::make_unique<RandomSampler>(s, t, opts.samples);
   return std::make_unique<ExhaustiveSearch>(s, t);
 }
 
@@ -41,10 +52,10 @@ int main(int argc, char** argv) {
 
   if (opts.check_mode) {
     g_save_file = opts.check_file;
-    g_search = std::make_unique<ExhaustiveSearch>(ExhaustiveSearch::load(opts.check_file));
+    g_search = load_strategy(opts.check_file);
 
     g_search->printSummary();
-    std::cout << "\nCommands: list <n>  |  show <n> <index>  |  quit\n";
+    std::cout << "\nCommands: list <n>  |  show <n> <index>  |  export <n> <index> <file.dot>  |  quit\n";
 
     std::string line;
     std::cin.ignore();
@@ -75,6 +86,18 @@ int main(int argc, char** argv) {
           auto graph = g_search->getColoring(n, indices[index]);
           graph.print();
           graph.edges().printMatrix();
+        }
+      } else if (command == "export") {
+        size_t n, index;
+        std::string dotfile;
+        stringstream >> n >> index >> dotfile;
+        const auto& indices = g_search->counterexamples(n);
+        if (index >= indices.size()) {
+          std::cout << "Index out of range\n";
+        } else {
+          auto graph = g_search->getColoring(n, indices[index]);
+          exportDOT(graph, dotfile);
+          std::cout << "Exported to " << dotfile << "\n";
         }
       } else {
         std::cout << "Unknown command\n";
