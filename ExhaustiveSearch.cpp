@@ -36,8 +36,6 @@ UndirectedGraph<Identifier, Color> ExhaustiveSearch::build_colored_kn(size_t n, 
   return graph;
 }
 
-// wrapper to introduce caching
-// to maybe implement a search function not limited to uint64_t sized numbers
 UndirectedGraph<Identifier, Color> ExhaustiveSearch::getColoring(size_t n, uint64_t coloring_index) const {
   return build_colored_kn(n, coloring_index);
 }
@@ -49,55 +47,26 @@ const std::vector<uint64_t>& ExhaustiveSearch::counterexamples(size_t n) const {
   return it != counterexamples_.end() ? it->second : empty;
 }
 
-void ExhaustiveSearch::run(bool verbose) {
-  if (done_) {
-    std::cout << "Already complete: R(" << s_ << "," << t_ << ") = " << result_ << "\n";
-    return;
+void ExhaustiveSearch::test_n(size_t n, bool verbose) {
+  size_t edges = total_edges(n);
+  uint64_t total_colorings = 1ULL << edges;
+  std::cout << "\nTesting K_" << n << " (" << edges << " edges, " << total_colorings << " colorings)...\n";
+
+  while (current_coloring_ < total_colorings) {
+    auto graph = build_colored_kn(n, current_coloring_);
+    bool satisfies = checkRamseyProperty(graph, s_, t_);
+    if (!satisfies)
+      counterexamples_[n].push_back(current_coloring_);
+
+    if (verbose) {
+      std::cout << "Coloring #" << current_coloring_ << (satisfies ? "  [satisfies]" : "  [counterexample]") << "\n";
+      graph.print();
+      std::cout << "Press Enter to continue ... ";
+      std::cin.ignore();
+    }
+    ++current_coloring_;
   }
-  while (!done_) {
-    size_t no_of_edges = total_edges(current_n_);
-
-    if (no_of_edges > 64) {
-      std::cout << "K_" << current_n_ << " has " << no_of_edges
-                << " edges — exceeds 64-bit limit, stopping.\n";
-      break;
-    }
-
-    uint64_t total_colorings = 1ULL << no_of_edges;
-    bool all_satisfy = counterexamples_.count(current_n_) == 0;
-
-    std::cout << "\nTesting K_" << current_n_ << " (" << no_of_edges << " edges, " << total_colorings
-              << " colorings)...\n";
-
-    while (current_coloring_ < total_colorings) {
-      auto graph = build_colored_kn(current_n_, current_coloring_);
-      bool satisfies = checkRamseyProperty(graph, s_, t_);
-      if (!satisfies) {
-        counterexamples_[current_n_].push_back(current_coloring_);
-        all_satisfy = false;
-      }
-
-      if (verbose) {
-        std::cout << "Coloring #" << current_coloring_ << (satisfies ? "  [satisfies]" : "  [counterexample]")
-                  << "\n";
-        graph.print();
-        std::cout << "Press Enter to continue ... ";
-        std::cin.ignore();
-      }
-      ++current_coloring_;
-    }
-
-    if (all_satisfy) {
-      result_ = current_n_;
-      done_ = true;
-      std::cout << "R(" << s_ << "," << t_ << ") = " << result_ << "\n";
-    } else {
-      std::cout << "  → " << counterexamples_[current_n_].size() << " counterexamples — K_" << current_n_
-                << " not sufficient\n";
-      ++current_n_;
-      current_coloring_ = 0;
-    }
-  }
+  current_coloring_ = 0;
 }
 
 void ExhaustiveSearch::save(const std::string& filename) const {

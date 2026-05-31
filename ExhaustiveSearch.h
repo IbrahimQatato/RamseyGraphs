@@ -26,7 +26,7 @@ public:
   /// @brief Runs the exhaustive search until R(s,t) is found or the 64-bit
   ///        coloring limit is exceeded.
   /// @param verbose If true, prints every coloring and waits for Enter.
-  void run(bool verbose) override;
+  void test_n(size_t n, bool verbose) override;
 
   /// @brief Reconstructs a specific coloring of K_n as a graph.
   /// @param n Number of nodes in the complete graph.

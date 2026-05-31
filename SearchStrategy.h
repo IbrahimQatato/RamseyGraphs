@@ -12,8 +12,32 @@
 
 class SearchStrategy {
 public:
-  virtual void run(bool verbose) = 0;
+  virtual void test_n(size_t n, bool verbose) = 0;
   virtual const std::vector<uint64_t>& counterexamples(size_t n) const = 0;
+
+  void run(bool verbose) {
+    if (done_) {
+      std::cout << "Already complete: R(" << s_ << "," << t_ << ") = " << result_ << "\n";
+      return;
+    }
+    while (!done_) {
+      size_t edges = total_edges(current_n_);
+      if (edges > 64) {
+        std::cout << "K_" << current_n_ << " exceeds 64-bit limit, stopping.\n";
+        break;
+      }
+      test_n(current_n_, verbose);
+      if (!counterexamples_.count(current_n_)) {
+        done_ = true;
+        result_ = current_n_;
+        std::cout << "R(" << s_ << "," << t_ << ") = " << result_ << "\n";
+      } else {
+        std::cout << "  → " << counterexamples_[current_n_].size()
+                  << " counterexamples — K_" << current_n_ << " not sufficient\n";
+        ++current_n_;
+      }
+    }
+  }
   virtual UndirectedGraph<Identifier, Color> getColoring(size_t n, uint64_t index) const = 0;
   virtual void save(const std::string& filename) const = 0;
   virtual std::string name() const = 0;

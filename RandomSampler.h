@@ -14,7 +14,7 @@ class RandomSampler : public SearchStrategy {
 public:
   RandomSampler(size_t s, size_t t, size_t samples_per_n = 1000);
 
-  void run(bool verbose) override;
+  void test_n(size_t n, bool verbose) override;
 
   UndirectedGraph<Identifier, Color> getColoring(size_t n, uint64_t coloring_index) const override;
 

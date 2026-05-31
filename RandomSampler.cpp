@@ -29,41 +29,16 @@ UndirectedGraph<Identifier, Color> RandomSampler::build_colored_kn(size_t n, uin
   return graph;
 }
 
-void RandomSampler::run(bool verbose) {
-  if (done_) {
-    std::cout << "Already complete: R(" << s_ << "," << t_ << ") = " << result_ << "\n";
-    return;
+void RandomSampler::test_n(size_t n, bool verbose) { //TODO add verbose instructions
+  size_t edges = total_edges(n);
+  std::uniform_int_distribution<uint64_t> dist(0, (1ULL << edges) - 1);
+  for (size_t i = 0; i < samples_per_n_; ++i) {
+    uint64_t mask = dist(rng_);
+    auto graph = build_colored_kn(n, mask);
+    if (!checkRamseyProperty(graph, s_, t_))
+      counterexamples_[n].push_back(mask);
   }
-  while (!done_) {
-    size_t no_of_edges = total_edges(current_n_);
-    if (no_of_edges > 64) { // TODO limit reached
-      std::cout << "K_" << current_n_ << " exceeds 64-bit limit, stopping.\n";
-      return;
-    }
-
-    std::uniform_int_distribution<uint64_t> dist(0, (1ULL << no_of_edges) - 1);
-    for (size_t i = 0; i < samples_per_n_; ++i) {
-      uint64_t mask = dist(rng_);
-      UndirectedGraph<Identifier, Color> graph = build_colored_kn(current_n_, mask);
-      bool satisfies = checkRamseyProperty(graph, s_, t_);
-      if (!satisfies) {
-        counterexamples_[current_n_].push_back(mask);
-      }
-    }
-
-    std::cout << "Sampled K_" << current_n_ << " (" << samples_per_n_ << " samples)";
-
-    if (!counterexamples_.count(current_n_)) {
-      done_ = true;
-      result_ = current_n_;
-      std::cout << " — no counterexamples found. R(" << s_ << "," << t_ << ") <= " << current_n_ << "\n";
-      return;
-    } else {
-      std::cout << " — " << counterexamples_[current_n_].size() << " counterexamples\n";
-
-      ++current_n_;
-    }
-  }
+  std::cout << "Sampled K_" << n << " (" << samples_per_n_ << " samples)\n";
 }
 
 const std::vector<uint64_t>& RandomSampler::counterexamples(size_t n) const {
