@@ -80,7 +80,6 @@ int main(int argc, char** argv) {
     printCheckHelp();
 
     std::string line;
-    std::cin.ignore();
     while (std::getline(std::cin, line)) {
       std::istringstream stringstream(line);
       std::string command;
