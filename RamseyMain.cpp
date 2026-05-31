@@ -36,17 +36,17 @@ std::unique_ptr<SearchStrategy> load_strategy(const std::string& filename) {
 ///          is inferred from the file tag). Otherwise a fresh strategy is created
 ///          according to opts.strategy ("exhaustive" or "random").
 /// @param opts Parsed CLI options.
-/// @param s Required red clique size.
-/// @param t Required blue clique size.
+/// @param red_size Required red clique size.
+/// @param blue_size Required blue clique size.
 /// @param save_file Path to check for an existing save and to write on completion.
 /// @return Owning pointer to the active SearchStrategy.
-std::unique_ptr<SearchStrategy> make_strategy(const Options& opts, size_t s, size_t t,
+std::unique_ptr<SearchStrategy> make_strategy(const Options& opts, size_t red_size, size_t blue_size,
                                               const std::string& save_file) {
   if (std::filesystem::exists(save_file))
     return load_strategy(save_file);
   if (opts.strategy == STRATEGY_RANDOM)
-    return std::make_unique<RandomSampler>(s, t, opts.samples);
-  return std::make_unique<ExhaustiveSearch>(s, t);
+    return std::make_unique<RandomSampler>(red_size, blue_size, opts.samples);
+  return std::make_unique<ExhaustiveSearch>(red_size, blue_size);
 }
 
 /// @brief SIGINT/SIGTERM handler — saves search state then exits cleanly.
@@ -126,14 +126,14 @@ int main(int argc, char** argv) {
       printCheckHelp();
     }
   } else {
-    size_t s, t;
-    std::cout << "Where s: size of red clique, and t : size of blue clique \nEnter s and t for R(s,t): ";
-    std::cin >> s >> t;
+    size_t red_size, blue_size;
+    std::cout << "Where s: size of red clique, t: size of blue clique\nEnter s and t for R(s,t): ";
+    std::cin >> red_size >> blue_size;
 
-    std::string save_file = "data/R_" + std::to_string(s) + "_" + std::to_string(t) + ".txt";
+    std::string save_file = "data/R_" + std::to_string(red_size) + "_" + std::to_string(blue_size) + ".txt";
     g_save_file = save_file;
 
-    g_search = make_strategy(opts, s, t, save_file);
+    g_search = make_strategy(opts, red_size, blue_size, save_file);
     g_search->run(opts.verbose);
     g_search->save(save_file);
   }

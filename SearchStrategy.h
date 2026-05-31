@@ -34,7 +34,7 @@ public:
   /// @return Const reference to the list — empty vector if none found.
   virtual const std::vector<uint64_t>& counterexamples(size_t n) const = 0;
 
-  /// @brief Runs the search loop until R(s,t) is found or the 64-bit limit is hit.
+  /// @brief Runs the search loop until R(red_size,blue_size) is found or MAX_COLORING_BITS is exceeded.
   /// @param verbose Passed through to test_n on each iteration.
   void run(bool verbose) {
     if (done_) {
@@ -117,8 +117,8 @@ protected:
     }
   }
 
-  static void load_common(std::ifstream& file, SearchStrategy& s) {
-    file >> s.current_n_ >> s.done_ >> s.result_;
+  static void load_common(std::ifstream& file, SearchStrategy& strategy) {
+    file >> strategy.current_n_ >> strategy.done_ >> strategy.result_;
     size_t n, count;
     while (file >> n >> count) {
       std::vector<uint64_t> indices;
@@ -127,7 +127,7 @@ protected:
         file >> idx;
         indices.push_back(idx);
       }
-      s.counterexamples_[n] = std::move(indices);
+      strategy.counterexamples_[n] = std::move(indices);
     }
   }
 };
