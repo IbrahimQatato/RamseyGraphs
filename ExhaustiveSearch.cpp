@@ -1,3 +1,5 @@
+/// @file ExhaustiveSearch.cpp
+/// @brief Exhaustive 2-coloring search implementation.
 #include "ExhaustiveSearch.h"
 #include "RamseyChecker.h"
 #include "Utils.h"

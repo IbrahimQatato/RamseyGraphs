@@ -1,3 +1,5 @@
+/// @file GraphExporter.cpp
+/// @brief DOT format export implementation.
 #include "GraphExporter.h"
 #include "Utils.h"
 #include <fstream>

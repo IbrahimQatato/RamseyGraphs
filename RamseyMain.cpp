@@ -1,3 +1,5 @@
+/// @file RamseyMain.cpp
+/// @brief Entry point — CLI parsing, signal handling, search mode dispatch.
 #include "ExhaustiveSearch.h"
 #include "GraphExporter.h"
 #include "Options.h"
@@ -15,6 +17,11 @@
 static std::unique_ptr<SearchStrategy> g_search;
 static std::string g_save_file;
 
+/// @brief Reads the strategy tag from a save file and loads the correct subclass.
+/// @details Peeks at the first token ("exhaustive" or "random") then delegates
+///          to the appropriate static load() factory.
+/// @param filename Path to the save file.
+/// @return Owning pointer to the loaded SearchStrategy.
 std::unique_ptr<SearchStrategy> load_strategy(const std::string& filename) {
   std::ifstream f(filename);
   std::string tag;
@@ -24,7 +31,17 @@ std::unique_ptr<SearchStrategy> load_strategy(const std::string& filename) {
   return std::make_unique<ExhaustiveSearch>(ExhaustiveSearch::load(filename));
 }
 
-std::unique_ptr<SearchStrategy> make_strategy(const Options& opts, size_t s, size_t t, const std::string& save_file) {
+/// @brief Creates or resumes a search strategy based on CLI options and saved state.
+/// @details If a save file exists for the given s/t it is loaded (strategy type
+///          is inferred from the file tag). Otherwise a fresh strategy is created
+///          according to opts.strategy ("exhaustive" or "random").
+/// @param opts Parsed CLI options.
+/// @param s Required red clique size.
+/// @param t Required blue clique size.
+/// @param save_file Path to check for an existing save and to write on completion.
+/// @return Owning pointer to the active SearchStrategy.
+std::unique_ptr<SearchStrategy> make_strategy(const Options& opts, size_t s, size_t t,
+                                              const std::string& save_file) {
   if (std::filesystem::exists(save_file))
     return load_strategy(save_file);
   if (opts.strategy == "random")
@@ -32,11 +49,16 @@ std::unique_ptr<SearchStrategy> make_strategy(const Options& opts, size_t s, siz
   return std::make_unique<ExhaustiveSearch>(s, t);
 }
 
+/// @brief SIGINT/SIGTERM handler — saves search state then exits cleanly.
 void signal_handler(int) {
   if (g_search)
     g_search->save(g_save_file);
   std::cout << "\nSaved to " << g_save_file << "\n";
   std::exit(0);
+}
+
+void printCheckHelp() {
+  std::cout << "\nCommands: list <n>  |  show <n> <index>  |  export <n> <index> <file.dot>  |  quit\n";
 }
 
 int main(int argc, char** argv) {
@@ -55,7 +77,7 @@ int main(int argc, char** argv) {
     g_search = load_strategy(opts.check_file);
 
     g_search->printSummary();
-    std::cout << "\nCommands: list <n>  |  show <n> <index>  |  export <n> <index> <file.dot>  |  quit\n";
+    printCheckHelp();
 
     std::string line;
     std::cin.ignore();
@@ -102,6 +124,7 @@ int main(int argc, char** argv) {
       } else {
         std::cout << "Unknown command\n";
       }
+      printCheckHelp();
     }
   } else {
     size_t s, t;

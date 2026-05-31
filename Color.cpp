@@ -1,3 +1,5 @@
+/// @file Color.cpp
+/// @brief Stream operator definitions for the Color enum.
 #include "Color.h"
 #include <string>
 

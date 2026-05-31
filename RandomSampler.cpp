@@ -1,3 +1,5 @@
+/// @file RandomSampler.cpp
+/// @brief Probabilistic Ramsey search implementation.
 #include "RandomSampler.h"
 #include "RamseyChecker.h"
 #include "Utils.h"

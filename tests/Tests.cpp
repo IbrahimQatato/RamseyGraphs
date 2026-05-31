@@ -1,3 +1,5 @@
+/// @file Tests.cpp
+/// @brief Unit and integration tests for the Ramsey Analyzer.
 #include "ExhaustiveSearch.h"
 #include "GraphExporter.h"
 #include "RandomSampler.h"
